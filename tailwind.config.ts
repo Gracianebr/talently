@@ -64,12 +64,13 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				talently: {
-					purple: '#6C3BF0',
-					blue: '#1E40AF',
-					lightblue: '#60A5FA',
-					gray: '#64748B',
-					lightgray: '#F8FAFC',
-					darkblue: '#132043'
+					purple: '#3359DF', // Andela primary blue
+					blue: '#173E7D',   // Darker blue
+					lightblue: '#EBF3FE', // Light blue background
+					gray: '#4F5E74',   // Andela text gray
+					lightgray: '#F5F9FF', // Andela light background
+					darkblue: '#022457', // Andela dark blue
+					accent: '#FFC351'  // Andela yellow accent
 				}
 			},
 			borderRadius: {

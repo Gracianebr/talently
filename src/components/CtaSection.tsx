@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { CalendarPlus, ArrowRight } from 'lucide-react';
+import { CalendarPlus } from 'lucide-react';
 
 const CtaSection = () => {
   return (
@@ -15,13 +15,10 @@ const CtaSection = () => {
             Agende uma reunião com nossos consultores e descubra como a Talently pode transformar seu processo de recrutamento.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex justify-center">
             <Button className="bg-white text-talently-purple hover:bg-talently-lightgray py-6 px-8 text-lg transition-all flex items-center gap-2">
               <CalendarPlus className="mr-2" size={20} />
               Agendar reunião
-            </Button>
-            <Button variant="outline" className="border-white text-white hover:bg-white hover:text-talently-purple py-6 px-8 text-lg transition-all flex items-center gap-2">
-              Solicitar proposta <ArrowRight size={20} />
             </Button>
           </div>
         </div>
