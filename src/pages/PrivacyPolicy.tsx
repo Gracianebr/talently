@@ -1,9 +1,14 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
 
 const PrivacyPolicy = () => {
+  useEffect(() => {
+    // Scroll to the top of the page when component mounts
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col">
       <NavBar />
@@ -63,7 +68,7 @@ const PrivacyPolicy = () => {
             <li>Solicitar a portabilidade dos dados</li>
           </ul>
           <p className="mb-6">
-            Para exercer esses direitos, entre em contato conosco pelo e-mail <strong>contato@talently.com</strong>.
+            Para exercer esses direitos, entre em contato conosco pelo e-mail <strong>contato@talently.com.br</strong>.
           </p>
 
           <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">6. Uso de cookies</h2>
@@ -80,7 +85,7 @@ const PrivacyPolicy = () => {
 
           <p className="mb-6">
             Em caso de dúvidas ou solicitações, entre em contato com o nosso Encarregado de Dados (DPO) 
-            pelo e-mail: <strong>contato@talently.com</strong>.
+            pelo e-mail: <strong>contato@talently.com.br</strong>.
           </p>
         </div>
       </main>
