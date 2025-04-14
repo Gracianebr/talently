@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Menu, X, Search, Users } from 'lucide-react';
+import { Menu, X, Search, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 // Componente para o Logo com ícone personalizado
@@ -13,9 +13,9 @@ const TalentlyLogo = () => {
         </div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <div className="flex">
-            <div className="w-2 h-4 bg-gray-400 rounded-full opacity-60 mx-0.5"></div>
-            <div className="w-2 h-4 bg-talently-accent rounded-full mx-0.5"></div>
-            <div className="w-2 h-4 bg-gray-400 rounded-full opacity-60 mx-0.5"></div>
+            <div className="w-2 h-5 bg-gray-400 rounded-full opacity-60 mx-0.5"></div>
+            <div className="w-2 h-5 bg-talently-accent rounded-full mx-0.5"></div>
+            <div className="w-2 h-5 bg-gray-400 rounded-full opacity-60 mx-0.5"></div>
           </div>
         </div>
       </div>

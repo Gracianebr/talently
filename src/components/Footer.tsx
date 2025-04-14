@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Mail, Phone, MapPin, Linkedin, Instagram, Twitter } from 'lucide-react';
+import { Mail, Phone, MapPin, Linkedin } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -16,32 +16,25 @@ const Footer = () => {
               <a href="#" className="text-gray-300 hover:text-white transition-colors">
                 <Linkedin size={20} />
               </a>
-              <a href="#" className="text-gray-300 hover:text-white transition-colors">
-                <Instagram size={20} />
-              </a>
-              <a href="#" className="text-gray-300 hover:text-white transition-colors">
-                <Twitter size={20} />
-              </a>
             </div>
           </div>
           
           <div>
             <h4 className="text-lg font-bold mb-4">Serviços</h4>
             <ul className="space-y-2">
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Education Recruiting</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Headhunter</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Outplacement</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Onboarding Assistido</a></li>
+              <li><a href="#services" className="text-gray-300 hover:text-white transition-colors">Education Recruiting</a></li>
+              <li><a href="#services" className="text-gray-300 hover:text-white transition-colors">Headhunter</a></li>
+              <li><a href="#services" className="text-gray-300 hover:text-white transition-colors">Outplacement</a></li>
+              <li><a href="#services" className="text-gray-300 hover:text-white transition-colors">Onboarding Assistido</a></li>
             </ul>
           </div>
           
           <div>
             <h4 className="text-lg font-bold mb-4">Links Rápidos</h4>
             <ul className="space-y-2">
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Sobre nós</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Planos</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Diferenciais</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Blog</a></li>
+              <li><a href="#about" className="text-gray-300 hover:text-white transition-colors">Sobre nós</a></li>
+              <li><a href="#pricing" className="text-gray-300 hover:text-white transition-colors">Planos</a></li>
+              <li><a href="#differentials" className="text-gray-300 hover:text-white transition-colors">Diferenciais</a></li>
               <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Política de Privacidade</a></li>
             </ul>
           </div>
