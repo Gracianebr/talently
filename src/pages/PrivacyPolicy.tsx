@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
@@ -14,7 +13,7 @@ const PrivacyPolicy = () => {
       <NavBar />
       <main className="flex-grow pt-24 pb-12">
         <div className="container mx-auto px-4 md:px-6 max-w-4xl">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Política de Privacidade – Talently</h1>
+          <h1 id="top" className="text-3xl font-bold text-gray-900 mb-4">Política de Privacidade – Talently</h1>
           <p className="mb-6">
             <strong>Última atualização:</strong> abril de 2025
           </p>
