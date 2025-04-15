@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Mail, Phone, MapPin, Linkedin } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -14,7 +15,12 @@ const Footer = () => {
               Conectando startups aos melhores talentos do mercado para acelerar seu crescimento.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-300 hover:text-white transition-colors">
+              <a 
+                href="https://www.linkedin.com/company/talently-recruiter/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-gray-300 hover:text-white transition-colors"
+              >
                 <Linkedin size={20} />
               </a>
             </div>
