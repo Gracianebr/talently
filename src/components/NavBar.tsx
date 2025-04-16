@@ -1,26 +1,13 @@
-
 import React, { useState } from 'react';
-import { Menu, X, Search, User } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-// Componente para o Logo com ícone personalizado
+// Updated Logo Component with Modern Typography
 const TalentlyLogo = () => {
   return (
-    <div className="flex items-center">
-      <div className="relative mr-2">
-        <div className="w-10 h-10 bg-talently-purple rounded-full flex items-center justify-center">
-          <Search className="text-white" size={20} />
-        </div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <div className="flex">
-            <div className="w-2 h-5 bg-gray-400 rounded-full opacity-60 mx-0.5"></div>
-            <div className="w-2 h-5 bg-talently-accent rounded-full mx-0.5"></div>
-            <div className="w-2 h-5 bg-gray-400 rounded-full opacity-60 mx-0.5"></div>
-          </div>
-        </div>
-      </div>
-      <span className="text-2xl font-bold text-talently-purple">Talently</span>
-    </div>
+    <span className="text-3xl font-bold tracking-tight text-talently-purple font-[Inter] uppercase">
+      Talently
+    </span>
   );
 };
 
