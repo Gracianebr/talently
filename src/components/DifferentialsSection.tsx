@@ -35,7 +35,7 @@ const differentials = [
   },
   {
     id: 6,
-    title: "Culture Match",
+    title: "Mach Cultural",
     description: "Análise de fit cultural entre candidato e empresa, reduzindo turnover e melhorando engajamento a longo prazo.",
     icon: HeartHandshake,
   },
