@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
@@ -10,10 +9,10 @@ const HeroSection = () => {
         <div className="flex flex-col md:flex-row items-center">
           <div className="md:w-1/2 mb-10 md:mb-0 md:pr-8">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-talently-darkblue mb-6 animate-fade-in">
-              <span className="text-talently-purple">Contrate</span> os talentos certos para <span className="text-talently-purple">acelerar</span> o crescimento da sua startup
+              <span className="text-talently-purple">Contrate</span> os talentos certos para <span className="text-talently-purple">acelerar</span> o crescimento da sua empresa
             </h1>
             <p className="text-lg md:text-xl text-talently-gray mb-8 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              Conectamos startups em fase de tração a profissionais altamente qualificados, com foco em agilidade e assertividade no processo de contratação.
+              Conectamos startups em fase de tração ou scale-up a profissionais altamente qualificados, com foco em agilidade e assertividade no processo de contratação.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 animate-fade-in" style={{ animationDelay: '0.3s' }}>
               <Button 
