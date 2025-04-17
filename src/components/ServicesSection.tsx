@@ -29,7 +29,7 @@ const headhuntingSteps = [
   {
     id: 4,
     title: "Apresentação e fechamento",
-    description: "Apresentamos os melhores candidatos com relatórios detalhados e acompanhamos todo o processo de contratação até a integração.",
+    description: "Apresentamos os melhores candidatos com relatórios detalhados.",
     icon: CalendarCheck,
     color: "bg-orange-100"
   }
@@ -48,12 +48,14 @@ const ServicesSection = () => {
           </p>
         </div>
         
-        <div className="max-w-5xl mx-auto mb-10">
-          <h3 className="text-2xl font-bold text-talently-purple mb-8 text-center">Como funciona nosso processo</h3>
+        <div className="max-w-7xl mx-auto mb-10">
+          <h3 className="text-2xl font-bold text-talently-purple mb-8 text-center uppercase">
+            COMO FUNCIONA NOSSO PROCESSO:
+          </h3>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="flex flex-col md:flex-row gap-4 md:gap-6 overflow-x-auto pb-4">
             {headhuntingSteps.map((step) => (
-              <Card key={step.id} className="border-none shadow-lg hover:shadow-xl transition-shadow overflow-hidden group">
+              <Card key={step.id} className="border-none shadow-lg hover:shadow-xl transition-shadow overflow-hidden group flex-1 min-w-[250px]">
                 <CardContent className="p-6">
                   <div className="flex items-center mb-6">
                     <div className={`p-4 rounded-full ${step.color} w-16 h-16 flex items-center justify-center mr-4 group-hover:scale-110 transition-transform`}>
