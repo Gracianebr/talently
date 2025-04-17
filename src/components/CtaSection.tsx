@@ -4,6 +4,10 @@ import { Button } from '@/components/ui/button';
 import { CalendarPlus } from 'lucide-react';
 
 const CtaSection = () => {
+  const handleScheduleMeeting = () => {
+    window.open('https://calendly.com/talentlyoficial', '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <section id="contact" className="py-16 md:py-24 bg-talently-purple">
       <div className="container mx-auto px-4 md:px-6">
@@ -16,7 +20,10 @@ const CtaSection = () => {
           </p>
           
           <div className="flex justify-center">
-            <Button className="bg-white text-talently-purple hover:bg-talently-lightgray py-6 px-8 text-lg transition-all flex items-center gap-2">
+            <Button 
+              onClick={handleScheduleMeeting}
+              className="bg-white text-talently-purple hover:bg-talently-lightgray py-6 px-8 text-lg transition-all flex items-center gap-2"
+            >
               <CalendarPlus className="mr-2" size={20} />
               Agendar reunião
             </Button>
@@ -28,3 +35,4 @@ const CtaSection = () => {
 };
 
 export default CtaSection;
+
