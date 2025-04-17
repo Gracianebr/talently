@@ -1,20 +1,8 @@
 
 import React from 'react';
-import { Brain, GamepadIcon, Globe, UserCheck, LineChart, HeartHandshake } from 'lucide-react';
+import { Globe, UserCheck, HeartHandshake } from 'lucide-react';
 
 const differentials = [
-  {
-    id: 1,
-    title: "Inteligência Artificial no Match",
-    description: "Nossa plataforma com IA fornece dados em tempo real, testes, vídeos de apresentação e análise de compatibilidade comportamental.",
-    icon: Brain,
-  },
-  {
-    id: 2,
-    title: "Testes Gamificados",
-    description: "Avaliações técnicas, de lógica e soft skills automatizadas, com simulações de situações reais e análise comportamental.",
-    icon: GamepadIcon,
-  },
   {
     id: 3,
     title: "Vagas Internacionais",
@@ -28,15 +16,9 @@ const differentials = [
     icon: UserCheck,
   },
   {
-    id: 5,
-    title: "Dashboard de KPIs",
-    description: "Métricas de recrutamento em tempo real, com indicadores de desempenho para tomada de decisão baseada em dados.",
-    icon: LineChart,
-  },
-  {
     id: 6,
-    title: "Mach Cultural",
-    description: "Análise de fit cultural entre candidato e empresa, reduzindo turnover e melhorando engajamento a longo prazo.",
+    title: "90 dias de garantia",
+    description: "Oferecemos uma garantia de 90 dias. Se o profissional contratado sair antes desse período, encontramos outro sem cobrar nada da sua empresa.",
     icon: HeartHandshake,
   },
 ];

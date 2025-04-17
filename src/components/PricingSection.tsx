@@ -42,6 +42,10 @@ const PricingSection = () => {
                   <Check className="text-talently-purple mr-2 flex-shrink-0 mt-1" size={18} />
                   <span className="text-talently-gray">Treinamentos gratuitos para candidatos</span>
                 </li>
+                <li className="flex items-start">
+                  <Check className="text-talently-purple mr-2 flex-shrink-0 mt-1" size={18} />
+                  <span className="text-talently-gray">Pagamento após a contratação</span>
+                </li>
               </ul>
             </div>
             
@@ -74,10 +78,6 @@ const PricingSection = () => {
                 <li className="flex items-start">
                   <Check className="mr-2 flex-shrink-0 mt-1" size={18} />
                   <span className="text-white opacity-90">Preços diferenciados por volume</span>
-                </li>
-                <li className="flex items-start">
-                  <Check className="mr-2 flex-shrink-0 mt-1" size={18} />
-                  <span className="text-white opacity-90">Dashboard de KPIs exclusivo</span>
                 </li>
                 <li className="flex items-start">
                   <Check className="mr-2 flex-shrink-0 mt-1" size={18} />
@@ -115,10 +115,6 @@ const PricingSection = () => {
                 <li className="flex items-start">
                   <Check className="text-talently-purple mr-2 flex-shrink-0 mt-1" size={18} />
                   <span className="text-talently-gray">Curso de português para estrangeiros</span>
-                </li>
-                <li className="flex items-start">
-                  <Check className="text-talently-purple mr-2 flex-shrink-0 mt-1" size={18} />
-                  <span className="text-talently-gray">Culture Match personalizado</span>
                 </li>
               </ul>
             </div>
