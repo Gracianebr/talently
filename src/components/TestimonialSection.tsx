@@ -5,10 +5,12 @@ const testimonials = [
   {
     id: 1,
     quote: "A Talently transformou nossa forma de contratar. Encontramos perfis que realmente se encaixam na nossa cultura e nos ajudam a crescer.",
-    author: "Ana Clara",
-    position: "CEO da TechGrow",
-    company: "TechGrow",
-    avatar: "https://randomuser.me/api/portraits/women/42.jpg"
+    author: "Gabriel Chisiu",
+    position: "Founder da",
+    company: "Espaços",
+    avatar: "/lovable-uploads/aa7f5b27-6eaa-4f1c-aa7e-ffb3a8a593d7.png",
+    linkedinUrl: "https://uk.linkedin.com/in/gabriel-chisiu",
+    companyUrl: "https://espacosbrasil.com.br/"
   },
   {
     id: 2,
