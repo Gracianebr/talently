@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Quote } from 'lucide-react';
 
@@ -23,11 +22,13 @@ const testimonials = [
   },
   {
     id: 3,
-    quote: "O diferencial da Talently é o match comportamental. Isso nos ajudou a montar um time mais coeso e produtivo desde o primeiro dia.",
-    author: "Carolina Santos",
-    position: "Head de RH da GrowthSeed",
-    company: "GrowthSeed",
-    avatar: "https://randomuser.me/api/portraits/women/68.jpg"
+    quote: "Hoje consigo produzir conteúdo para diversas redes sociais, de forma consistente e condizente com a minha proposta e perfil, graças a uma excelente profissional que veio pela Talently",
+    author: "Danilo Mendes",
+    position: "Sócio da",
+    company: "MartelloEF",
+    avatar: "/lovable-uploads/3d7be94e-b169-4f4d-b478-4d2750692f3d.png",
+    linkedinUrl: "https://www.instagram.com/aqueledann/",
+    companyUrl: "https://martelloef.com.br/"
   }
 ];
 
