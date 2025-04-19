@@ -13,11 +13,13 @@ const testimonials = [
   },
   {
     id: 2,
-    quote: "Reduzimos o tempo de contratação em 62% com a Talently. Os candidatos já chegam alinhados com nossas expectativas e cultura.",
-    author: "Ricardo Mendes",
-    position: "COO da FinovaApp",
-    company: "FinovaApp",
-    avatar: "https://randomuser.me/api/portraits/men/32.jpg"
+    quote: "A Talently nos disponibilizou de forma muito rápida e eficiente, dois SDRs que nos ajudou muito na validação do ICP de nosso produto na fase de planejamento de nossa startup.",
+    author: "Peter Godoi",
+    position: "Co-Fundador da",
+    company: "Let's Vou",
+    avatar: "/lovable-uploads/89bf49da-f4e7-476a-96a6-4412076321a5.png",
+    linkedinUrl: "https://www.linkedin.com/in/peter-godoi-16025410?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+    companyUrl: "https://www.letsvou.com/"
   },
   {
     id: 3,
@@ -55,8 +57,35 @@ const TestimonialSection = () => {
                     className="w-12 h-12 rounded-full mr-4 object-cover"
                   />
                   <div>
-                    <h4 className="font-bold text-talently-darkblue">{testimonial.author}</h4>
-                    <p className="text-talently-gray text-sm">{testimonial.position}</p>
+                    {testimonial.linkedinUrl ? (
+                      <h4 className="font-bold text-talently-darkblue">
+                        <a 
+                          href={testimonial.linkedinUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:underline"
+                        >
+                          {testimonial.author}
+                        </a>
+                      </h4>
+                    ) : (
+                      <h4 className="font-bold text-talently-darkblue">{testimonial.author}</h4>
+                    )}
+                    <p className="text-talently-gray text-sm">
+                      {testimonial.position}{' '}
+                      {testimonial.companyUrl ? (
+                        <a 
+                          href={testimonial.companyUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:underline"
+                        >
+                          {testimonial.company}
+                        </a>
+                      ) : (
+                        testimonial.company
+                      )}
+                    </p>
                   </div>
                 </div>
               </div>
