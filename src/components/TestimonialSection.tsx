@@ -5,12 +5,11 @@ const testimonials = [
   {
     id: 1,
     quote: "A Talently transformou nossa forma de contratar. Encontramos perfis que realmente se encaixam na nossa cultura e nos ajudam a crescer.",
-    author: "Gabriel Chisiu",
-    position: "Founder da",
-    company: "Espaços",
-    avatar: "/lovable-uploads/aa7f5b27-6eaa-4f1c-aa7e-ffb3a8a593d7.png",
-    linkedinUrl: "https://uk.linkedin.com/in/gabriel-chisiu",
-    companyUrl: "https://espacosbrasil.com.br/"
+    author: "Suzanna",
+    position: "Co-founder da",
+    company: "Zold Brasil",
+    avatar: "/lovable-uploads/f1266160-07dc-44b6-9633-aabc0c115594.png",
+    companyUrl: "https://www.zoldbrasil.com/"
   },
   {
     id: 2,
