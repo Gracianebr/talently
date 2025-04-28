@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-// Updated Logo Component with Modern Typography
+// Updated Logo Component with Icon
 const TalentlyLogo = () => {
   return (
-    <span className="text-3xl font-bold tracking-tight text-talently-purple font-[Inter] uppercase">
-      Talently
-    </span>
+    <div className="flex items-center gap-2">
+      <Users size={32} className="text-talently-purple" />
+      <span className="text-3xl font-bold tracking-tight text-talently-purple font-[Inter] uppercase">
+        Talently
+      </span>
+    </div>
   );
 };
 
