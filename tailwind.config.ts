@@ -63,13 +63,13 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				talently: {
-					purple: '#3359DF', // Andela primary blue
-					blue: '#173E7D',   // Darker blue
-					lightblue: '#EBF3FE', // Light blue background
-					gray: '#4F5E74',   // Andela text gray
-					lightgray: '#F5F9FF', // Andela light background
-					darkblue: '#022457', // Andela dark blue
-					accent: '#FFC351'  // Andela yellow accent
+					purple: '#004E7C', // Updated to navy blue/petroleum blue
+					blue: '#004E7C',   // Matching primary color
+					lightblue: '#62B6CB', // Light blue for details
+					gray: '#4F5E74',   // Keeping original gray for text
+					lightgray: '#F2F2F2', // Light gray background
+					darkblue: '#003B5F', // Darker variant of primary blue
+					accent: '#62B6CB'  // Using light blue as accent
 				}
 			},
 			borderRadius: {
