@@ -2,11 +2,15 @@ import React, { useState } from 'react';
 import { Menu, X, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-// Updated Logo Component with Icon
+// Updated Logo Component with Three Icons
 const TalentlyLogo = () => {
   return (
     <div className="flex items-center gap-2">
-      <Users size={32} className="text-talently-purple" />
+      <div className="flex -space-x-1">
+        <Users size={32} className="text-talently-purple" />
+        <Users size={32} className="text-talently-purple fill-talently-lightblue" />
+        <Users size={32} className="text-talently-purple" />
+      </div>
       <span className="text-3xl font-bold tracking-tight text-talently-purple font-[Inter] uppercase">
         Talently
       </span>
