@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
@@ -12,7 +13,7 @@ const HeroSection = () => {
               <span className="text-talently-purple">Contrate</span> os talentos certos para <span className="text-talently-purple">acelerar</span> o crescimento da sua empresa
             </h1>
             <p className="text-lg md:text-xl text-talently-gray mb-8 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              Conectamos startups em fase de tração ou scale-up a profissionais altamente qualificados, com foco em agilidade e assertividade no processo de contratação.
+              Conectamos empresas e startups em fase de tração ou scale-up a profissionais altamente qualificados, com foco em agilidade e assertividade no processo de contratação.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 animate-fade-in" style={{ animationDelay: '0.3s' }}>
               <Button 
