@@ -47,7 +47,7 @@ const AboutSection = () => {
                 </div>
                 <div>
                   <h4 className="font-bold text-talently-darkblue text-lg mb-1">Agilidade</h4>
-                  <p className="text-talently-gray">Processos otimizados para reduzir o tempo de contratação.</p>
+                  <p className="text-talently-gray">Entregamos até 5 profissionais qualificados por vaga em até 7 dias úteis.</p>
                 </div>
               </div>
               

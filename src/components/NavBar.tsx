@@ -70,7 +70,7 @@ const LogoOption5 = () => {
 // Current logo selection - change the number to test different options (1-5)
 const TalentlyLogo = () => {
   // Change logoOption to a number between 1-5 to select different logo options
-  const logoOption = 1;
+  const logoOption: 1 | 2 | 3 | 4 | 5 = 1;
   
   switch(logoOption) {
     case 1: return <LogoOption1 />;
