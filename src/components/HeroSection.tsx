@@ -2,32 +2,35 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const HeroSection = () => {
+  const { t } = useLanguage();
+
   return (
     <section className="pt-24 pb-16 md:pt-32 md:pb-24 bg-gradient-to-r from-talently-lightblue to-white">
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col md:flex-row items-center">
           <div className="md:w-1/2 mb-10 md:mb-0 md:pr-8">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-talently-darkblue mb-6 animate-fade-in">
-              <span className="text-talently-purple">Contrate</span> os talentos certos para <span className="text-talently-purple">acelerar</span> o crescimento da sua empresa
+              <span className="text-talently-purple">{t('hero.title.highlight1')}</span> {t('hero.title')} <span className="text-talently-purple">{t('hero.title.highlight2')}</span> {t('hero.title.end')}
             </h1>
             <p className="text-lg md:text-xl text-talently-gray mb-8 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              Conectamos empresas e startups em fase de tração ou scale-up a profissionais altamente qualificados, com foco em agilidade e assertividade no processo de contratação.
+              {t('hero.subtitle')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 animate-fade-in" style={{ animationDelay: '0.3s' }}>
               <Button 
                 className="bg-talently-purple hover:bg-talently-blue text-white py-6 px-8 text-lg transition-all hover:shadow-lg flex items-center gap-2"
                 onClick={() => window.location.href='#contact'}
               >
-                Agende uma reunião <ArrowRight size={20} />
+                {t('hero.cta1')} <ArrowRight size={20} />
               </Button>
               <Button 
                 variant="outline" 
                 className="border-talently-purple text-talently-purple hover:bg-talently-purple hover:text-white py-6 px-8 text-lg transition-all"
                 onClick={() => window.location.href='#services'}
               >
-                Conheça nossos serviços
+                {t('hero.cta2')}
               </Button>
             </div>
           </div>

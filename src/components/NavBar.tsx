@@ -1,7 +1,8 @@
 
 import React, { useState } from 'react';
-import { Menu, X, Users, User, UserRound } from 'lucide-react';
+import { Menu, X, Users, User, UserRound, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '../contexts/LanguageContext';
 
 // Logo Option 1: Three distinct user icons with middle one filled
 const LogoOption1 = () => {
@@ -69,8 +70,7 @@ const LogoOption5 = () => {
 
 // Current logo selection - change the number to test different options (1-5)
 const TalentlyLogo = () => {
-  // Change logoOption to a number between 1-5 to select different logo options
-  const logoOption: 1 | 2 | 3 | 4 | 5 = 1;
+  const logoOption = 1;
   
   switch(logoOption) {
     case 1: return <LogoOption1 />;
@@ -84,6 +84,7 @@ const TalentlyLogo = () => {
 
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { language, toggleLanguage, t } = useLanguage();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -102,22 +103,30 @@ const NavBar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <a href="#services" className="text-talently-gray hover:text-talently-purple transition-colors">
-              Serviços
+              {t('nav.services')}
             </a>
             <a href="#differentials" className="text-talently-gray hover:text-talently-purple transition-colors">
-              Diferenciais
+              {t('nav.differentials')}
             </a>
             <a href="#pricing" className="text-talently-gray hover:text-talently-purple transition-colors">
-              Planos
+              {t('nav.pricing')}
             </a>
             <a href="#about" className="text-talently-gray hover:text-talently-purple transition-colors">
-              Sobre nós
+              {t('nav.about')}
             </a>
+            <Button 
+              variant="ghost"
+              onClick={toggleLanguage}
+              className="flex items-center gap-2 text-talently-gray hover:text-talently-purple"
+            >
+              <Globe size={18} />
+              {language === 'pt' ? 'EN' : 'PT'}
+            </Button>
             <Button 
               className="bg-talently-purple hover:bg-talently-blue text-white transition-colors"
               onClick={() => window.location.href='#contact'}
             >
-              Fale conosco
+              {t('nav.contact')}
             </Button>
           </div>
 
@@ -134,17 +143,28 @@ const NavBar = () => {
           <div className="md:hidden pt-4 pb-2 animate-fade-in">
             <div className="flex flex-col space-y-4">
               <a href="#services" className="text-talently-gray hover:text-talently-purple transition-colors py-2" onClick={toggleMenu}>
-                Serviços
+                {t('nav.services')}
               </a>
               <a href="#differentials" className="text-talently-gray hover:text-talently-purple transition-colors py-2" onClick={toggleMenu}>
-                Diferenciais
+                {t('nav.differentials')}
               </a>
               <a href="#pricing" className="text-talently-gray hover:text-talently-purple transition-colors py-2" onClick={toggleMenu}>
-                Planos
+                {t('nav.pricing')}
               </a>
               <a href="#about" className="text-talently-gray hover:text-talently-purple transition-colors py-2" onClick={toggleMenu}>
-                Sobre nós
+                {t('nav.about')}
               </a>
+              <Button 
+                variant="ghost"
+                onClick={() => {
+                  toggleLanguage();
+                  toggleMenu();
+                }}
+                className="flex items-center gap-2 text-talently-gray hover:text-talently-purple justify-start"
+              >
+                <Globe size={18} />
+                {language === 'pt' ? 'English' : 'Português'}
+              </Button>
               <Button 
                 className="bg-talently-purple hover:bg-talently-blue text-white transition-colors w-full"
                 onClick={() => {
@@ -152,7 +172,7 @@ const NavBar = () => {
                   toggleMenu();
                 }}
               >
-                Fale conosco
+                {t('nav.contact')}
               </Button>
             </div>
           </div>

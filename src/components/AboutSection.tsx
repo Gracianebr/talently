@@ -1,8 +1,11 @@
 
 import React from 'react';
 import { Target, Clock, CheckCircle } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const AboutSection = () => {
+  const { t } = useLanguage();
+
   return (
     <section id="about" className="py-16 md:py-24 bg-white">
       <div className="container mx-auto px-4 md:px-6">
@@ -21,13 +24,13 @@ const AboutSection = () => {
           
           <div className="lg:w-1/2">
             <h2 className="text-3xl md:text-4xl font-bold text-talently-darkblue mb-6">
-              Quem Somos
+              {t('about.title')}
             </h2>
             <p className="text-lg text-talently-gray mb-6">
-              A Talently é uma startup focada em atender startups em fase de tração e scale-up — empresas que estão crescendo rapidamente, receberam investimento ou estão alcançando altos volumes de vendas, e agora enfrentam o desafio de contratar os talentos certos para continuar expandindo.
+              {t('about.description1')}
             </p>
             <p className="text-lg text-talently-gray mb-8">
-              Nossa metodologia inclui match comportamental entre candidato e vaga, priorizando perfis com as soft skills ideais para a função, além de treinamentos gratuitos para candidatos em temas como soft skills, etiqueta profissional, expressão verbal, revisão gramatical e redação comercial.
+              {t('about.description2')}
             </p>
             
             <div className="space-y-6">
@@ -36,8 +39,8 @@ const AboutSection = () => {
                   <Target className="w-5 h-5 text-talently-purple" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-talently-darkblue text-lg mb-1">Precisão</h4>
-                  <p className="text-talently-gray">Para cada vaga, entregamos até 5 candidatos altamente qualificados.</p>
+                  <h4 className="font-bold text-talently-darkblue text-lg mb-1">{t('about.precision.title')}</h4>
+                  <p className="text-talently-gray">{t('about.precision.description')}</p>
                 </div>
               </div>
               
@@ -46,8 +49,8 @@ const AboutSection = () => {
                   <Clock className="w-5 h-5 text-talently-purple" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-talently-darkblue text-lg mb-1">Agilidade</h4>
-                  <p className="text-talently-gray">Entregamos até 5 profissionais qualificados por vaga em até 7 dias úteis.</p>
+                  <h4 className="font-bold text-talently-darkblue text-lg mb-1">{t('about.agility.title')}</h4>
+                  <p className="text-talently-gray">{t('about.agility.description')}</p>
                 </div>
               </div>
               
@@ -56,8 +59,8 @@ const AboutSection = () => {
                   <CheckCircle className="w-5 h-5 text-talently-purple" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-talently-darkblue text-lg mb-1">Qualidade</h4>
-                  <p className="text-talently-gray">Talentos pré-qualificados e alinhados com a cultura da sua empresa.</p>
+                  <h4 className="font-bold text-talently-darkblue text-lg mb-1">{t('about.quality.title')}</h4>
+                  <p className="text-talently-gray">{t('about.quality.description')}</p>
                 </div>
               </div>
             </div>
