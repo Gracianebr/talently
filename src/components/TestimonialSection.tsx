@@ -1,48 +1,52 @@
+
 import React from 'react';
 import { Quote } from 'lucide-react';
-
-const testimonials = [
-  {
-    id: 1,
-    quote: "A Talently transformou nossa forma de contratar. Encontramos perfis que realmente se encaixam na nossa cultura e nos ajudam a crescer.",
-    author: "Suzanna",
-    position: "Co-founder da",
-    company: "Zold Brasil",
-    avatar: "/lovable-uploads/f1266160-07dc-44b6-9633-aabc0c115594.png",
-    companyUrl: "https://www.zoldbrasil.com/"
-  },
-  {
-    id: 2,
-    quote: "A Talently nos disponibilizou de forma muito rápida e eficiente, dois SDRs que nos ajudou muito na validação do ICP de nosso produto na fase de planejamento de nossa startup.",
-    author: "Peter Godoi",
-    position: "Co-Fundador da",
-    company: "Let's Vou",
-    avatar: "/lovable-uploads/89bf49da-f4e7-476a-96a6-4412076321a5.png",
-    linkedinUrl: "https://www.linkedin.com/in/peter-godoi-16025410?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
-    companyUrl: "https://www.letsvou.com/"
-  },
-  {
-    id: 3,
-    quote: "Hoje consigo produzir conteúdo para diversas redes sociais, de forma consistente e condizente com a minha proposta e perfil, graças a uma excelente profissional que veio pela Talently",
-    author: "Danilo Mendes",
-    position: "Sócio da",
-    company: "MartelloEF",
-    avatar: "/lovable-uploads/3d7be94e-b169-4f4d-b478-4d2750692f3d.png",
-    linkedinUrl: "https://www.instagram.com/aqueledann/",
-    companyUrl: "https://martelloef.com.br/"
-  }
-];
+import { useLanguage } from '../contexts/LanguageContext';
 
 const TestimonialSection = () => {
+  const { t } = useLanguage();
+
+  const testimonials = [
+    {
+      id: 1,
+      quote: "A Talently transformou nossa forma de contratar. Encontramos perfis que realmente se encaixam na nossa cultura e nos ajudam a crescer.",
+      author: "Suzanna",
+      position: "Co-founder da",
+      company: "Zold Brasil",
+      avatar: "/lovable-uploads/f1266160-07dc-44b6-9633-aabc0c115594.png",
+      companyUrl: "https://www.zoldbrasil.com/"
+    },
+    {
+      id: 2,
+      quote: "A Talently nos disponibilizou de forma muito rápida e eficiente, dois SDRs que nos ajudou muito na validação do ICP de nosso produto na fase de planejamento de nossa startup.",
+      author: "Peter Godoi",
+      position: "Co-Fundador da",
+      company: "Let's Vou",
+      avatar: "/lovable-uploads/89bf49da-f4e7-476a-96a6-4412076321a5.png",
+      linkedinUrl: "https://www.linkedin.com/in/peter-godoi-16025410?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+      companyUrl: "https://www.letsvou.com/"
+    },
+    {
+      id: 3,
+      quote: "Hoje consigo produzir conteúdo para diversas redes sociais, de forma consistente e condizente com a minha proposta e perfil, graças a uma excelente profissional que veio pela Talently",
+      author: "Danilo Mendes",
+      position: "Sócio da",
+      company: "MartelloEF",
+      avatar: "/lovable-uploads/3d7be94e-b169-4f4d-b478-4d2750692f3d.png",
+      linkedinUrl: "https://www.instagram.com/aqueledann/",
+      companyUrl: "https://martelloef.com.br/"
+    }
+  ];
+
   return (
     <section className="py-16 md:py-24 bg-gradient-to-b from-talently-lightgray to-white">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-talently-darkblue mb-4">
-            O que nossos clientes dizem
+            {t('testimonials.title')}
           </h2>
           <p className="text-lg text-talently-gray max-w-3xl mx-auto">
-            Startups que cresceram com o talento certo no time.
+            {t('testimonials.subtitle')}
           </p>
         </div>
 
