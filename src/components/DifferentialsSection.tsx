@@ -8,21 +8,21 @@ const DifferentialsSection = () => {
 
   const differentials = [
     {
-      id: 3,
-      title: "Vagas Internacionais",
-      description: "Busca de talentos na América Latina para posições remotas, incluindo curso intensivo de português para estrangeiros.",
+      id: 1,
+      title: t('differentials.international.title'),
+      description: t('differentials.international.description'),
       icon: Globe,
     },
     {
-      id: 4,
-      title: "Onboarding Assistido",
-      description: "Acompanhamento especializado nos primeiros 30 dias, com ajustes de expectativas e feedback contínuo para garantir sucesso.",
+      id: 2,
+      title: t('differentials.onboarding.title'),
+      description: t('differentials.onboarding.description'),
       icon: UserCheck,
     },
     {
-      id: 6,
-      title: "90 dias de garantia",
-      description: "Oferecemos uma garantia de 90 dias. Se o profissional contratado sair antes desse período, encontramos outro sem cobrar nada da sua empresa.",
+      id: 3,
+      title: t('differentials.guarantee.title'),
+      description: t('differentials.guarantee.description'),
       icon: HeartHandshake,
     },
   ];
