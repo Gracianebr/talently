@@ -11,29 +11,29 @@ const ServicesSection = () => {
   const headhuntingSteps = [
     {
       id: 1,
-      title: "Entendimento do perfil",
-      description: "Compreendemos profundamente as necessidades técnicas e comportamentais da sua empresa, cultura organizacional e objetivos de negócio.",
+      title: t('services.process.step1.title'),
+      description: t('services.process.step1.description'),
       icon: Search,
       color: "bg-blue-100"
     },
     {
       id: 2,
-      title: "Busca qualificada",
-      description: "Utilizamos nosso banco de talentos e metodologias avançadas para encontrar profissionais que se encaixam perfeitamente nos requisitos definidos.",
+      title: t('services.process.step2.title'),
+      description: t('services.process.step2.description'),
       icon: FileCheck,
       color: "bg-purple-100"
     },
     {
       id: 3,
-      title: "Entrevistas e seleção",
-      description: "Realizamos triagens técnicas e comportamentais para garantir o alinhamento do candidato com a posição e cultura da empresa.",
+      title: t('services.process.step3.title'),
+      description: t('services.process.step3.description'),
       icon: Users,
       color: "bg-green-100"
     },
     {
       id: 4,
-      title: "Apresentação e fechamento",
-      description: "Apresentamos os melhores candidatos com relatórios detalhados.",
+      title: t('services.process.step4.title'),
+      description: t('services.process.step4.description'),
       icon: CalendarCheck,
       color: "bg-orange-100"
     }
