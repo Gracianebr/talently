@@ -66,15 +66,15 @@ const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-start">
                 <Mail className="mr-2 flex-shrink-0 mt-1" size={18} />
-                <span className="text-gray-300">contato@talently.com.br</span>
+                <span className="text-gray-300">{t('footer.contact.email')}</span>
               </li>
               <li className="flex items-start">
                 <Phone className="mr-2 flex-shrink-0 mt-1" size={18} />
-                <span className="text-gray-300">(19) 99741-6289</span>
+                <span className="text-gray-300">{t('footer.contact.phone')}</span>
               </li>
               <li className="flex items-start">
                 <MapPin className="mr-2 flex-shrink-0 mt-1" size={18} />
-                <span className="text-gray-300">Campinas, SP - Brasil</span>
+                <span className="text-gray-300">{t('footer.contact.location')}</span>
               </li>
             </ul>
           </div>

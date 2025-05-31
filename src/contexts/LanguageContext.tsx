@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 type Language = 'pt' | 'en';
@@ -105,6 +104,9 @@ const translations = {
     'footer.quickLinks.differentials': 'Diferenciais',
     'footer.quickLinks.privacy': 'Política de Privacidade',
     'footer.contact': 'Contato',
+    'footer.contact.email': 'contato@talently.com.br',
+    'footer.contact.phone': '(19) 99741-6289',
+    'footer.contact.location': 'Campinas, SP - Brasil',
     'footer.copyright': 'Todos os direitos reservados.'
   },
   en: {
@@ -154,7 +156,7 @@ const translations = {
     'pricing.subtitle': 'Choose the ideal plan for your startup\'s hiring needs.',
     'pricing.plan1.title': 'One-time Hiring',
     'pricing.plan1.description': 'Ideal for startups with specific hiring needs.',
-    'pricing.plan1.price': 'Starting at R$ 3,500',
+    'pricing.plan1.price': 'Starting at £2,500',
     'pricing.plan1.period': 'per position',
     'pricing.plan1.included': 'What\'s included:',
     'pricing.plan1.feature1': 'Up to 5 qualified candidates',
@@ -202,6 +204,9 @@ const translations = {
     'footer.quickLinks.differentials': 'Differentials',
     'footer.quickLinks.privacy': 'Privacy Policy',
     'footer.contact': 'Contact',
+    'footer.contact.email': 'contact@talentlyrecruiter.co.uk',
+    'footer.contact.phone': '+44 7917 288150',
+    'footer.contact.location': 'London, UK',
     'footer.copyright': 'All rights reserved.'
   }
 };
