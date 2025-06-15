@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Menu, X, Globe } from 'lucide-react';
+import { Menu, X, Globe, LogIn } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const NavBar = () => {
@@ -16,6 +16,12 @@ const NavBar = () => {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
+    setIsMenuOpen(false);
+  };
+
+  // Função para navegar à página de login futuramente
+  const goToLogin = () => {
+    window.location.href = "/login"; // Quando rota /login estiver pronta, pode ser ajustado para react-router
     setIsMenuOpen(false);
   };
 
@@ -53,7 +59,7 @@ const NavBar = () => {
             >
               {t('nav.about')}
             </button>
-            
+
             {/* Language Toggle */}
             <button
               onClick={toggleLanguage}
@@ -62,12 +68,21 @@ const NavBar = () => {
               <Globe size={18} />
               <span className="text-sm font-medium">{language === 'pt' ? 'EN' : 'PT'}</span>
             </button>
-            
+
+            {/* Botão Fale Conosco */}
             <button 
               onClick={() => scrollToSection('contact')}
               className="bg-talently-purple text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition-colors"
             >
               {t('nav.contact')}
+            </button>
+            {/* Botão Login */}
+            <button
+              onClick={goToLogin}
+              className="flex items-center bg-talently-darkblue text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition-colors ml-2"
+            >
+              <LogIn size={18} className="mr-2" />
+              <span className="text-sm font-semibold">Acessar</span>
             </button>
           </div>
 
@@ -121,6 +136,14 @@ const NavBar = () => {
                 className="block w-full text-left bg-talently-purple text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition-colors"
               >
                 {t('nav.contact')}
+              </button>
+              {/* Botão Login Mobile */}
+              <button
+                onClick={goToLogin}
+                className="flex items-center w-full text-left bg-talently-darkblue text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition-colors"
+              >
+                <LogIn size={18} className="mr-2" />
+                <span className="text-sm font-semibold">Acessar</span>
               </button>
             </div>
           </div>
