@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { User, Building2, TestTube, FileText, LogOut } from "lucide-react";
+import { User, Building2, TestTube, FileText, LogOut, Users } from "lucide-react";
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
@@ -57,30 +57,32 @@ export default function Dashboard() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Teste DISC */}
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <TestTube className="text-talently-purple" size={24} />
-                <span>Teste DISC</span>
-              </CardTitle>
-              <CardDescription>
-                {user?.profile?.hasCompletedDISC 
-                  ? 'Teste concluído' 
-                  : 'Descubra seu perfil comportamental'
-                }
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button 
-                onClick={() => navigate('/disc-test')}
-                className="w-full bg-talently-purple hover:bg-talently-purple/90"
-                disabled={user?.profile?.hasCompletedDISC}
-              >
-                {user?.profile?.hasCompletedDISC ? 'Ver Resultado' : 'Iniciar Teste'}
-              </Button>
-            </CardContent>
-          </Card>
+          {/* Teste DISC - Apenas para candidatos */}
+          {isCandidate && (
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <TestTube className="text-talently-purple" size={24} />
+                  <span>Teste DISC</span>
+                </CardTitle>
+                <CardDescription>
+                  {user?.profile?.hasCompletedDISC 
+                    ? 'Teste concluído' 
+                    : 'Descubra seu perfil comportamental'
+                  }
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button 
+                  onClick={() => navigate('/disc-test')}
+                  className="w-full bg-talently-purple hover:bg-talently-purple/90"
+                  disabled={user?.profile?.hasCompletedDISC}
+                >
+                  {user?.profile?.hasCompletedDISC ? 'Ver Resultado' : 'Iniciar Teste'}
+                </Button>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Teste Cultural */}
           <Card className="hover:shadow-lg transition-shadow">
@@ -107,27 +109,35 @@ export default function Dashboard() {
             </CardContent>
           </Card>
 
-          {/* Vagas/Candidatos */}
+          {/* Candidatos (para empresas) / Vagas (para candidatos) */}
           <Card className="hover:shadow-lg transition-shadow">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
-                <Building2 className="text-talently-purple" size={24} />
-                <span>{isCandidate ? 'Vagas Disponíveis' : 'Candidatos'}</span>
+                {isCandidate ? (
+                  <>
+                    <Building2 className="text-talently-purple" size={24} />
+                    <span>Vagas Disponíveis</span>
+                  </>
+                ) : (
+                  <>
+                    <Users className="text-talently-purple" size={24} />
+                    <span>Candidatos</span>
+                  </>
+                )}
               </CardTitle>
               <CardDescription>
                 {isCandidate 
                   ? 'Veja vagas compatíveis com seu perfil'
-                  : 'Visualize candidatos compatíveis'
+                  : 'Visualize candidatos e seus perfis culturais'
                 }
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Button 
-                variant="outline"
-                className="w-full"
-                disabled
+                onClick={() => navigate(isCandidate ? '/jobs' : '/candidates')}
+                className="w-full bg-talently-purple hover:bg-talently-purple/90"
               >
-                Em breve
+                {isCandidate ? 'Ver Vagas' : 'Ver Candidatos'}
               </Button>
             </CardContent>
           </Card>
@@ -152,12 +162,14 @@ export default function Dashboard() {
                     {isCandidate ? 'Candidato' : 'Empresa'}
                   </p>
                 </div>
-                <div>
-                  <p className="font-semibold text-gray-700">Teste DISC:</p>
-                  <p className="text-gray-600">
-                    {user?.profile?.hasCompletedDISC ? '✅ Concluído' : '⏳ Pendente'}
-                  </p>
-                </div>
+                {isCandidate && (
+                  <div>
+                    <p className="font-semibold text-gray-700">Teste DISC:</p>
+                    <p className="text-gray-600">
+                      {user?.profile?.hasCompletedDISC ? '✅ Concluído' : '⏳ Pendente'}
+                    </p>
+                  </div>
+                )}
                 <div>
                   <p className="font-semibold text-gray-700">Teste Cultural:</p>
                   <p className="text-gray-600">
