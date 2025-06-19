@@ -14,6 +14,7 @@ import Dashboard from "./pages/Dashboard";
 import DiscTest from "./pages/DiscTest";
 import CulturalTest from "./pages/CulturalTest";
 import Candidates from "./pages/Candidates";
+import Jobs from "./pages/Jobs";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => (
               <Route path="/disc-test" element={<DiscTest />} />
               <Route path="/cultural-test" element={<CulturalTest />} />
               <Route path="/candidates" element={<Candidates />} />
+              <Route path="/jobs" element={<Jobs />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

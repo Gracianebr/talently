@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { User, Building2, TestTube, FileText, LogOut, Users } from "lucide-react";
+import { User, Building2, TestTube, FileText, LogOut, Users, Briefcase } from "lucide-react";
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
@@ -141,6 +141,29 @@ export default function Dashboard() {
               </Button>
             </CardContent>
           </Card>
+
+          {/* Minhas Vagas - Apenas para empresas */}
+          {!isCandidate && (
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Briefcase className="text-talently-purple" size={24} />
+                  <span>Minhas Vagas</span>
+                </CardTitle>
+                <CardDescription>
+                  Gerencie suas vagas abertas e crie novas oportunidades
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button 
+                  onClick={() => navigate('/jobs')}
+                  className="w-full bg-talently-purple hover:bg-talently-purple/90"
+                >
+                  Gerenciar Vagas
+                </Button>
+              </CardContent>
+            </Card>
+          )}
         </div>
 
         {/* Profile Summary */}

@@ -1,12 +1,18 @@
-
 import React, { useState } from 'react';
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { useNavigate } from "react-router-dom";
-import { ArrowLeft, User, Mail, Phone, Linkedin, FileText, Eye, Download, MapPin, Calendar, GraduationCap, Languages } from "lucide-react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { ArrowLeft, User, Mail, Phone, Linkedin, FileText, Eye, Download, MapPin, Calendar, GraduationCap, Languages, Briefcase } from "lucide-react";
+
+// Vagas disponíveis para seleção
+const AVAILABLE_JOBS = [
+  { id: 1, title: "Desenvolvedor Frontend React", applicantsCount: 12 },
+  { id: 2, title: "Analista de Marketing Digital", applicantsCount: 8 },
+  { id: 3, title: "Gerente de Recursos Humanos", applicantsCount: 15 }
+];
 
 // Dados de exemplo de candidatos
 const SAMPLE_CANDIDATES = [
@@ -101,7 +107,9 @@ const CULTURAL_PROFILE_COLORS = {
 export default function Candidates() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [selectedCandidate, setSelectedCandidate] = useState(null);
+  const [selectedJobId, setSelectedJobId] = useState(searchParams.get('jobId') || null);
 
   if (user?.type !== 'company') {
     navigate('/dashboard');
@@ -122,6 +130,68 @@ export default function Candidates() {
     // Simular download do currículo
     alert(`Download do currículo de ${candidate.firstName} ${candidate.lastName} iniciado!`);
   };
+
+  const selectedJob = AVAILABLE_JOBS.find(job => job.id === parseInt(selectedJobId));
+
+  // Se não há vaga selecionada, mostrar seletor de vagas
+  if (!selectedJobId) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        {/* Header */}
+        <div className="bg-white shadow-sm border-b">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center py-4">
+              <div className="flex items-center space-x-4">
+                <Button 
+                  variant="ghost" 
+                  onClick={() => navigate('/dashboard')}
+                  className="flex items-center space-x-2"
+                >
+                  <ArrowLeft size={16} />
+                  <span>Dashboard</span>
+                </Button>
+                <span className="text-2xl font-bold text-talently-purple">Talently</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Job Selection */}
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="mb-8 text-center">
+            <h1 className="text-3xl font-bold text-talently-darkblue mb-2">
+              Selecione uma Vaga
+            </h1>
+            <p className="text-gray-600">
+              Escolha a vaga para visualizar os candidatos inscritos
+            </p>
+          </div>
+
+          <div className="grid gap-4">
+            {AVAILABLE_JOBS.map((job) => (
+              <Card key={job.id} className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => setSelectedJobId(job.id.toString())}>
+                <CardContent className="p-6">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <h3 className="text-xl font-semibold text-talently-darkblue mb-2">{job.title}</h3>
+                      <p className="text-gray-600">
+                        {job.applicantsCount} candidatos inscritos
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <Button className="bg-talently-purple hover:bg-talently-purple/90">
+                        Ver Candidatos
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (selectedCandidate) {
     return (
@@ -301,11 +371,11 @@ export default function Candidates() {
             <div className="flex items-center space-x-4">
               <Button 
                 variant="ghost" 
-                onClick={() => navigate('/dashboard')}
+                onClick={() => setSelectedJobId(null)}
                 className="flex items-center space-x-2"
               >
                 <ArrowLeft size={16} />
-                <span>Dashboard</span>
+                <span>Vagas</span>
               </Button>
               <span className="text-2xl font-bold text-talently-purple">Talently</span>
             </div>
@@ -317,10 +387,10 @@ export default function Candidates() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-talently-darkblue mb-2">
-            Candidatos Disponíveis
+            Candidatos - {selectedJob?.title}
           </h1>
           <p className="text-gray-600">
-            Visualize os candidatos compatíveis com o perfil cultural da sua empresa
+            {selectedJob?.applicantsCount} candidatos inscritos nesta vaga
           </p>
         </div>
 
