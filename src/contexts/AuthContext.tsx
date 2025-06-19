@@ -36,6 +36,22 @@ const TEMP_USERS = [
       discResults: null,
       culturalResults: null
     }
+  },
+  {
+    email: 'betecps@gmail.com',
+    password: '12345678',
+    name: 'Tech Empresa',
+    type: 'company' as const,
+    profile: {
+      companyName: 'Tech Empresa',
+      cnpj: '12.345.678/0001-90',
+      responsibleName: 'Bete Silva',
+      responsibleRole: 'Gerente de RH',
+      segment: 'Tecnologia',
+      website: 'https://techempresa.com.br',
+      hasCompletedCultural: false,
+      culturalResults: null
+    }
   }
 ];
 

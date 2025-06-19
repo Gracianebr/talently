@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -11,6 +12,7 @@ import LoginPage from "./pages/Login";
 import SignUpPage from "./pages/SignUp";
 import Dashboard from "./pages/Dashboard";
 import DiscTest from "./pages/DiscTest";
+import CulturalTest from "./pages/CulturalTest";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +33,7 @@ const App = () => (
               <Route path="/signup" element={<SignUpPage />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/disc-test" element={<DiscTest />} />
+              <Route path="/cultural-test" element={<CulturalTest />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
