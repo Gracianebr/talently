@@ -15,6 +15,8 @@ import DiscTest from "./pages/DiscTest";
 import CulturalTest from "./pages/CulturalTest";
 import Candidates from "./pages/Candidates";
 import Jobs from "./pages/Jobs";
+import EditJob from "./pages/EditJob";
+import CreateJob from "./pages/CreateJob";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +40,8 @@ const App = () => (
               <Route path="/cultural-test" element={<CulturalTest />} />
               <Route path="/candidates" element={<Candidates />} />
               <Route path="/jobs" element={<Jobs />} />
+              <Route path="/jobs/edit" element={<EditJob />} />
+              <Route path="/jobs/create" element={<CreateJob />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -108,11 +107,15 @@ export default function Jobs() {
   };
 
   const handleEditJob = (jobId) => {
-    alert(`Redirecionando para edição da vaga ${jobId}`);
+    navigate(`/jobs/edit?id=${jobId}`);
   };
 
   const handleViewCandidates = (jobId) => {
     navigate(`/candidates?jobId=${jobId}`);
+  };
+
+  const handleCreateJob = () => {
+    navigate('/jobs/create');
   };
 
   if (selectedJob) {
@@ -287,7 +290,7 @@ export default function Jobs() {
               <span className="text-2xl font-bold text-talently-purple">Talently</span>
             </div>
             <Button 
-              onClick={() => alert('Funcionalidade de criar vaga em desenvolvimento')}
+              onClick={handleCreateJob}
               className="bg-talently-purple hover:bg-talently-purple/90"
             >
               <Plus size={16} className="mr-2" />
