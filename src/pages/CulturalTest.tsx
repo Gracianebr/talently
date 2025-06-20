@@ -122,7 +122,10 @@ const COMPANY_QUESTIONS: Question[] = [
   }
 ];
 
-const PROFILE_DESCRIPTIONS = {
+type CandidateProfile = 'Explorador' | 'Executor' | 'Guardião' | 'Conector';
+type CompanyProfile = 'Exploradora' | 'Executora' | 'Guardiã' | 'Conectora';
+
+const PROFILE_DESCRIPTIONS: Record<CandidateProfile, { title: string; description: string; keywords: string }> = {
   Explorador: {
     title: "🔷 Explorador",
     description: "Valorizam a inovação, a criatividade e a autonomia. Estão sempre em busca de novas ideias, abraçam mudanças e têm forte espírito empreendedor.",
@@ -145,7 +148,7 @@ const PROFILE_DESCRIPTIONS = {
   }
 };
 
-const COMPANY_PROFILE_DESCRIPTIONS = {
+const COMPANY_PROFILE_DESCRIPTIONS: Record<CompanyProfile, { title: string; description: string; keywords: string }> = {
   Exploradora: {
     title: "🔷 Exploradora",
     description: "A sua empresa tem um perfil Explorador, voltado à inovação, criatividade e autonomia. Esse tipo de organização costuma valorizar a liberdade para experimentar, pensar fora da caixa e adaptar-se rapidamente às mudanças do mercado. São ambientes ideais para profissionais com espírito empreendedor, que buscam crescer junto com ideias novas. Aqui, errar rápido é parte do processo e a flexibilidade é uma aliada da evolução constante.",
@@ -197,7 +200,19 @@ export default function CulturalTest() {
         profileCounts[a] > profileCounts[b] ? a : b
       );
 
-      setResult(dominantProfile);
+      // Convert candidate profiles to company profiles for companies
+      let finalResult = dominantProfile;
+      if (user?.type === 'company') {
+        const profileMapping: Record<string, string> = {
+          'Explorador': 'Exploradora',
+          'Executor': 'Executora',
+          'Guardião': 'Guardiã',
+          'Conector': 'Conectora'
+        };
+        finalResult = profileMapping[dominantProfile] || dominantProfile;
+      }
+
+      setResult(finalResult);
       setShowResult(true);
     }
   };
@@ -219,8 +234,13 @@ export default function CulturalTest() {
 
   if (showResult) {
     const isCandidate = user?.type === 'candidate';
-    const profileDescriptions = isCandidate ? PROFILE_DESCRIPTIONS : COMPANY_PROFILE_DESCRIPTIONS;
-    const profileInfo = profileDescriptions[result as keyof typeof profileDescriptions];
+    let profileInfo;
+    
+    if (isCandidate) {
+      profileInfo = PROFILE_DESCRIPTIONS[result as CandidateProfile];
+    } else {
+      profileInfo = COMPANY_PROFILE_DESCRIPTIONS[result as CompanyProfile];
+    }
     
     return (
       <div className="min-h-screen bg-gray-50 py-12 px-4">
