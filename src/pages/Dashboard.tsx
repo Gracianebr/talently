@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { User, Building2, TestTube, FileText, LogOut, Users, Briefcase } from "lucide-react";
+import { User, Building2, FileText, LogOut, Users, Briefcase, Download, ExternalLink, Phone, Mail, Linkedin } from "lucide-react";
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
@@ -16,6 +16,18 @@ export default function Dashboard() {
   };
 
   const isCandidate = user?.type === 'candidate';
+
+  // Dados de exemplo da empresa
+  const companyData = {
+    cnpj: "12.345.678/0001-90",
+    razaoSocial: "Betec Consultoria e Projetos Ltda",
+    site: "https://www.betecps.com.br",
+    responsavel: "Maria Silva",
+    cargo: "Diretora de RH",
+    linkedin: "https://linkedin.com/in/maria-silva-rh",
+    telefone: "+55 11 99999-9999",
+    contratoUrl: "/downloads/contrato-prestacao-servicos.pdf"
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -62,7 +74,7 @@ export default function Dashboard() {
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
-                  <TestTube className="text-talently-purple" size={24} />
+                  <User className="text-talently-purple" size={24} />
                   <span>Teste DISC</span>
                 </CardTitle>
                 <CardDescription>
@@ -99,13 +111,30 @@ export default function Dashboard() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button 
-                onClick={() => navigate('/cultural-test')}
-                className="w-full bg-talently-purple hover:bg-talently-purple/90"
-                disabled={user?.profile?.hasCompletedCultural}
-              >
-                {user?.profile?.hasCompletedCultural ? 'Ver Resultado' : 'Iniciar Teste'}
-              </Button>
+              {user?.profile?.hasCompletedCultural ? (
+                <div className="space-y-2">
+                  <Button 
+                    onClick={() => navigate('/cultural-test')}
+                    className="w-full bg-talently-purple hover:bg-talently-purple/90"
+                  >
+                    Ver Resultado
+                  </Button>
+                  <Button 
+                    onClick={() => navigate('/cultural-test')}
+                    variant="outline"
+                    className="w-full"
+                  >
+                    Refazer Teste
+                  </Button>
+                </div>
+              ) : (
+                <Button 
+                  onClick={() => navigate('/cultural-test')}
+                  className="w-full bg-talently-purple hover:bg-talently-purple/90"
+                >
+                  Iniciar Teste
+                </Button>
+              )}
             </CardContent>
           </Card>
 
@@ -170,36 +199,130 @@ export default function Dashboard() {
         <div className="mt-8">
           <Card>
             <CardHeader>
-              <CardTitle>Resumo do Perfil</CardTitle>
-              <CardDescription>Suas informações e progresso</CardDescription>
+              <CardTitle>
+                {isCandidate ? 'Resumo do Perfil' : 'Informações da Empresa'}
+              </CardTitle>
+              <CardDescription>
+                {isCandidate ? 'Suas informações e progresso' : 'Dados cadastrais e contato'}
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <p className="font-semibold text-gray-700">E-mail:</p>
-                  <p className="text-gray-600">{user?.email}</p>
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-700">Tipo de conta:</p>
-                  <p className="text-gray-600">
-                    {isCandidate ? 'Candidato' : 'Empresa'}
-                  </p>
-                </div>
-                {isCandidate && (
+              {isCandidate ? (
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <p className="font-semibold text-gray-700">E-mail:</p>
+                    <p className="text-gray-600">{user?.email}</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-gray-700">Tipo de conta:</p>
+                    <p className="text-gray-600">Candidato</p>
+                  </div>
                   <div>
                     <p className="font-semibold text-gray-700">Teste DISC:</p>
                     <p className="text-gray-600">
                       {user?.profile?.hasCompletedDISC ? '✅ Concluído' : '⏳ Pendente'}
                     </p>
                   </div>
-                )}
-                <div>
-                  <p className="font-semibold text-gray-700">Teste Cultural:</p>
-                  <p className="text-gray-600">
-                    {user?.profile?.hasCompletedCultural ? '✅ Concluído' : '⏳ Pendente'}
-                  </p>
+                  <div>
+                    <p className="font-semibold text-gray-700">Teste Cultural:</p>
+                    <p className="text-gray-600">
+                      {user?.profile?.hasCompletedCultural ? '✅ Concluído' : '⏳ Pendente'}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="space-y-6">
+                  {/* Teste Cultural Result */}
+                  <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="font-semibold text-talently-darkblue">Perfil Cultural:</p>
+                      <span className="text-2xl">🔶</span>
+                    </div>
+                    <p className="text-blue-700 font-medium">
+                      {user?.profile?.hasCompletedCultural ? 'Executora - Cultura de Performance' : '⏳ Teste Pendente'}
+                    </p>
+                  </div>
+
+                  {/* Company Information */}
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <div>
+                        <p className="font-semibold text-gray-700 flex items-center space-x-2">
+                          <Building2 size={16} />
+                          <span>CNPJ:</span>
+                        </p>
+                        <p className="text-gray-600">{companyData.cnpj}</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-700">Razão Social:</p>
+                        <p className="text-gray-600">{companyData.razaoSocial}</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-700 flex items-center space-x-2">
+                          <ExternalLink size={16} />
+                          <span>Website:</span>
+                        </p>
+                        <a 
+                          href={companyData.site} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-talently-purple hover:underline"
+                        >
+                          {companyData.site}
+                        </a>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-700">E-mail:</p>
+                        <p className="text-gray-600">{user?.email}</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div>
+                        <p className="font-semibold text-gray-700">Responsável:</p>
+                        <p className="text-gray-600">{companyData.responsavel}</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-700">Cargo:</p>
+                        <p className="text-gray-600">{companyData.cargo}</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-700 flex items-center space-x-2">
+                          <Linkedin size={16} />
+                          <span>LinkedIn:</span>
+                        </p>
+                        <a 
+                          href={companyData.linkedin} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-talently-purple hover:underline"
+                        >
+                          Ver perfil
+                        </a>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-700 flex items-center space-x-2">
+                          <Phone size={16} />
+                          <span>WhatsApp/Telefone:</span>
+                        </p>
+                        <p className="text-gray-600">{companyData.telefone}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Service Agreement Download */}
+                  <div className="pt-4 border-t">
+                    <Button 
+                      variant="outline" 
+                      className="flex items-center space-x-2"
+                      onClick={() => window.open(companyData.contratoUrl, '_blank')}
+                    >
+                      <Download size={16} />
+                      <span>Baixar Contrato de Prestação de Serviços</span>
+                    </Button>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>

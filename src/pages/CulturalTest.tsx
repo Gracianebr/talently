@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,6 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { ArrowLeft } from "lucide-react";
 
 interface Question {
   id: number;
@@ -145,6 +145,29 @@ const PROFILE_DESCRIPTIONS = {
   }
 };
 
+const COMPANY_PROFILE_DESCRIPTIONS = {
+  Exploradora: {
+    title: "🔷 Exploradora",
+    description: "A sua empresa tem um perfil Explorador, voltado à inovação, criatividade e autonomia. Esse tipo de organização costuma valorizar a liberdade para experimentar, pensar fora da caixa e adaptar-se rapidamente às mudanças do mercado. São ambientes ideais para profissionais com espírito empreendedor, que buscam crescer junto com ideias novas. Aqui, errar rápido é parte do processo e a flexibilidade é uma aliada da evolução constante.",
+    keywords: "Inovação, liberdade, criatividade, experimentação, flexibilidade"
+  },
+  Executora: {
+    title: "🔶 Executora",
+    description: "A sua empresa tem um perfil Executor, voltado à performance, metas e entrega de resultados. Esse tipo de organização valoriza profissionais comprometidos, ambiciosos e com foco em produtividade. A velocidade, eficiência e a busca por excelência são pilares da cultura. Ambientes com esse perfil são ideais para talentos que gostam de desafios, metas claras e recompensas proporcionais ao esforço.",
+    keywords: "Performance, metas, resultados, eficiência, competitividade"
+  },
+  Guardiã: {
+    title: "🟤 Guardiã",
+    description: "A sua empresa tem um perfil Guardião, com foco em estabilidade, segurança e cumprimento de regras. Esse tipo de organização funciona bem com processos claros, hierarquia definida e um ambiente previsível. É ideal para pessoas que valorizam planejamento, estrutura e uma jornada profissional sólida e segura. Mudanças são bem-vindas, mas apenas com organização e responsabilidade.",
+    keywords: "Estabilidade, segurança, processos, estrutura, planejamento"
+  },
+  Conectora: {
+    title: "🟢 Conectora", 
+    description: "A sua empresa tem um perfil Conector, com foco em propósito, pessoas e impacto social. Essa cultura valoriza um ambiente humano, empático e colaborativo. É o lugar ideal para quem busca fazer parte de algo maior, onde as relações, o respeito e os valores éticos vêm antes de tudo. Mudanças são bem aceitas quando estão alinhadas ao bem-estar da equipe e à missão da empresa.",
+    keywords: "Propósito, pessoas, impacto social, colaboração, valores éticos"
+  }
+};
+
 export default function CulturalTest() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -179,6 +202,13 @@ export default function CulturalTest() {
     }
   };
 
+  const handleBack = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion(currentQuestion - 1);
+      setAnswers(answers.slice(0, -1));
+    }
+  };
+
   const handleFinish = () => {
     toast({
       title: "Teste concluído!",
@@ -188,7 +218,9 @@ export default function CulturalTest() {
   };
 
   if (showResult) {
-    const profileInfo = PROFILE_DESCRIPTIONS[result as keyof typeof PROFILE_DESCRIPTIONS];
+    const isCandidate = user?.type === 'candidate';
+    const profileDescriptions = isCandidate ? PROFILE_DESCRIPTIONS : COMPANY_PROFILE_DESCRIPTIONS;
+    const profileInfo = profileDescriptions[result as keyof typeof profileDescriptions];
     
     return (
       <div className="min-h-screen bg-gray-50 py-12 px-4">
@@ -196,7 +228,7 @@ export default function CulturalTest() {
           <Card>
             <CardHeader className="text-center">
               <CardTitle className="text-3xl text-talently-darkblue">
-                Seu Perfil Cultural
+                {isCandidate ? 'Seu Perfil Cultural' : 'Perfil Cultural da Empresa'}
               </CardTitle>
               <CardDescription>
                 Resultado do seu teste de fit cultural
@@ -209,19 +241,34 @@ export default function CulturalTest() {
               <h3 className="text-2xl font-bold text-talently-purple">
                 {profileInfo.title}
               </h3>
-              <p className="text-gray-700 text-lg leading-relaxed">
-                {profileInfo.description}
-              </p>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <p className="font-semibold text-talently-darkblue">Palavras-chave:</p>
-                <p className="text-gray-600">{profileInfo.keywords}</p>
+              <div className="bg-gray-50 p-6 rounded-lg text-left">
+                <p className="text-gray-700 text-lg leading-relaxed mb-4">
+                  {profileInfo.description}
+                </p>
+                <div className="bg-white p-4 rounded-lg border">
+                  <p className="font-semibold text-talently-darkblue mb-2">Palavras-chave:</p>
+                  <p className="text-gray-600">{profileInfo.keywords}</p>
+                </div>
               </div>
-              <Button 
-                onClick={handleFinish}
-                className="w-full bg-talently-purple hover:bg-talently-purple/90"
-              >
-                Finalizar
-              </Button>
+              <div className="flex space-x-3">
+                <Button 
+                  onClick={handleFinish}
+                  className="flex-1 bg-talently-purple hover:bg-talently-purple/90"
+                >
+                  Finalizar
+                </Button>
+                <Button 
+                  onClick={() => {
+                    setShowResult(false);
+                    setCurrentQuestion(0);
+                    setAnswers([]);
+                  }}
+                  variant="outline"
+                  className="flex-1"
+                >
+                  Refazer Teste
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -257,6 +304,20 @@ export default function CulturalTest() {
                   {option.text}
                 </Button>
               ))}
+            </div>
+            <div className="flex justify-between pt-4">
+              <Button
+                variant="outline"
+                onClick={handleBack}
+                disabled={currentQuestion === 0}
+                className="flex items-center space-x-2"
+              >
+                <ArrowLeft size={16} />
+                <span>Voltar</span>
+              </Button>
+              <span className="text-sm text-gray-500">
+                {currentQuestion + 1} de {questions.length}
+              </span>
             </div>
           </CardContent>
         </Card>
