@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ArrowLeft, User, Mail, Phone, Linkedin, FileText, Eye, Download, MapPin, Calendar, GraduationCap, Languages, Briefcase } from "lucide-react";
+import { ArrowLeft, User, Mail, Phone, Linkedin, FileText, Eye, Download, MapPin, Calendar, GraduationCap, Languages, Briefcase, Clock, X } from "lucide-react";
 
 // Vagas disponíveis para seleção
 const AVAILABLE_JOBS = [
@@ -110,6 +112,11 @@ export default function Candidates() {
   const [searchParams] = useSearchParams();
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [selectedJobId, setSelectedJobId] = useState(searchParams.get('jobId') || null);
+  const [showScheduleForm, setShowScheduleForm] = useState(false);
+  const [scheduleOptions, setScheduleOptions] = useState([
+    { date: '', time: '' },
+    { date: '', time: '' }
+  ]);
 
   if (user?.type !== 'company') {
     navigate('/dashboard');
@@ -124,11 +131,47 @@ export default function Candidates() {
 
   const handleViewCandidate = (candidate) => {
     setSelectedCandidate(candidate);
+    setShowScheduleForm(false);
+    setScheduleOptions([{ date: '', time: '' }, { date: '', time: '' }]);
   };
 
   const handleDownloadResume = (candidate) => {
     // Simular download do currículo
     alert(`Download do currículo de ${candidate.firstName} ${candidate.lastName} iniciado!`);
+  };
+
+  const handleScheduleInterview = () => {
+    setShowScheduleForm(true);
+  };
+
+  const handleScheduleOptionChange = (index, field, value) => {
+    const newOptions = [...scheduleOptions];
+    newOptions[index][field] = value;
+    setScheduleOptions(newOptions);
+  };
+
+  const handleRemoveScheduleOption = (index) => {
+    if (scheduleOptions.length > 1) {
+      const newOptions = scheduleOptions.filter((_, i) => i !== index);
+      setScheduleOptions(newOptions);
+    }
+  };
+
+  const handleAddScheduleOption = () => {
+    if (scheduleOptions.length < 2) {
+      setScheduleOptions([...scheduleOptions, { date: '', time: '' }]);
+    }
+  };
+
+  const handleConfirmSchedule = () => {
+    const validOptions = scheduleOptions.filter(opt => opt.date && opt.time);
+    if (validOptions.length > 0) {
+      alert(`Opções de entrevista enviadas para ${selectedCandidate.firstName} ${selectedCandidate.lastName}:\n${validOptions.map((opt, i) => `Opção ${i + 1}: ${opt.date} às ${opt.time}`).join('\n')}`);
+      setShowScheduleForm(false);
+      setScheduleOptions([{ date: '', time: '' }, { date: '', time: '' }]);
+    } else {
+      alert('Por favor, preencha pelo menos uma opção de data e horário.');
+    }
   };
 
   const selectedJob = AVAILABLE_JOBS.find(job => job.id === parseInt(selectedJobId));
@@ -278,7 +321,7 @@ export default function Candidates() {
                     <span>Currículo</span>
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="space-y-4">
                   <Button 
                     onClick={() => handleDownloadResume(selectedCandidate)}
                     className="w-full bg-talently-purple hover:bg-talently-purple/90"
@@ -286,6 +329,95 @@ export default function Candidates() {
                     <Download size={16} className="mr-2" />
                     Download PDF
                   </Button>
+
+                  {/* Agendar Entrevista */}
+                  <div className="pt-4 border-t">
+                    <h4 className="font-semibold text-talently-darkblue mb-3 flex items-center">
+                      <Calendar className="mr-2" size={16} />
+                      Agendar Entrevista
+                    </h4>
+                    
+                    {!showScheduleForm ? (
+                      <Button 
+                        onClick={handleScheduleInterview}
+                        className="w-full bg-blue-600 hover:bg-blue-700"
+                      >
+                        <Clock size={16} className="mr-2" />
+                        Agendar
+                      </Button>
+                    ) : (
+                      <div className="space-y-4">
+                        <p className="text-sm text-gray-600">
+                          Disponibilize até 2 opções de data e horário para o candidato escolher:
+                        </p>
+                        
+                        {scheduleOptions.map((option, index) => (
+                          <div key={index} className="p-3 border rounded-lg bg-gray-50">
+                            <div className="flex justify-between items-center mb-2">
+                              <Label className="text-sm font-medium">Opção {index + 1}</Label>
+                              {scheduleOptions.length > 1 && (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => handleRemoveScheduleOption(index)}
+                                  className="h-6 w-6 p-0"
+                                >
+                                  <X size={12} />
+                                </Button>
+                              )}
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                              <div>
+                                <Label className="text-xs text-gray-500">Data</Label>
+                                <Input
+                                  type="date"
+                                  value={option.date}
+                                  onChange={(e) => handleScheduleOptionChange(index, 'date', e.target.value)}
+                                  className="text-sm"
+                                />
+                              </div>
+                              <div>
+                                <Label className="text-xs text-gray-500">Horário</Label>
+                                <Input
+                                  type="time"
+                                  value={option.time}
+                                  onChange={(e) => handleScheduleOptionChange(index, 'time', e.target.value)}
+                                  className="text-sm"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+
+                        {scheduleOptions.length < 2 && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={handleAddScheduleOption}
+                            className="w-full"
+                          >
+                            + Adicionar outra opção
+                          </Button>
+                        )}
+
+                        <div className="flex space-x-2">
+                          <Button
+                            variant="outline"
+                            onClick={() => setShowScheduleForm(false)}
+                            className="flex-1"
+                          >
+                            Cancelar
+                          </Button>
+                          <Button
+                            onClick={handleConfirmSchedule}
+                            className="flex-1 bg-blue-600 hover:bg-blue-700"
+                          >
+                            Enviar Convite
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </CardContent>
               </Card>
             </div>
