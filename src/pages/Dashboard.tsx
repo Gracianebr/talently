@@ -121,6 +121,37 @@ export default function Dashboard() {
             </p>
           </div>
 
+          {/* Company Information Section */}
+          <div className="mb-8">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-xl font-semibold text-talently-darkblue">
+                  Informações da Empresa
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="font-medium text-gray-700 mb-2">Razão Social</h4>
+                    <p className="text-gray-600">Empresa Exemplo Ltda.</p>
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-gray-700 mb-2">CNPJ</h4>
+                    <p className="text-gray-600">12.345.678/0001-90</p>
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-gray-700 mb-2">Setor</h4>
+                    <p className="text-gray-600">Tecnologia</p>
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-gray-700 mb-2">Porte</h4>
+                    <p className="text-gray-600">Médio Porte</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
           {/* Company Dashboard Content */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate('/jobs')}>
