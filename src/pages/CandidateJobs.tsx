@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, MapPin, DollarSign, Calendar, Building, Upload, Clock, CheckCircle, AlertCircle } from "lucide-react";
 
@@ -442,23 +443,30 @@ export default function CandidateJobs() {
               {selectedJob && (
                 <div>
                   <h3 className="text-lg font-semibold text-talently-darkblue mb-4">Perguntas Qualificadoras</h3>
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     {selectedJob.qualifyingQuestions.map((question, index) => (
-                      <div key={index}>
-                        <Label htmlFor={`question-${index}`} className="mb-2 block">
+                      <div key={index} className="space-y-3">
+                        <Label className="text-base font-medium">
                           {index + 1}. {question}
                         </Label>
-                        <Textarea
-                          id={`question-${index}`}
+                        <RadioGroup
                           value={applicationData.answers[index]}
-                          onChange={(e) => {
+                          onValueChange={(value) => {
                             const newAnswers = [...applicationData.answers];
-                            newAnswers[index] = e.target.value;
+                            newAnswers[index] = value;
                             setApplicationData({...applicationData, answers: newAnswers});
                           }}
-                          placeholder="Sua resposta..."
-                          className="min-h-[60px]"
-                        />
+                          className="flex gap-6"
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="sim" id={`question-${index}-sim`} />
+                            <Label htmlFor={`question-${index}-sim`}>Sim</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="nao" id={`question-${index}-nao`} />
+                            <Label htmlFor={`question-${index}-nao`}>Não</Label>
+                          </div>
+                        </RadioGroup>
                       </div>
                     ))}
                   </div>
