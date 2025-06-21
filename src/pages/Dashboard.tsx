@@ -143,14 +143,13 @@ export default function Dashboard() {
               </CardContent>
             </Card>
 
-            <Card>
-              <CardContent>
-                <h3 className="text-xl font-semibold text-talently-darkblue mb-4">
-                  Dicas para Recrutamento
-                </h3>
-                <p className="text-gray-700">
-                  Utilize nossos testes para encontrar candidatos com o perfil ideal para sua empresa.
-                </p>
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate('/cultural-test')}>
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 mx-auto mb-4 bg-green-100 rounded-lg flex items-center justify-center">
+                  <Users className="text-green-600" size={24} />
+                </div>
+                <h3 className="text-lg font-semibold text-talently-darkblue mb-2">Teste Cultural</h3>
+                <p className="text-gray-600 text-sm">Veja o fit cultural da empresa</p>
               </CardContent>
             </Card>
           </div>
