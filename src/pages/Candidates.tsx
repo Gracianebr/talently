@@ -6,8 +6,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Slider } from "@/components/ui/slider";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ArrowLeft, User, Mail, Phone, Linkedin, FileText, Eye, Download, MapPin, Calendar, GraduationCap, Languages, Briefcase, Clock, X } from "lucide-react";
+import { ArrowLeft, User, Mail, Phone, Linkedin, FileText, Eye, Download, MapPin, Calendar, GraduationCap, Languages, Briefcase, Clock, X, Star } from "lucide-react";
 
 // Vagas disponíveis para seleção
 const AVAILABLE_JOBS = [
@@ -117,6 +119,9 @@ export default function Candidates() {
     { date: '', time: '' },
     { date: '', time: '' }
   ]);
+  const [interestLevel, setInterestLevel] = useState([70]);
+  const [feedback, setFeedback] = useState('');
+  const [hasEvaluated, setHasEvaluated] = useState(false);
 
   if (user?.type !== 'company') {
     navigate('/dashboard');
@@ -172,6 +177,25 @@ export default function Candidates() {
     } else {
       alert('Por favor, preencha pelo menos uma opção de data e horário.');
     }
+  };
+
+  const handleSaveEvaluation = () => {
+    if (selectedCandidate) {
+      alert(`Avaliação salva para ${selectedCandidate.firstName} ${selectedCandidate.lastName}:\nNível de Interesse: ${interestLevel[0]}%\nFeedback: ${feedback || 'Nenhum feedback fornecido'}`);
+      setHasEvaluated(true);
+    }
+  };
+
+  const getInterestColor = (level) => {
+    if (level >= 80) return 'text-green-600';
+    if (level >= 50) return 'text-orange-600';
+    return 'text-red-600';
+  };
+
+  const getInterestLabel = (level) => {
+    if (level >= 80) return 'Alto Interesse';
+    if (level >= 50) return 'Interesse Moderado';
+    return 'Baixo Interesse';
   };
 
   const selectedJob = AVAILABLE_JOBS.find(job => job.id === parseInt(selectedJobId));
@@ -290,6 +314,60 @@ export default function Candidates() {
                     <MapPin size={16} className="text-gray-500" />
                     <span className="text-sm">{selectedCandidate.city}, {selectedCandidate.state}</span>
                   </div>
+                </CardContent>
+              </Card>
+
+              {/* Avaliação de Interesse */}
+              <Card className="mt-6">
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Star className="text-talently-purple" size={20} />
+                    <span>Avaliação de Interesse</span>
+                  </CardTitle>
+                  <CardDescription>Avalie seu interesse neste candidato</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label className="text-sm font-medium mb-2 block">
+                      Nível de Interesse: {interestLevel[0]}%
+                    </Label>
+                    <Slider
+                      value={interestLevel}
+                      onValueChange={setInterestLevel}
+                      max={100}
+                      min={0}
+                      step={5}
+                      className="w-full"
+                    />
+                    <div className="flex justify-between text-xs text-gray-500 mt-1">
+                      <span>0%</span>
+                      <span className={getInterestColor(interestLevel[0])}>
+                        {getInterestLabel(interestLevel[0])}
+                      </span>
+                      <span>100%</span>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="feedback" className="text-sm font-medium mb-2 block">
+                      Feedback {interestLevel[0] < 50 && <span className="text-red-500">*</span>}
+                    </Label>
+                    <Textarea
+                      id="feedback"
+                      placeholder={interestLevel[0] < 50 ? "Por favor, informe o motivo do baixo interesse..." : "Comentários adicionais sobre o candidato (opcional)"}
+                      value={feedback}
+                      onChange={(e) => setFeedback(e.target.value)}
+                      className="min-h-[80px]"
+                    />
+                  </div>
+
+                  <Button 
+                    onClick={handleSaveEvaluation}
+                    className="w-full bg-talently-purple hover:bg-talently-purple/90"
+                    disabled={interestLevel[0] < 50 && !feedback.trim()}
+                  >
+                    {hasEvaluated ? 'Atualizar Avaliação' : 'Salvar Avaliação'}
+                  </Button>
                 </CardContent>
               </Card>
 
