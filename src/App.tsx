@@ -17,6 +17,7 @@ import Candidates from "./pages/Candidates";
 import Jobs from "./pages/Jobs";
 import EditJob from "./pages/EditJob";
 import CreateJob from "./pages/CreateJob";
+import CandidateJobs from "./pages/CandidateJobs";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +43,7 @@ const App = () => (
               <Route path="/jobs" element={<Jobs />} />
               <Route path="/jobs/edit" element={<EditJob />} />
               <Route path="/jobs/create" element={<CreateJob />} />
+              <Route path="/candidate-jobs" element={<CandidateJobs />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
