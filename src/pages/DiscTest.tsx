@@ -6,6 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { getDominantProfile } from "@/data/discResults";
 
 const DISC_QUESTIONS = [
   {
@@ -103,10 +104,10 @@ const DISC_QUESTIONS = [
 export default function DiscTest() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
-  const [isCompleted, setIsCompleted] = useState(false);
+  const [showFinalize, setShowFinalize] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { updateUserProfile } = useAuth();
 
   const handleAnswer = (selectedType: string) => {
     const newAnswers = [...answers, selectedType];
@@ -115,60 +116,92 @@ export default function DiscTest() {
     if (currentQuestion < DISC_QUESTIONS.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
-      completeTest(newAnswers);
+      setShowFinalize(true);
     }
   };
 
-  const completeTest = (allAnswers: string[]) => {
+  const handleFinalize = () => {
     // Calcular pontuações DISC
     const scores = { D: 0, I: 0, S: 0, C: 0 };
     
-    allAnswers.forEach(answer => {
+    answers.forEach(answer => {
       scores[answer as keyof typeof scores]++;
     });
 
     // Converter para porcentagem
     const totalQuestions = DISC_QUESTIONS.length;
-    const discResults = {
+    const discScores = {
       D: Math.round((scores.D / totalQuestions) * 100),
       I: Math.round((scores.I / totalQuestions) * 100),
       S: Math.round((scores.S / totalQuestions) * 100),
       C: Math.round((scores.C / totalQuestions) * 100)
     };
 
-    // Salvar resultados (temporariamente no localStorage)
-    const savedUser = JSON.parse(localStorage.getItem('talently_user') || '{}');
-    savedUser.profile = {
-      ...savedUser.profile,
+    // Determinar perfil dominante
+    const profileId = getDominantProfile(discScores);
+
+    const discResults = {
+      scores: discScores,
+      profileId: profileId
+    };
+
+    // Atualizar o perfil do usuário
+    updateUserProfile({
       hasCompletedDISC: true,
       discResults: discResults
-    };
-    localStorage.setItem('talently_user', JSON.stringify(savedUser));
+    });
 
-    setIsCompleted(true);
-    
     toast({
       title: "Teste DISC Concluído!",
       description: "Seus resultados foram salvos com sucesso.",
     });
 
-    setTimeout(() => {
-      navigate('/disc-results');
-    }, 2000);
+    // Redirecionar para a página de resultados
+    navigate('/disc-results');
   };
 
-  const progress = ((currentQuestion + 1) / DISC_QUESTIONS.length) * 100;
+  const progress = showFinalize ? 100 : ((currentQuestion + 1) / DISC_QUESTIONS.length) * 100;
 
-  if (isCompleted) {
+  if (showFinalize) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
-          <CardContent className="text-center pt-6">
-            <div className="text-green-600 text-6xl mb-4">✓</div>
-            <h2 className="text-2xl font-bold mb-2">Teste Concluído!</h2>
-            <p className="text-gray-600">Redirecionando para os resultados...</p>
-          </CardContent>
-        </Card>
+      <div className="min-h-screen bg-gray-50 p-4">
+        <div className="container mx-auto max-w-2xl">
+          <Card className="text-center">
+            <CardHeader>
+              <div className="w-20 h-20 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
+                <div className="text-green-600 text-4xl">✓</div>
+              </div>
+              <CardTitle className="text-2xl text-talently-darkblue">
+                Parabéns! Você respondeu todas as perguntas
+              </CardTitle>
+              <CardDescription className="text-lg mt-2">
+                Clique em "Finalizar Teste" para ver seus resultados
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6">
+              <div className="space-y-4">
+                <p className="text-gray-600">
+                  Total de perguntas respondidas: <strong>{answers.length} de {DISC_QUESTIONS.length}</strong>
+                </p>
+                <Button 
+                  onClick={handleFinalize}
+                  className="bg-talently-purple hover:bg-talently-purple/90"
+                  size="lg"
+                >
+                  Finalizar Teste
+                </Button>
+                <div className="mt-4">
+                  <Button
+                    variant="outline"
+                    onClick={() => navigate('/dashboard')}
+                  >
+                    Voltar ao Dashboard
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     );
   }

@@ -12,6 +12,7 @@ import LoginPage from "./pages/Login";
 import SignUpPage from "./pages/SignUp";
 import Dashboard from "./pages/Dashboard";
 import DiscTest from "./pages/DiscTest";
+import DiscResults from "./pages/DiscResults";
 import CulturalTest from "./pages/CulturalTest";
 import Candidates from "./pages/Candidates";
 import Jobs from "./pages/Jobs";
@@ -39,6 +40,7 @@ const App = () => (
               <Route path="/signup" element={<SignUpPage />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/disc-test" element={<DiscTest />} />
+              <Route path="/disc-results" element={<DiscResults />} />
               <Route path="/cultural-test" element={<CulturalTest />} />
               <Route path="/candidates" element={<Candidates />} />
               <Route path="/jobs" element={<Jobs />} />
