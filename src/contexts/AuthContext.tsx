@@ -13,6 +13,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
   isAuthenticated: boolean;
+  updateUserProfile: (updates: any) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -85,6 +86,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return false;
   };
 
+  const updateUserProfile = (updates: any) => {
+    if (user) {
+      const updatedUser = {
+        ...user,
+        profile: {
+          ...user.profile,
+          ...updates
+        }
+      };
+      setUser(updatedUser);
+      localStorage.setItem('talently_user', JSON.stringify(updatedUser));
+    }
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem('talently_user');
@@ -95,6 +110,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       user,
       login,
       logout,
+      updateUserProfile,
       isAuthenticated: !!user
     }}>
       {children}

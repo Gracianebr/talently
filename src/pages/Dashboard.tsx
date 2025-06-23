@@ -1,13 +1,18 @@
+
 import React from 'react';
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { Briefcase, GraduationCap, User, Users } from "lucide-react";
+import CandidateProfileMenu from "@/components/CandidateProfileMenu";
+import { useTestStatus } from "@/hooks/useTestStatus";
+import TestsRequired from "@/components/TestsRequired";
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const { canAccessJobs } = useTestStatus();
 
   const handleLogout = () => {
     logout();
@@ -15,6 +20,29 @@ export default function Dashboard() {
   };
 
   if (user?.type === 'candidate') {
+    // Verificar se os testes foram concluídos
+    if (!canAccessJobs) {
+      return (
+        <div className="min-h-screen bg-gray-50">
+          {/* Header */}
+          <div className="bg-white shadow-sm border-b">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex justify-between items-center py-4">
+                <div className="flex items-center space-x-4">
+                  <span className="text-2xl font-bold text-talently-purple">Talently</span>
+                </div>
+                <div>
+                  <CandidateProfileMenu />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <TestsRequired />
+        </div>
+      );
+    }
+
     return (
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
@@ -25,7 +53,7 @@ export default function Dashboard() {
                 <span className="text-2xl font-bold text-talently-purple">Talently</span>
               </div>
               <div>
-                <Button variant="outline" onClick={handleLogout}>Logout</Button>
+                <CandidateProfileMenu />
               </div>
             </div>
           </div>
