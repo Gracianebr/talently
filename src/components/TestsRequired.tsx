@@ -18,12 +18,12 @@ export default function TestsRequired() {
             <AlertCircle className="text-yellow-600" size={32} />
           </div>
           <CardTitle className="text-2xl text-gray-800">
-            Testes Obrigatórios Pendentes
+            Teste Obrigatório Pendente
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <p className="text-center text-gray-600 text-lg">
-            Para acessar as vagas disponíveis, conclua primeiro os testes obrigatórios.
+            Para acessar as vagas disponíveis, conclua primeiro o teste DISC obrigatório.
           </p>
 
           <div className="grid md:grid-cols-2 gap-4">
@@ -47,29 +47,27 @@ export default function TestsRequired() {
               </CardContent>
             </Card>
 
-            <Card className={`border ${hasCompletedCultural ? 'border-green-200 bg-green-50' : 'border-gray-200'}`}>
+            <Card className="border-blue-200 bg-blue-50">
               <CardContent className="p-6 text-center">
-                <div className={`w-12 h-12 mx-auto mb-4 rounded-lg flex items-center justify-center ${hasCompletedCultural ? 'bg-green-100' : 'bg-purple-100'}`}>
-                  <Users className={hasCompletedCultural ? 'text-green-600' : 'text-purple-600'} size={24} />
+                <div className="w-12 h-12 mx-auto mb-4 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <Users className="text-blue-600" size={24} />
                 </div>
                 <h3 className="text-lg font-semibold mb-2">Teste Cultural</h3>
                 <p className="text-gray-600 text-sm mb-4">
-                  {hasCompletedCultural ? 'Concluído ✓' : 'Veja seu fit cultural com empresas'}
+                  Opcional - Melhore seu match com empresas
                 </p>
-                {!hasCompletedCultural && (
-                  <Button 
-                    onClick={() => navigate('/cultural-test')}
-                    className="w-full"
-                    variant="secondary"
-                  >
-                    Fazer Teste Cultural
-                  </Button>
-                )}
+                <Button 
+                  onClick={() => navigate('/cultural-test')}
+                  className="w-full"
+                  variant="outline"
+                >
+                  Fazer Teste Cultural (Opcional)
+                </Button>
               </CardContent>
             </Card>
           </div>
 
-          {hasCompletedDISC && hasCompletedCultural && (
+          {hasCompletedDISC && (
             <div className="text-center">
               <Button 
                 onClick={() => navigate('/candidate-jobs')}

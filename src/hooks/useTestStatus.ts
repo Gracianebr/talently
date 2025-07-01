@@ -14,7 +14,7 @@ export const useTestStatus = () => {
 
   const hasCompletedDISC = user.profile?.hasCompletedDISC || false;
   const hasCompletedCultural = user.profile?.hasCompletedCultural || false;
-  const canAccessJobs = hasCompletedDISC && hasCompletedCultural;
+  const canAccessJobs = hasCompletedDISC; // Apenas DISC é obrigatório
 
   return {
     hasCompletedDISC,
