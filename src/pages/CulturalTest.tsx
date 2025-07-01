@@ -225,6 +225,17 @@ export default function CulturalTest() {
   };
 
   const handleFinish = () => {
+    const { updateUserProfile } = useAuth();
+    
+    // Update user profile with cultural test completion
+    updateUserProfile({
+      hasCompletedCultural: true,
+      culturalResults: {
+        profile: result,
+        answers: answers
+      }
+    });
+
     toast({
       title: "Teste concluído!",
       description: "Seu perfil cultural foi salvo com sucesso.",

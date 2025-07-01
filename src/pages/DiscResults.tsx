@@ -90,8 +90,8 @@ export default function DiscResults() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {Object.entries(user.profile.discResults.scores).map(([type, score]) => (
                 <div key={type} className="text-center">
-                  <div className="text-3xl font-bold text-talently-purple mb-1">
-                    {score}%
+                 <div className="text-3xl font-bold text-talently-purple mb-1">
+                    {String(score)}%
                   </div>
                   <div className="text-sm text-gray-600">
                     {type === 'D' && 'Dominância'}
