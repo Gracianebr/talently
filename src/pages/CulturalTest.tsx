@@ -172,7 +172,7 @@ const COMPANY_PROFILE_DESCRIPTIONS: Record<CompanyProfile, { title: string; desc
 };
 
 export default function CulturalTest() {
-  const { user } = useAuth();
+  const { user, updateUserProfile } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [currentQuestion, setCurrentQuestion] = useState(0);
