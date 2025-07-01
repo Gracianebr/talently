@@ -240,7 +240,7 @@ export default function CulturalTest() {
       title: "Teste concluído!",
       description: "Seu perfil cultural foi salvo com sucesso.",
     });
-    navigate('/dashboard');
+    navigate('/candidate-jobs');
   };
 
   if (showResult) {

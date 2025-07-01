@@ -36,11 +36,7 @@ export default function DiscResults() {
   }
 
   const handleNext = () => {
-    if (hasCompletedCultural) {
-      navigate('/candidate-jobs');
-    } else {
-      navigate('/cultural-test');
-    }
+    navigate('/candidate-jobs');
   };
 
   return (
@@ -109,39 +105,28 @@ export default function DiscResults() {
         <Card>
           <CardContent className="pt-6 text-center">
             <h3 className="text-xl font-semibold text-talently-darkblue mb-4">
-              Próximos Passos
+              Parabéns! Teste DISC Concluído
             </h3>
-            {!hasCompletedCultural ? (
-              <>
-                <p className="text-gray-600 mb-6">
-                  Agora você precisa completar o Teste de Fit Cultural para acessar as vagas disponíveis.
-                </p>
-                <Button 
-                  onClick={handleNext}
-                  className="bg-talently-purple hover:bg-talently-purple/90"
-                  size="lg"
-                >
-                  Fazer Teste Cultural
-                  <ArrowRight className="ml-2" size={20} />
-                </Button>
-              </>
-            ) : (
-              <>
-                <p className="text-gray-600 mb-6">
-                  Parabéns! Você completou todos os testes obrigatórios. Agora pode explorar as vagas disponíveis.
-                </p>
-                <Button 
-                  onClick={handleNext}
-                  className="bg-green-600 hover:bg-green-700"
-                  size="lg"
-                >
-                  Ver Vagas Disponíveis
-                  <ArrowRight className="ml-2" size={20} />
-                </Button>
-              </>
-            )}
+            <p className="text-gray-600 mb-6">
+              Agora você pode explorar as vagas disponíveis e se candidatar às que mais combinam com seu perfil.
+            </p>
+            <Button 
+              onClick={handleNext}
+              className="bg-green-600 hover:bg-green-700"
+              size="lg"
+            >
+              Ver Vagas Disponíveis
+              <ArrowRight className="ml-2" size={20} />
+            </Button>
             
-            <div className="mt-6">
+            <div className="mt-6 space-y-2">
+              <Button 
+                variant="outline" 
+                onClick={() => navigate('/cultural-test')}
+                className="mr-2"
+              >
+                Fazer Teste Cultural (Opcional)
+              </Button>
               <Button 
                 variant="outline" 
                 onClick={() => navigate('/dashboard')}
