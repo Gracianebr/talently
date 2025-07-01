@@ -24,33 +24,59 @@ import JobDetails from "./pages/JobDetails";
 const queryClient = new QueryClient();
 
 import { AuthProvider } from "./contexts/AuthContext";
+import { AdminAuthProvider } from "./contexts/AdminAuthContext";
+import AdminLayout from "./components/AdminLayout";
+import AdminProtectedRoute from "./components/AdminProtectedRoute";
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminCandidates from "./pages/admin/AdminCandidates";
+import AdminCompanies from "./pages/admin/AdminCompanies";
+import AdminJobs from "./pages/admin/AdminJobs";
+import AdminTests from "./pages/admin/AdminTests";
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <LanguageProvider>
         <AuthProvider>
-          <Toaster />
-          <Sonner />
-          <FloatingWhatsApp />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<SignUpPage />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/disc-test" element={<DiscTest />} />
-              <Route path="/disc-results" element={<DiscResults />} />
-              <Route path="/cultural-test" element={<CulturalTest />} />
-              <Route path="/candidates" element={<Candidates />} />
-              <Route path="/jobs" element={<Jobs />} />
-              <Route path="/jobs/edit" element={<EditJob />} />
-              <Route path="/jobs/create" element={<CreateJob />} />
-              <Route path="/candidate-jobs" element={<CandidateJobs />} />
-              <Route path="/job/:id" element={<JobDetails />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
+          <AdminAuthProvider>
+            <Toaster />
+            <Sonner />
+            <FloatingWhatsApp />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/signup" element={<SignUpPage />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/disc-test" element={<DiscTest />} />
+                <Route path="/disc-results" element={<DiscResults />} />
+                <Route path="/cultural-test" element={<CulturalTest />} />
+                <Route path="/candidates" element={<Candidates />} />
+                <Route path="/jobs" element={<Jobs />} />
+                <Route path="/jobs/edit" element={<EditJob />} />
+                <Route path="/jobs/create" element={<CreateJob />} />
+                <Route path="/candidate-jobs" element={<CandidateJobs />} />
+                <Route path="/job/:id" element={<JobDetails />} />
+                
+                {/* Admin Routes */}
+                <Route path="/admin/login" element={<AdminLogin />} />
+                <Route path="/admin" element={
+                  <AdminProtectedRoute>
+                    <AdminLayout />
+                  </AdminProtectedRoute>
+                }>
+                  <Route path="dashboard" element={<AdminDashboard />} />
+                  <Route path="candidates" element={<AdminCandidates />} />
+                  <Route path="companies" element={<AdminCompanies />} />
+                  <Route path="jobs" element={<AdminJobs />} />
+                  <Route path="tests" element={<AdminTests />} />
+                </Route>
+                
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </AdminAuthProvider>
         </AuthProvider>
       </LanguageProvider>
     </TooltipProvider>
