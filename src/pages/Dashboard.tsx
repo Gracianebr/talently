@@ -105,6 +105,42 @@ export default function Dashboard() {
 
           {/* Additional Candidate Content */}
           <div className="grid gap-6">
+            {/* Vagas Candidatadas */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-xl font-semibold text-talently-darkblue">
+                  Minhas Candidaturas
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                    <div className="flex justify-between items-start mb-2">
+                      <h4 className="font-semibold text-talently-darkblue">Desenvolvedor Full Stack</h4>
+                      <span className="text-sm px-2 py-1 bg-blue-100 text-blue-800 rounded-full">Em análise</span>
+                    </div>
+                    <p className="text-gray-600 text-sm mb-2">TechFlow Soluções • São Paulo - SP</p>
+                    <p className="text-gray-500 text-xs">Candidatado em 15/03/2024</p>
+                  </div>
+                  
+                  <div className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                    <div className="flex justify-between items-start mb-2">
+                      <h4 className="font-semibold text-talently-darkblue">UX/UI Designer</h4>
+                      <span className="text-sm px-2 py-1 bg-green-100 text-green-800 rounded-full">Pré-aprovado</span>
+                    </div>
+                    <p className="text-gray-600 text-sm mb-2">TechFlow Soluções • São Paulo - SP</p>
+                    <p className="text-gray-500 text-xs">Candidatado em 10/03/2024</p>
+                  </div>
+                  
+                  <div className="text-center py-4">
+                    <Button variant="outline" onClick={() => navigate('/candidate-jobs')}>
+                      Ver Todas as Vagas Disponíveis
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            
             <Card>
               <CardContent>
                 <h3 className="text-xl font-semibold text-talently-darkblue mb-4">
