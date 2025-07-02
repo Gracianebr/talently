@@ -12,6 +12,8 @@ export interface MockCandidate {
   applications: string[];
   registeredAt: string;
   resume?: string;
+  status: 'Em avaliação' | 'Pré-aprovado' | 'Reprovado';
+  resumeText?: string;
 }
 
 export interface MockCompany {
@@ -26,6 +28,7 @@ export interface MockCompany {
   culturalProfile?: string;
   jobsPosted: number;
   registeredAt: string;
+  responsibleName: string;
 }
 
 export interface MockJob {
@@ -55,7 +58,9 @@ export const mockCandidates: MockCandidate[] = [
     culturalProfile: 'Executor',
     applications: ['1', '3'],
     registeredAt: '2024-01-15',
-    resume: 'curriculum_ana_santos.pdf'
+    resume: 'curriculum_ana_santos.pdf',
+    status: 'Pré-aprovado',
+    resumeText: 'Desenvolvedora com 5 anos de experiência em React e Node.js. Especializada em desenvolvimento full-stack.'
   },
   {
     id: '2',
@@ -68,7 +73,9 @@ export const mockCandidates: MockCandidate[] = [
     discProfile: 'I - Influência',
     applications: ['2'],
     registeredAt: '2024-02-20',
-    resume: 'curriculum_carlos_lima.pdf'
+    resume: 'curriculum_carlos_lima.pdf',
+    status: 'Em avaliação',
+    resumeText: 'Analista de marketing com experiência em campanhas digitais e estratégias de growth hacking.'
   },
   {
     id: '3',
@@ -82,7 +89,9 @@ export const mockCandidates: MockCandidate[] = [
     culturalProfile: 'Conector',
     applications: ['1', '4'],
     registeredAt: '2024-01-10',
-    resume: 'curriculum_mariana_costa.pdf'
+    resume: 'curriculum_mariana_costa.pdf',
+    status: 'Pré-aprovado',
+    resumeText: 'UX/UI Designer com foco em design centrado no usuário e experiência de produto.'
   },
   {
     id: '4',
@@ -93,7 +102,8 @@ export const mockCandidates: MockCandidate[] = [
     hasCompletedDISC: false,
     hasCompletedCultural: false,
     applications: [],
-    registeredAt: '2024-03-01'
+    registeredAt: '2024-03-01',
+    status: 'Em avaliação'
   },
   {
     id: '5',
@@ -106,7 +116,9 @@ export const mockCandidates: MockCandidate[] = [
     discProfile: 'C - Conformidade',
     culturalProfile: 'Guardião',
     applications: ['5'],
-    registeredAt: '2024-02-05'
+    registeredAt: '2024-02-05',
+    status: 'Reprovado',
+    resumeText: 'Enfermeira especializada em UTI com 8 anos de experiência em hospitais de grande porte.'
   }
 ];
 
@@ -122,7 +134,8 @@ export const mockCompanies: MockCompany[] = [
     hasCompletedCultural: true,
     culturalProfile: 'Exploradora',
     jobsPosted: 3,
-    registeredAt: '2023-12-10'
+    registeredAt: '2023-12-10',
+    responsibleName: 'Maria Fernanda Silva'
   },
   {
     id: '2',
@@ -135,7 +148,8 @@ export const mockCompanies: MockCompany[] = [
     hasCompletedCultural: true,
     culturalProfile: 'Executora',
     jobsPosted: 2,
-    registeredAt: '2024-01-05'
+    registeredAt: '2024-01-05',
+    responsibleName: 'João Carlos Pereira'
   },
   {
     id: '3',
@@ -147,7 +161,8 @@ export const mockCompanies: MockCompany[] = [
     sector: 'Engenharia',
     hasCompletedCultural: false,
     jobsPosted: 1,
-    registeredAt: '2024-02-15'
+    registeredAt: '2024-02-15',
+    responsibleName: 'Ana Beatriz Costa'
   },
   {
     id: '4',
@@ -160,7 +175,8 @@ export const mockCompanies: MockCompany[] = [
     hasCompletedCultural: true,
     culturalProfile: 'Conectora',
     jobsPosted: 2,
-    registeredAt: '2023-11-20'
+    registeredAt: '2023-11-20',
+    responsibleName: 'Dr. Roberto Santos'
   }
 ];
 

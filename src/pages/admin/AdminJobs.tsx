@@ -178,10 +178,13 @@ const AdminJobs = () => {
                       </div>
                     </td>
                     <td className="p-3">
-                      <div className="flex items-center space-x-1">
-                        <Users size={14} className="text-gray-500" />
+                      <button
+                        onClick={() => window.location.href = `/admin/jobs/${job.id}/candidates`}
+                        className="flex items-center space-x-1 text-talently-purple hover:text-talently-purple/80 font-medium"
+                      >
+                        <Users size={14} />
                         <span className="text-sm">{job.applications}</span>
-                      </div>
+                      </button>
                     </td>
                     <td className="p-3">
                       <div className="flex space-x-2">
@@ -375,16 +378,24 @@ const JobForm = ({
           />
         </div>
         <div>
-          <label className="text-sm font-medium text-gray-700">Tipo</label>
-          <Select value={formData.type} onValueChange={(value) => setFormData({ ...formData, type: value as any })}>
+          <label className="text-sm font-medium text-gray-700">Empresa</label>
+          <Select value={formData.companyId} onValueChange={(value) => {
+            const company = mockCompanies.find(c => c.id === value);
+            setFormData({ 
+              ...formData, 
+              companyId: value,
+              companyName: company?.name || ''
+            });
+          }}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="CLT">CLT</SelectItem>
-              <SelectItem value="PJ">PJ</SelectItem>
-              <SelectItem value="Estágio">Estágio</SelectItem>
-              <SelectItem value="Freelancer">Freelancer</SelectItem>
+              {mockCompanies.map((company) => (
+                <SelectItem key={company.id} value={company.id}>
+                  {company.name}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>

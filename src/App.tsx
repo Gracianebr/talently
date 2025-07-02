@@ -33,6 +33,7 @@ import AdminCandidates from "./pages/admin/AdminCandidates";
 import AdminCompanies from "./pages/admin/AdminCompanies";
 import AdminJobs from "./pages/admin/AdminJobs";
 import AdminTests from "./pages/admin/AdminTests";
+import JobCandidates from "./pages/admin/JobCandidates";
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -70,6 +71,7 @@ const App = () => (
                   <Route path="candidates" element={<AdminCandidates />} />
                   <Route path="companies" element={<AdminCompanies />} />
                   <Route path="jobs" element={<AdminJobs />} />
+                  <Route path="jobs/:jobId/candidates" element={<JobCandidates />} />
                   <Route path="tests" element={<AdminTests />} />
                 </Route>
                 

@@ -101,6 +101,7 @@ const AdminCompanies = () => {
               <thead>
                 <tr className="border-b">
                   <th className="text-left p-3 font-semibold">Empresa</th>
+                  <th className="text-left p-3 font-semibold">Responsável</th>
                   <th className="text-left p-3 font-semibold">CNPJ</th>
                   <th className="text-left p-3 font-semibold">Setor</th>
                   <th className="text-left p-3 font-semibold">Cidade</th>
@@ -122,6 +123,9 @@ const AdminCompanies = () => {
                           <div className="text-sm text-gray-500">{company.email}</div>
                         </div>
                       </div>
+                    </td>
+                    <td className="p-3">
+                      <div className="font-medium">{company.responsibleName}</div>
                     </td>
                     <td className="p-3 text-sm font-mono">{company.cnpj}</td>
                     <td className="p-3">
@@ -266,6 +270,10 @@ const CompanyForm = ({
             <p className="mt-1 text-sm text-gray-900">{company.name}</p>
           </div>
           <div>
+            <label className="text-sm font-medium text-gray-700">Responsável</label>
+            <p className="mt-1 text-sm text-gray-900">{company.responsibleName}</p>
+          </div>
+          <div>
             <label className="text-sm font-medium text-gray-700">Email</label>
             <p className="mt-1 text-sm text-gray-900">{company.email}</p>
           </div>
@@ -331,6 +339,14 @@ const CompanyForm = ({
           <Input
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            required
+          />
+        </div>
+        <div>
+          <label className="text-sm font-medium text-gray-700">Responsável</label>
+          <Input
+            value={formData.responsibleName}
+            onChange={(e) => setFormData({ ...formData, responsibleName: e.target.value })}
             required
           />
         </div>

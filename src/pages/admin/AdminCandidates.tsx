@@ -13,6 +13,9 @@ const AdminCandidates = () => {
   const [candidates, setCandidates] = useState<MockCandidate[]>(mockCandidates);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [discFilter, setDiscFilter] = useState<string>('all');
+  const [culturalFilter, setCulturalFilter] = useState<string>('all');
+  const [candidateStatusFilter, setCandidateStatusFilter] = useState<string>('all');
   const [selectedCandidate, setSelectedCandidate] = useState<MockCandidate | null>(null);
   const [deleteCandidate, setDeleteCandidate] = useState<MockCandidate | null>(null);
   const [viewMode, setViewMode] = useState<'view' | 'edit'>('view');
@@ -21,7 +24,8 @@ const AdminCandidates = () => {
   // Filter candidates
   const filteredCandidates = candidates.filter(candidate => {
     const matchesSearch = candidate.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         candidate.email.toLowerCase().includes(searchTerm.toLowerCase());
+                         candidate.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         candidate.city.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesStatus = statusFilter === 'all' ||
                          (statusFilter === 'disc-complete' && candidate.hasCompletedDISC) ||
@@ -29,7 +33,17 @@ const AdminCandidates = () => {
                          (statusFilter === 'both-complete' && candidate.hasCompletedDISC && candidate.hasCompletedCultural) ||
                          (statusFilter === 'incomplete' && (!candidate.hasCompletedDISC || !candidate.hasCompletedCultural));
     
-    return matchesSearch && matchesStatus;
+    const matchesDisc = discFilter === 'all' || 
+                       (discFilter === 'none' && !candidate.hasCompletedDISC) ||
+                       (candidate.discProfile && candidate.discProfile.toLowerCase().includes(discFilter.toLowerCase()));
+
+    const matchesCultural = culturalFilter === 'all' ||
+                           (culturalFilter === 'none' && !candidate.hasCompletedCultural) ||
+                           (candidate.culturalProfile && candidate.culturalProfile.toLowerCase().includes(culturalFilter.toLowerCase()));
+
+    const matchesCandidateStatus = candidateStatusFilter === 'all' || candidate.status === candidateStatusFilter;
+    
+    return matchesSearch && matchesStatus && matchesDisc && matchesCultural && matchesCandidateStatus;
   });
 
   const handleDeleteCandidate = () => {
@@ -65,28 +79,72 @@ const AdminCandidates = () => {
       {/* Filters */}
       <Card>
         <CardContent className="pt-6">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
-              <Input
-                placeholder="Buscar por nome ou email..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
+          <div className="space-y-4">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex-1 relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+                <Input
+                  placeholder="Buscar por nome, email ou cidade..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="w-full md:w-[200px]">
+                  <SelectValue placeholder="Status dos testes" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos</SelectItem>
+                  <SelectItem value="disc-complete">DISC Completo</SelectItem>
+                  <SelectItem value="cultural-complete">Cultural Completo</SelectItem>
+                  <SelectItem value="both-complete">Ambos Completos</SelectItem>
+                  <SelectItem value="incomplete">Incompletos</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-full md:w-[200px]">
-                <SelectValue placeholder="Filtrar por status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos</SelectItem>
-                <SelectItem value="disc-complete">DISC Completo</SelectItem>
-                <SelectItem value="cultural-complete">Cultural Completo</SelectItem>
-                <SelectItem value="both-complete">Ambos Completos</SelectItem>
-                <SelectItem value="incomplete">Incompletos</SelectItem>
-              </SelectContent>
-            </Select>
+            
+            <div className="flex flex-col md:flex-row gap-4">
+              <Select value={discFilter} onValueChange={setDiscFilter}>
+                <SelectTrigger className="w-full md:w-[200px]">
+                  <SelectValue placeholder="Perfil DISC" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos DISC</SelectItem>
+                  <SelectItem value="none">Sem DISC</SelectItem>
+                  <SelectItem value="dominância">D - Dominância</SelectItem>
+                  <SelectItem value="influência">I - Influência</SelectItem>
+                  <SelectItem value="estabilidade">S - Estabilidade</SelectItem>
+                  <SelectItem value="conformidade">C - Conformidade</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select value={culturalFilter} onValueChange={setCulturalFilter}>
+                <SelectTrigger className="w-full md:w-[200px]">
+                  <SelectValue placeholder="Fit Cultural" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos Cultural</SelectItem>
+                  <SelectItem value="none">Sem Cultural</SelectItem>
+                  <SelectItem value="executor">Executor</SelectItem>
+                  <SelectItem value="conector">Conector</SelectItem>
+                  <SelectItem value="guardião">Guardião</SelectItem>
+                  <SelectItem value="explorador">Explorador</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select value={candidateStatusFilter} onValueChange={setCandidateStatusFilter}>
+                <SelectTrigger className="w-full md:w-[200px]">
+                  <SelectValue placeholder="Status candidato" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos Status</SelectItem>
+                  <SelectItem value="Em avaliação">Em avaliação</SelectItem>
+                  <SelectItem value="Pré-aprovado">Pré-aprovado</SelectItem>
+                  <SelectItem value="Reprovado">Reprovado</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -106,6 +164,7 @@ const AdminCandidates = () => {
                   <th className="text-left p-3 font-semibold">Cidade</th>
                   <th className="text-left p-3 font-semibold">DISC</th>
                   <th className="text-left p-3 font-semibold">Cultural</th>
+                  <th className="text-left p-3 font-semibold">Status</th>
                   <th className="text-left p-3 font-semibold">Candidaturas</th>
                   <th className="text-left p-3 font-semibold">Ações</th>
                 </tr>
@@ -156,6 +215,18 @@ const AdminCandidates = () => {
                           Não feito
                         </Badge>
                       )}
+                    </td>
+                    <td className="p-3">
+                      <Badge 
+                        variant="secondary" 
+                        className={
+                          candidate.status === 'Pré-aprovado' ? 'bg-green-100 text-green-800' :
+                          candidate.status === 'Reprovado' ? 'bg-red-100 text-red-800' :
+                          'bg-yellow-100 text-yellow-800'
+                        }
+                      >
+                        {candidate.status}
+                      </Badge>
                     </td>
                     <td className="p-3">
                       <Badge variant="outline">
