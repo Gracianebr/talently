@@ -1,10 +1,10 @@
-
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { 
   MapPin, 
@@ -18,6 +18,7 @@ import {
   ArrowLeft,
   ExternalLink
 } from "lucide-react";
+import QualifyingQuestionsForm from "@/components/QualifyingQuestionsForm";
 
 // Mock data - em produção viria de uma API
 const mockJob = {
@@ -68,6 +69,7 @@ export default function JobDetails() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isApplying, setIsApplying] = useState(false);
+  const [showQualifyingQuestions, setShowQualifyingQuestions] = useState(false);
 
   // Em produção, aqui faria fetch da vaga por ID
   const job = mockJob;
@@ -92,6 +94,37 @@ export default function JobDetails() {
       return;
     }
 
+    // Mostrar perguntas qualificadoras se existirem
+    if (job.qualifyingQuestions && job.qualifyingQuestions.length > 0) {
+      setShowQualifyingQuestions(true);
+    } else {
+      // Se não há perguntas, processar candidatura diretamente
+      processApplication();
+    }
+  };
+
+  const handleQualifyingQuestionsComplete = (answers: Array<{ question: string; answer: 'sim' | 'não' }>) => {
+    // Verificar se há alguma resposta "não"
+    const hasNegativeAnswer = answers.some(answer => answer.answer === 'não');
+    
+    if (hasNegativeAnswer) {
+      // Candidatura não pode prosseguir
+      setShowQualifyingQuestions(false);
+      toast({
+        title: "Candidatura não realizada",
+        description: "Você não atende aos requisitos obrigatórios para esta vaga.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Salvar respostas e processar candidatura
+    console.log('Respostas das perguntas qualificadoras:', answers);
+    setShowQualifyingQuestions(false);
+    processApplication();
+  };
+
+  const processApplication = () => {
     setIsApplying(true);
     // Simular processo de candidatura
     setTimeout(() => {
@@ -281,6 +314,9 @@ export default function JobDetails() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
+                <p className="text-sm text-gray-600 mb-4">
+                  Estas perguntas são obrigatórias e você deve responder "Sim" a todas para prosseguir com a candidatura:
+                </p>
                 {job.qualifyingQuestions.map((question, index) => (
                   <div key={index} className="p-3 bg-gray-50 rounded-lg">
                     <p className="text-gray-700 font-medium">{index + 1}. {question}</p>
@@ -303,6 +339,22 @@ export default function JobDetails() {
           </Button>
         </div>
       </div>
+
+      {/* Qualifying Questions Dialog */}
+      <Dialog open={showQualifyingQuestions} onOpenChange={() => setShowQualifyingQuestions(false)}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Perguntas Qualificadoras</DialogTitle>
+          </DialogHeader>
+          
+          <QualifyingQuestionsForm
+            questions={job.qualifyingQuestions}
+            jobTitle={job.title}
+            onComplete={handleQualifyingQuestionsComplete}
+            onCancel={() => setShowQualifyingQuestions(false)}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

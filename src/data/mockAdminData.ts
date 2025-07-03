@@ -1,85 +1,44 @@
+import { v4 as uuidv4 } from 'uuid';
 
-export interface MockCandidate {
+export interface MockJob {
   id: string;
-  name: string;
-  email: string;
-  phone: string;
-  city: string;
-  jobArea: string; // Nova propriedade para área de atuação
-  hasCompletedDISC: boolean;
-  discProfile?: string;
-  hasCompletedCultural: boolean;
-  culturalProfile?: string;
-  applications: string[];
-  status: 'Em avaliação' | 'Pré-aprovado' | 'Reprovado';
-  resume?: string;
-  resumeText?: string;
-  registeredAt: string;
-  // Novos campos para visualização completa
-  education?: {
-    level: string;
-    course: string;
-    institution: string;
-    year: string;
-  }[];
-  experience?: {
-    position: string;
-    company: string;
-    period: string;
-    description: string;
-  }[];
-  languages?: {
-    language: string;
-    level: string;
-  }[];
-  skills?: string[];
+  title: string;
+  companyName: string;
+  companyId: string;
+  location: string;
+  type: string;
+  salary: string;
+  description: string;
+  status: 'active' | 'inactive';
+  applications: number;
+  createdAt: Date;
+  updatedAt: Date;
+  requirements?: string;
+  responsibilities?: string;
+  benefits?: string;
 }
 
 export interface MockCompany {
   id: string;
   name: string;
   email: string;
-  cnpj: string;
   phone: string;
-  city: string;
-  sector: string;
-  size: 'Pequena' | 'Média' | 'Grande'; // Nova propriedade para porte
-  responsibleName: string;
-  hasCompletedCultural: boolean;
-  culturalProfile?: string;
-  jobsPosted: number;
-  registeredAt: string;
-}
-
-export interface MockJob {
-  id: string;
-  title: string;
-  companyId: string;
-  companyName: string;
-  location: string;
-  type: string;
-  salary: string;
-  description: string;
-  requirements?: string;
-  benefits?: string;
-  responsibilities?: string;
-  status: 'active' | 'inactive';
-  applications: number;
-  createdAt: string;
+  address: string;
+  jobs: string[];
+  logo?: string;
 }
 
 export interface MockTest {
   id: string;
-  userId: string;
   userName: string;
   userEmail: string;
   type: 'disc' | 'cultural';
+  completedAt: Date;
   profile: string;
-  completedAt: string;
-  questions?: {
+  questions?: Array<{
     question: string;
     answer: string;
-  }[];
+  }>;
   detailedResult?: {
     description: string;
     strengths: string[];
@@ -88,263 +47,404 @@ export interface MockTest {
   };
 }
 
-export const mockCandidates: MockCandidate[] = [
+export interface QualifyingAnswer {
+  question: string;
+  answer: 'sim' | 'não';
+}
+
+export interface MockCandidate {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  city: string;
+  jobArea: string;
+  status: 'Pré-aprovado' | 'Reprovado' | 'Em avaliação';
+  hasCompletedDISC: boolean;
+  discProfile?: string;
+  hasCompletedCultural: boolean;
+  culturalProfile?: string;
+  applications: string[];
+  resume?: string;
+  education?: Array<{
+    course: string;
+    institution: string;
+    level: string;
+    year: string;
+  }>;
+  experience?: Array<{
+    position: string;
+    company: string;
+    period: string;
+    description: string;
+  }>;
+  languages?: Array<{
+    language: string;
+    level: string;
+  }>;
+  skills?: string[];
+  qualifyingAnswers?: { [jobId: string]: QualifyingAnswer[] };
+}
+
+export const mockJobs: MockJob[] = [
   {
     id: '1',
-    name: 'Ana Silva',
-    email: 'ana.silva@email.com',
-    phone: '(11) 99999-9999',
-    city: 'São Paulo',
-    jobArea: 'Tecnologia',
-    hasCompletedDISC: true,
-    discProfile: 'Dominância (D)',
-    hasCompletedCultural: true,
-    culturalProfile: 'Executor',
-    applications: ['1', '2'],
-    status: 'Em avaliação',
-    resume: 'curriculo_ana_silva.pdf',
-    resumeText: 'Desenvolvedora Full Stack com 3 anos de experiência em React e Node.js...',
-    registeredAt: '2024-01-15T10:00:00Z',
-    education: [
-      {
-        level: 'Superior',
-        course: 'Ciência da Computação',
-        institution: 'USP',
-        year: '2021'
-      }
-    ],
-    experience: [
-      {
-        position: 'Desenvolvedor Full Stack',
-        company: 'TechCorp',
-        period: '2021 - Atual',
-        description: 'Desenvolvimento de aplicações web usando React, Node.js e MongoDB'
-      }
-    ],
-    languages: [
-      { language: 'Inglês', level: 'Avançado' },
-      { language: 'Espanhol', level: 'Intermediário' }
-    ],
-    skills: ['React', 'Node.js', 'MongoDB', 'TypeScript', 'Git']
+    title: 'Desenvolvedor Frontend React',
+    companyName: 'Tech Solutions',
+    companyId: '1',
+    location: 'São Paulo, SP',
+    type: 'Frontend',
+    salary: 'R$ 8.000 - R$ 12.000',
+    description: 'Buscamos um desenvolvedor React para criar interfaces incríveis.',
+    status: 'active',
+    applications: 25,
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date(),
+    requirements: 'Experiência com React, TypeScript, Git',
+    responsibilities: 'Desenvolvimento de interfaces, code review, testes unitários',
+    benefits: 'VR, VA, Plano de Saúde'
   },
   {
     id: '2',
-    name: 'Carlos Oliveira',
-    email: 'carlos.oliveira@email.com',
-    phone: '(11) 88888-8888',
-    city: 'Rio de Janeiro',
-    jobArea: 'Design',
-    hasCompletedDISC: true,
-    discProfile: 'Influência (I)',
-    hasCompletedCultural: false,
-    applications: ['1'],
-    status: 'Pré-aprovado',
-    resume: 'curriculo_carlos_oliveira.pdf',
-    resumeText: 'Designer UX/UI especializado em interfaces mobile e web...',
-    registeredAt: '2024-01-20T14:30:00Z',
-    education: [
-      {
-        level: 'Superior',
-        course: 'Design Gráfico',
-        institution: 'PUC-RJ',
-        year: '2020'
-      }
-    ],
-    experience: [
-      {
-        position: 'UX/UI Designer',
-        company: 'DesignStudio',
-        period: '2020 - Atual',
-        description: 'Criação de interfaces para aplicativos mobile e web'
-      }
-    ],
-    languages: [
-      { language: 'Inglês', level: 'Intermediário' }
-    ],
-    skills: ['Figma', 'Adobe XD', 'Sketch', 'Prototyping', 'User Research']
+    title: 'Cientista de Dados',
+    companyName: 'Data Insights',
+    companyId: '2',
+    location: 'Rio de Janeiro, RJ',
+    type: 'Data Science',
+    salary: 'R$ 10.000 - R$ 15.000',
+    description: 'Procuramos um cientista de dados para análise e modelagem preditiva.',
+    status: 'active',
+    applications: 15,
+    createdAt: new Date('2024-01-15'),
+    updatedAt: new Date(),
   },
   {
     id: '3',
-    name: 'Mariana Santos',
-    email: 'mariana.santos@email.com',
-    phone: '(11) 77777-7777',
-    city: 'Belo Horizonte',
-    jobArea: 'Marketing',
-    hasCompletedDISC: false,
-    hasCompletedCultural: true,
-    culturalProfile: 'Conector',
-    applications: ['2'],
-    status: 'Reprovado',
-    resume: 'curriculo_mariana_santos.pdf',
-    resumeText: 'Especialista em marketing digital com foco em redes sociais...',
-    registeredAt: '2024-02-01T09:15:00Z',
-    education: [
-      {
-        level: 'Superior',
-        course: 'Marketing',
-        institution: 'UFMG',
-        year: '2019'
-      }
-    ],
-    experience: [
-      {
-        position: 'Analista de Marketing Digital',
-        company: 'Marketing Pro',
-        period: '2019 - Atual',
-        description: 'Gestão de campanhas digitais e análise de métricas'
-      }
-    ],
-    languages: [
-      { language: 'Inglês', level: 'Avançado' },
-      { language: 'Francês', level: 'Básico' }
-    ],
-    skills: ['Google Ads', 'Facebook Ads', 'SEO', 'Analytics', 'Social Media']
+    title: 'Analista de Marketing Digital',
+    companyName: 'Marketing Plus',
+    companyId: '3',
+    location: 'Belo Horizonte, MG',
+    type: 'Marketing',
+    salary: 'R$ 6.000 - R$ 9.000',
+    description: 'Vaga para analista de marketing digital com foco em SEO e mídias sociais.',
+    status: 'inactive',
+    applications: 8,
+    createdAt: new Date('2024-02-01'),
+    updatedAt: new Date(),
+  },
+  {
+    id: '4',
+    title: 'Gerente de Projetos',
+    companyName: 'Global Projects',
+    companyId: '4',
+    location: 'Porto Alegre, RS',
+    type: 'Gestão',
+    salary: 'R$ 12.000 - R$ 18.000',
+    description: 'Estamos buscando um gerente de projetos experiente para liderar equipes multidisciplinares.',
+    status: 'active',
+    applications: 32,
+    createdAt: new Date('2024-02-15'),
+    updatedAt: new Date(),
+  },
+  {
+    id: '5',
+    title: 'Analista Financeiro',
+    companyName: 'Finance Solutions',
+    companyId: '5',
+    location: 'Curitiba, PR',
+    type: 'Financeiro',
+    salary: 'R$ 7.000 - R$ 11.000',
+    description: 'Oportunidade para analista financeiro com conhecimento em contabilidade e finanças.',
+    status: 'inactive',
+    applications: 12,
+    createdAt: new Date('2024-03-01'),
+    updatedAt: new Date(),
+  },
+  {
+    id: '6',
+    title: 'Especialista em Cibersegurança',
+    companyName: 'Secure Tech',
+    companyId: '1',
+    location: 'Recife, PE',
+    type: 'Segurança da Informação',
+    salary: 'R$ 9.000 - R$ 14.000',
+    description: 'Buscamos um especialista em cibersegurança para proteger nossos sistemas e dados.',
+    status: 'active',
+    applications: 18,
+    createdAt: new Date('2024-03-15'),
+    updatedAt: new Date(),
+  },
+  {
+    id: '7',
+    title: 'Consultor de Vendas',
+    companyName: 'Salesforce',
+    companyId: '2',
+    location: 'Salvador, BA',
+    type: 'Vendas',
+    salary: 'R$ 5.000 - R$ 10.000',
+    description: 'Vaga para consultor de vendas com experiência em vendas consultivas.',
+    status: 'active',
+    applications: 20,
+    createdAt: new Date('2024-04-01'),
+    updatedAt: new Date(),
+  },
+  {
+    id: '8',
+    title: 'Designer UX/UI',
+    companyName: 'Creative Agency',
+    companyId: '3',
+    location: 'Goiânia, GO',
+    type: 'Design',
+    salary: 'R$ 6.500 - R$ 10.000',
+    description: 'Procuramos um designer UX/UI para criar interfaces intuitivas e agradáveis.',
+    status: 'inactive',
+    applications: 10,
+    createdAt: new Date('2024-04-15'),
+    updatedAt: new Date(),
+  },
+  {
+    id: '9',
+    title: 'Engenheiro de Software',
+    companyName: 'Innovation Labs',
+    companyId: '4',
+    location: 'Manaus, AM',
+    type: 'Engenharia de Software',
+    salary: 'R$ 11.000 - R$ 16.000',
+    description: 'Estamos buscando um engenheiro de software para desenvolver soluções inovadoras.',
+    status: 'active',
+    applications: 28,
+    createdAt: new Date('2024-05-01'),
+    updatedAt: new Date(),
+  },
+  {
+    id: '10',
+    title: 'Analista de Suporte Técnico',
+    companyName: 'Help Desk Solutions',
+    companyId: '5',
+    location: 'Florianópolis, SC',
+    type: 'Suporte Técnico',
+    salary: 'R$ 4.500 - R$ 7.500',
+    description: 'Oportunidade para analista de suporte técnico com habilidades de comunicação e resolução de problemas.',
+    status: 'active',
+    applications: 15,
+    createdAt: new Date('2024-05-15'),
+    updatedAt: new Date(),
   }
 ];
 
 export const mockCompanies: MockCompany[] = [
   {
     id: '1',
-    name: 'TechFlow Soluções',
-    email: 'contato@techflow.com',
-    cnpj: '12.345.678/0001-90',
-    phone: '(11) 3333-3333',
-    city: 'São Paulo',
-    sector: 'Tecnologia',
-    size: 'Média',
-    responsibleName: 'João Silva',
-    hasCompletedCultural: true,
-    culturalProfile: 'Executor',
-    jobsPosted: 5,
-    registeredAt: '2024-01-10T08:00:00Z'
+    name: 'Tech Solutions',
+    email: 'contact@techsolutions.com',
+    phone: '(11) 1234-5678',
+    address: 'Av. Paulista, 1234 - São Paulo, SP',
+    jobs: ['1', '6'],
+    logo: 'tech-solutions-logo.png'
   },
   {
     id: '2',
-    name: 'Inovação Digital',
-    email: 'rh@inovacaodigital.com',
-    cnpj: '98.765.432/0001-10',
-    phone: '(11) 4444-4444',
-    city: 'Rio de Janeiro',
-    sector: 'Tecnologia',
-    size: 'Grande',
-    responsibleName: 'Maria Santos',
-    hasCompletedCultural: false,
-    jobsPosted: 3,
-    registeredAt: '2024-01-12T10:30:00Z'
+    name: 'Data Insights',
+    email: 'info@datainsights.com',
+    phone: '(21) 9876-5432',
+    address: 'Rua das Laranjeiras, 567 - Rio de Janeiro, RJ',
+    jobs: ['2', '7'],
+    logo: 'data-insights-logo.png'
   },
   {
     id: '3',
-    name: 'StartupX',
-    email: 'hiring@startupx.com',
-    cnpj: '11.222.333/0001-44',
-    phone: '(11) 5555-5555',
-    city: 'São Paulo',
-    sector: 'Tecnologia',
-    size: 'Pequena',
-    responsibleName: 'Pedro Oliveira',
-    hasCompletedCultural: true,
-    culturalProfile: 'Explorador',
-    jobsPosted: 2,
-    registeredAt: '2024-01-15T16:45:00Z'
-  }
-];
-
-export const mockJobs: MockJob[] = [
-  {
-    id: '1',
-    title: 'Desenvolvedor Full Stack',
-    companyId: '1',
-    companyName: 'TechFlow Soluções',
-    location: 'São Paulo - SP',
-    type: 'CLT',
-    salary: 'R$ 8.000 - R$ 12.000',
-    description: 'Vaga para desenvolvedor full stack com experiência em React e Node.js',
-    requirements: 'Experiência mínima de 2 anos com React, Node.js, MongoDB. Conhecimento em TypeScript é um diferencial.',
-    benefits: 'Vale refeição, plano de saúde, plano odontológico, gympass, home office flexível',
-    responsibilities: 'Desenvolver aplicações web, manter código existente, participar de code reviews, colaborar com equipe de design',
-    status: 'active',
-    applications: 15,
-    createdAt: '2024-01-20T10:00:00Z'
+    name: 'Marketing Plus',
+    email: 'hello@marketingplus.com',
+    phone: '(31) 4321-8765',
+    address: 'Av. Afonso Pena, 789 - Belo Horizonte, MG',
+    jobs: ['3', '8'],
+    logo: 'marketing-plus-logo.png'
   },
   {
-    id: '2',
-    title: 'UX/UI Designer',
-    companyId: '2',
-    companyName: 'Inovação Digital',
-    location: 'Rio de Janeiro - RJ',
-    type: 'PJ',
-    salary: 'R$ 5.000 - R$ 8.000',
-    description: 'Designer para criar interfaces inovadoras e user-friendly',
-    requirements: 'Experiência com Figma, Adobe XD, conhecimento em Design System, portfolio sólido',
-    benefits: 'Horário flexível, equipamento fornecido, ambiente criativo',
-    responsibilities: 'Criar wireframes, protótipos, conduzir pesquisas com usuários, trabalhar em equipe multidisciplinar',
-    status: 'active',
-    applications: 8,
-    createdAt: '2024-01-25T14:00:00Z'
+    id: '4',
+    name: 'Global Projects',
+    email: 'work@globalprojects.com',
+    phone: '(51) 5678-1234',
+    address: 'Rua da Praia, 1010 - Porto Alegre, RS',
+    jobs: ['4', '9'],
+    logo: 'global-projects-logo.png'
+  },
+  {
+    id: '5',
+    name: 'Finance Solutions',
+    email: 'money@financesolutions.com',
+    phone: '(41) 8765-4321',
+    address: 'Av. Batel, 2323 - Curitiba, PR',
+    jobs: ['5', '10'],
+    logo: 'finance-solutions-logo.png'
   }
 ];
 
 export const mockTests: MockTest[] = [
   {
-    id: '1',
-    userId: '1',
-    userName: 'Ana Silva',
-    userEmail: 'ana.silva@email.com',
+    id: uuidv4(),
+    userName: 'João Silva',
+    userEmail: 'joao.silva@example.com',
     type: 'disc',
-    profile: 'Dominância (D)',
-    completedAt: '2024-01-16T10:00:00Z',
+    completedAt: new Date(),
+    profile: 'Analista',
     questions: [
-      {
-        question: 'Como você prefere trabalhar em equipe?',
-        answer: 'Gosto de liderar e tomar decisões rápidas'
-      },
-      {
-        question: 'Como você lida com conflitos?',
-        answer: 'Enfrento de forma direta e busco soluções práticas'
-      }
+      { question: 'Você se considera uma pessoa comunicativa?', answer: 'Sim' },
+      { question: 'Você prefere trabalhar em equipe ou sozinho?', answer: 'Em equipe' },
     ],
     detailedResult: {
-      description: 'Perfil Dominância caracteriza-se por pessoas focadas em resultados, diretas e assertivas.',
-      strengths: ['Liderança natural', 'Tomada de decisões rápidas', 'Foco em resultados', 'Assertividade'],
-      areas_for_development: ['Paciência com processos', 'Escuta ativa', 'Trabalho em equipe'],
-      recommendations: ['Desenvolver habilidades de coaching', 'Praticar feedback construtivo', 'Trabalhar flexibilidade']
+      description: 'Perfil analítico e detalhista, com foco em qualidade e precisão.',
+      strengths: ['Atenção aos detalhes', 'Organização', 'Pensamento lógico'],
+      areas_for_development: ['Comunicação', 'Flexibilidade'],
+      recommendations: ['Invista em cursos de comunicação', 'Busque atividades que exijam flexibilidade'],
+    },
+  },
+  {
+    id: uuidv4(),
+    userName: 'Maria Souza',
+    userEmail: 'maria.souza@example.com',
+    type: 'cultural',
+    completedAt: new Date(),
+    profile: 'Líder',
+    questions: [
+      { question: 'Você se considera uma pessoa proativa?', answer: 'Sim' },
+      { question: 'Você prefere liderar ou ser liderado?', answer: 'Liderar' },
+    ],
+    detailedResult: {
+      description: 'Perfil de liderança, com foco em resultados e tomada de decisão.',
+      strengths: ['Liderança', 'Proatividade', 'Visão estratégica'],
+      areas_for_development: ['Empatia', 'Delegação'],
+      recommendations: ['Invista em cursos de liderança', 'Busque atividades que exijam delegação'],
+    },
+  },
+];
+
+export const mockCandidates: MockCandidate[] = [
+  {
+    id: '1',
+    name: 'Ana Silva',
+    email: 'ana.silva@email.com',
+    phone: '(11) 99999-1234',
+    city: 'São Paulo, SP',
+    jobArea: 'Tecnologia',
+    status: 'Pré-aprovado',
+    hasCompletedDISC: true,
+    discProfile: 'Dominante',
+    hasCompletedCultural: true,
+    culturalProfile: 'Executora',
+    applications: ['1', '2'],
+    resume: 'curriculo-ana-silva.pdf',
+    education: [
+      {
+        course: 'Ciência da Computação',
+        institution: 'USP',
+        level: 'Bacharelado',
+        year: '2020'
+      }
+    ],
+    experience: [
+      {
+        position: 'Desenvolvedora Frontend',
+        company: 'Tech Corp',
+        period: '2020 - Atual',
+        description: 'Desenvolvimento de aplicações React e Vue.js'
+      }
+    ],
+    languages: [
+      { language: 'Inglês', level: 'Avançado' },
+      { language: 'Espanhol', level: 'Intermediário' }
+    ],
+    skills: ['React', 'JavaScript', 'TypeScript', 'CSS', 'HTML'],
+    qualifyingAnswers: {
+      '1': [
+        { question: 'Você tem experiência mínima de 3 anos com React?', answer: 'sim' },
+        { question: 'Possui conhecimento em TypeScript?', answer: 'sim' },
+        { question: 'Tem experiência com metodologias ágeis?', answer: 'sim' },
+        { question: 'Possui nível intermediário de inglês?', answer: 'sim' }
+      ],
+      '2': [
+        { question: 'Você tem experiência com Python?', answer: 'não' },
+        { question: 'Possui conhecimento em Machine Learning?', answer: 'não' }
+      ]
     }
   },
   {
     id: '2',
-    userId: '1',
-    userName: 'Ana Silva',
-    userEmail: 'ana.silva@email.com',
-    type: 'cultural',
-    profile: 'Executor',
-    completedAt: '2024-01-17T15:30:00Z',
-    questions: [
+    name: 'Carlos Santos',
+    email: 'carlos.santos@email.com',
+    phone: '(11) 98888-5678',
+    city: 'Rio de Janeiro, RJ',
+    jobArea: 'Marketing',
+    status: 'Em avaliação',
+    hasCompletedDISC: true,
+    discProfile: 'Influente',
+    hasCompletedCultural: false,
+    applications: ['1', '3'],
+    resume: 'curriculo-carlos-santos.pdf',
+    education: [
       {
-        question: 'O que mais te motiva no trabalho?',
-        answer: 'Atingir metas e ver resultados concretos'
-      },
-      {
-        question: 'Como você prefere receber feedback?',
-        answer: 'De forma direta e com foco em melhorias'
+        course: 'Marketing Digital',
+        institution: 'FGV',
+        level: 'MBA',
+        year: '2021'
       }
     ],
-    detailedResult: {
-      description: 'Perfil Executor é focado em performance, metas e resultados mensuráveis.',
-      strengths: ['Orientação para resultados', 'Disciplina', 'Eficiência', 'Competitividade saudável'],
-      areas_for_development: ['Flexibilidade', 'Criatividade', 'Colaboração'],
-      recommendations: ['Participar de projetos colaborativos', 'Explorar soluções criativas', 'Desenvolver empatia']
+    experience: [
+      {
+        position: 'Analista de Marketing',
+        company: 'Marketing Plus',
+        period: '2019 - Atual',
+        description: 'Gestão de campanhas digitais e análise de métricas'
+      }
+    ],
+    languages: [
+      { language: 'Inglês', level: 'Intermediário' }
+    ],
+    skills: ['Google Ads', 'Facebook Ads', 'Analytics', 'SEO'],
+    qualifyingAnswers: {
+      '1': [
+        { question: 'Você tem experiência mínima de 3 anos com React?', answer: 'não' },
+        { question: 'Possui conhecimento em TypeScript?', answer: 'não' }
+      ]
+    }
+  },
+  {
+    id: '3',
+    name: 'Maria Oliveira',
+    email: 'maria.oliveira@email.com',
+    phone: '(11) 97777-9012',
+    city: 'Belo Horizonte, MG',
+    jobArea: 'Recursos Humanos',
+    status: 'Reprovado',
+    hasCompletedDISC: false,
+    hasCompletedCultural: true,
+    culturalProfile: 'Conectora',
+    applications: ['2'],
+    education: [
+      {
+        course: 'Psicologia',
+        institution: 'UFMG',
+        level: 'Bacharelado',
+        year: '2018'
+      }
+    ],
+    experience: [
+      {
+        position: 'Analista de RH',
+        company: 'RH Solutions',
+        period: '2018 - Atual',
+        description: 'Recrutamento e seleção, gestão de pessoas'
+      }
+    ],
+    languages: [
+      { language: 'Inglês', level: 'Básico' }
+    ],
+    skills: ['Recrutamento', 'Seleção', 'Gestão de Pessoas'],
+    qualifyingAnswers: {
+      '2': [
+        { question: 'Você tem experiência com Python?', answer: 'sim' },
+        { question: 'Possui conhecimento em Machine Learning?', answer: 'sim' }
+      ]
     }
   }
 ];
-
-export const getAdminStats = () => {
-  return {
-    totalCandidates: mockCandidates.length,
-    totalCompanies: mockCompanies.length,
-    totalJobs: mockJobs.length,
-    activeJobs: mockJobs.filter(job => job.status === 'active').length,
-    totalApplications: mockJobs.reduce((sum, job) => sum + job.applications, 0),
-    completedDISC: mockCandidates.filter(c => c.hasCompletedDISC).length,
-    completedCultural: mockCandidates.filter(c => c.hasCompletedCultural).length + mockCompanies.filter(c => c.hasCompletedCultural).length
-  };
-};

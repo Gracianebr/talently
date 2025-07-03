@@ -283,7 +283,10 @@ const JobCandidates = () => {
           </DialogHeader>
           
           {selectedCandidate && (
-            <CandidateFullView candidate={selectedCandidate} />
+            <CandidateFullView 
+              candidate={selectedCandidate} 
+              jobId={jobId}
+            />
           )}
         </DialogContent>
       </Dialog>

@@ -1,15 +1,15 @@
-
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle, XCircle, FileText, GraduationCap, Briefcase, Globe } from 'lucide-react';
+import { CheckCircle, XCircle, FileText, GraduationCap, Briefcase, Globe, HelpCircle } from 'lucide-react';
 import { MockCandidate } from '@/data/mockAdminData';
 
 interface CandidateFullViewProps {
   candidate: MockCandidate;
+  jobId?: string;
 }
 
-const CandidateFullView = ({ candidate }: CandidateFullViewProps) => {
+const CandidateFullView = ({ candidate, jobId }: CandidateFullViewProps) => {
   return (
     <div className="space-y-6">
       {/* Dados Pessoais */}
@@ -141,6 +141,42 @@ const CandidateFullView = ({ candidate }: CandidateFullViewProps) => {
                 <Badge key={index} variant="secondary">
                   {skill}
                 </Badge>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Respostas das Perguntas Qualificadoras */}
+      {jobId && candidate.qualifyingAnswers && candidate.qualifyingAnswers[jobId] && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <HelpCircle className="text-orange-600" size={20} />
+              <span>Respostas das Perguntas Qualificadoras</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {candidate.qualifyingAnswers[jobId].map((qa, index) => (
+                <div key={index} className="border-l-4 border-orange-500 pl-4">
+                  <h4 className="font-medium text-gray-900 mb-2">
+                    {index + 1}. {qa.question}
+                  </h4>
+                  <div className="flex items-center space-x-2">
+                    {qa.answer === 'sim' ? (
+                      <Badge className="bg-green-100 text-green-800">
+                        <CheckCircle size={12} className="mr-1" />
+                        Sim
+                      </Badge>
+                    ) : (
+                      <Badge className="bg-red-100 text-red-800">
+                        <XCircle size={12} className="mr-1" />
+                        Não
+                      </Badge>
+                    )}
+                  </div>
+                </div>
               ))}
             </div>
           </CardContent>
