@@ -82,7 +82,8 @@ const JobCandidates = () => {
     const styles = {
       'Pré-aprovado': 'bg-green-100 text-green-800',
       'Reprovado': 'bg-red-100 text-red-800',
-      'Em avaliação': 'bg-yellow-100 text-yellow-800'
+      'Em avaliação': 'bg-yellow-100 text-yellow-800',
+      'Contratado': 'bg-blue-100 text-blue-800'
     };
     
     return (
@@ -114,7 +115,7 @@ const JobCandidates = () => {
       {/* Job Info */}
       <Card>
         <CardContent className="pt-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             <div>
               <label className="text-sm font-medium text-gray-700">Total de Candidatos</label>
               <p className="text-2xl font-bold text-talently-purple">{filteredCandidates.length}</p>
@@ -129,6 +130,12 @@ const JobCandidates = () => {
               <label className="text-sm font-medium text-gray-700">Em Avaliação</label>
               <p className="text-2xl font-bold text-yellow-600">
                 {filteredCandidates.filter(c => c.status === 'Em avaliação').length}
+              </p>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700">Contratados</label>
+              <p className="text-2xl font-bold text-blue-600">
+                {filteredCandidates.filter(c => c.status === 'Contratado').length}
               </p>
             </div>
             <div>
@@ -162,6 +169,7 @@ const JobCandidates = () => {
                 <SelectItem value="all">Todos os status</SelectItem>
                 <SelectItem value="Pré-aprovado">Pré-aprovado</SelectItem>
                 <SelectItem value="Em avaliação">Em avaliação</SelectItem>
+                <SelectItem value="Contratado">Contratado</SelectItem>
                 <SelectItem value="Reprovado">Reprovado</SelectItem>
               </SelectContent>
             </Select>
@@ -253,6 +261,16 @@ const JobCandidates = () => {
                         >
                           <CheckCircle size={14} className="mr-1" />
                           Pré-aprovar
+                        </Button>
+                        
+                        <Button
+                          size="sm"
+                          onClick={() => handleStatusChange(candidate.id, 'Contratado')}
+                          className="bg-blue-600 hover:bg-blue-700 text-white flex items-center"
+                          disabled={candidate.status === 'Contratado'}
+                        >
+                          <CheckCircle size={14} className="mr-1" />
+                          Contratar
                         </Button>
                         
                         <Button

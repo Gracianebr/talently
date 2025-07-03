@@ -1,169 +1,165 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
-import { Search, Eye, Edit, Trash2, CheckCircle, XCircle } from 'lucide-react';
+import { User, Search } from 'lucide-react';
 import { mockCandidates, MockCandidate } from '@/data/mockAdminData';
 import CandidateFullView from '@/components/admin/CandidateFullView';
 
 const AdminCandidates = () => {
-  const [candidates, setCandidates] = useState<MockCandidate[]>(mockCandidates);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [discFilter, setDiscFilter] = useState<string>('all');
-  const [culturalFilter, setCulturalFilter] = useState<string>('all');
-  const [candidateStatusFilter, setCandidateStatusFilter] = useState<string>('all');
-  const [jobAreaFilter, setJobAreaFilter] = useState<string>('all');
-  const [selectedCandidate, setSelectedCandidate] = useState<MockCandidate | null>(null);
-  const [deleteCandidate, setDeleteCandidate] = useState<MockCandidate | null>(null);
-  const [viewMode, setViewMode] = useState<'view' | 'edit'>('view');
+  const navigate = useNavigate();
   const { toast } = useToast();
 
-  // Get unique job areas
-  const jobAreas = Array.from(new Set(candidates.map(candidate => candidate.jobArea)));
+  const [candidates, setCandidates] = useState(mockCandidates);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [jobAreaFilter, setJobAreaFilter] = useState<string>('all');
+  const [selectedCandidate, setSelectedCandidate] = useState<MockCandidate | null>(null);
 
-  // Filter candidates
+  // Filtrar candidatos
   const filteredCandidates = candidates.filter(candidate => {
-    const matchesSearch = candidate.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         candidate.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         candidate.city.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesStatus = statusFilter === 'all' ||
-                         (statusFilter === 'disc-complete' && candidate.hasCompletedDISC) ||
-                         (statusFilter === 'cultural-complete' && candidate.hasCompletedCultural) ||
-                         (statusFilter === 'both-complete' && candidate.hasCompletedDISC && candidate.hasCompletedCultural) ||
-                         (statusFilter === 'incomplete' && (!candidate.hasCompletedDISC || !candidate.hasCompletedCultural));
-    
-    const matchesDisc = discFilter === 'all' || 
-                       (discFilter === 'none' && !candidate.hasCompletedDISC) ||
-                       (candidate.discProfile && candidate.discProfile.toLowerCase().includes(discFilter.toLowerCase()));
-
-    const matchesCultural = culturalFilter === 'all' ||
-                           (culturalFilter === 'none' && !candidate.hasCompletedCultural) ||
-                           (candidate.culturalProfile && candidate.culturalProfile.toLowerCase().includes(culturalFilter.toLowerCase()));
-
-    const matchesCandidateStatus = candidateStatusFilter === 'all' || candidate.status === candidateStatusFilter;
-    
+    const matchesSearch = candidate.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = statusFilter === 'all' || candidate.status === statusFilter;
     const matchesJobArea = jobAreaFilter === 'all' || candidate.jobArea === jobAreaFilter;
-    
-    return matchesSearch && matchesStatus && matchesDisc && matchesCultural && matchesCandidateStatus && matchesJobArea;
+    return matchesSearch && matchesStatus && matchesJobArea;
   });
 
-  const handleDeleteCandidate = () => {
-    if (deleteCandidate) {
-      setCandidates(candidates.filter(c => c.id !== deleteCandidate.id));
-      setDeleteCandidate(null);
-      toast({
-        title: "Candidato excluído",
-        description: `${deleteCandidate.name} foi removido do sistema.`,
-      });
-    }
+  // Obter áreas de trabalho únicas
+  const uniqueJobAreas = Array.from(new Set(candidates.map(candidate => candidate.jobArea)));
+
+  const handleStatusChange = (candidateId: string, newStatus: MockCandidate['status']) => {
+    setCandidates(candidates.map(candidate => 
+      candidate.id === candidateId 
+        ? { ...candidate, status: newStatus }
+        : candidate
+    ));
+    
+    const candidate = candidates.find(c => c.id === candidateId);
+    toast({
+      title: `Status atualizado`,
+      description: `${candidate?.name} foi marcado como ${newStatus.toLowerCase()}.`,
+    });
   };
 
-  const handleSaveCandidate = (updatedCandidate: MockCandidate) => {
-    setCandidates(candidates.map(c => c.id === updatedCandidate.id ? updatedCandidate : c));
-    setSelectedCandidate(null);
-    toast({
-      title: "Candidato atualizado",
-      description: "Os dados foram salvos com sucesso.",
-    });
+  const getStatusBadge = (status: MockCandidate['status']) => {
+    const styles = {
+      'Pré-aprovado': 'bg-green-100 text-green-800',
+      'Reprovado': 'bg-red-100 text-red-800',
+      'Em avaliação': 'bg-yellow-100 text-yellow-800',
+      'Contratado': 'bg-blue-100 text-blue-800'
+    };
+    
+    return (
+      <Badge className={styles[status]}>
+        {status}
+      </Badge>
+    );
   };
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Gestão de Candidatos</h1>
-          <p className="text-gray-500 mt-1">{filteredCandidates.length} candidatos encontrados</p>
-        </div>
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold text-gray-900">Candidatos</h1>
       </div>
 
-      {/* Filters */}
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <Card>
+          <CardContent className="pt-4">
+            <div className="text-center">
+              <p className="text-2xl font-bold text-talently-purple">{filteredCandidates.length}</p>
+              <p className="text-sm text-gray-600">Total</p>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardContent className="pt-4">
+            <div className="text-center">
+              <p className="text-2xl font-bold text-green-600">
+                {filteredCandidates.filter(c => c.status === 'Pré-aprovado').length}
+              </p>
+              <p className="text-sm text-gray-600">Pré-aprovados</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="pt-4">
+            <div className="text-center">
+              <p className="text-2xl font-bold text-yellow-600">
+                {filteredCandidates.filter(c => c.status === 'Em avaliação').length}
+              </p>
+              <p className="text-sm text-gray-600">Em Avaliação</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="pt-4">
+            <div className="text-center">
+              <p className="text-2xl font-bold text-blue-600">
+                {filteredCandidates.filter(c => c.status === 'Contratado').length}
+              </p>
+              <p className="text-sm text-gray-600">Contratados</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="pt-4">
+            <div className="text-center">
+              <p className="text-2xl font-bold text-red-600">
+                {filteredCandidates.filter(c => c.status === 'Reprovado').length}
+              </p>
+              <p className="text-sm text-gray-600">Reprovados</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Filtros */}
       <Card>
         <CardContent className="pt-6">
-          <div className="space-y-4">
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
-                <Input
-                  placeholder="Buscar por nome, email ou cidade..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-full md:w-[200px]">
-                  <SelectValue placeholder="Status dos testes" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Todos</SelectItem>
-                  <SelectItem value="disc-complete">DISC Completo</SelectItem>
-                  <SelectItem value="cultural-complete">Cultural Completo</SelectItem>
-                  <SelectItem value="both-complete">Ambos Completos</SelectItem>
-                  <SelectItem value="incomplete">Incompletos</SelectItem>
-                </SelectContent>
-              </Select>
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+              <Input
+                placeholder="Buscar candidato por nome..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
             </div>
-            
-            <div className="flex flex-col md:flex-row gap-4">
-              <Select value={jobAreaFilter} onValueChange={setJobAreaFilter}>
-                <SelectTrigger className="w-full md:w-[200px]">
-                  <SelectValue placeholder="Área de Atuação" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Todas as Áreas</SelectItem>
-                  {jobAreas.map((area) => (
-                    <SelectItem key={area} value={area}>{area}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <Select value={discFilter} onValueChange={setDiscFilter}>
-                <SelectTrigger className="w-full md:w-[200px]">
-                  <SelectValue placeholder="Perfil DISC" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Todos DISC</SelectItem>
-                  <SelectItem value="none">Sem DISC</SelectItem>
-                  <SelectItem value="dominância">D - Dominância</SelectItem>
-                  <SelectItem value="influência">I - Influência</SelectItem>
-                  <SelectItem value="estabilidade">S - Estabilidade</SelectItem>
-                  <SelectItem value="conformidade">C - Conformidade</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Select value={culturalFilter} onValueChange={setCulturalFilter}>
-                <SelectTrigger className="w-full md:w-[200px]">
-                  <SelectValue placeholder="Fit Cultural" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Todos Cultural</SelectItem>
-                  <SelectItem value="none">Sem Cultural</SelectItem>
-                  <SelectItem value="executor">Executor</SelectItem>
-                  <SelectItem value="conector">Conector</SelectItem>
-                  <SelectItem value="guardião">Guardião</SelectItem>
-                  <SelectItem value="explorador">Explorador</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Select value={candidateStatusFilter} onValueChange={setCandidateStatusFilter}>
-                <SelectTrigger className="w-full md:w-[200px]">
-                  <SelectValue placeholder="Status candidato" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Todos Status</SelectItem>
-                  <SelectItem value="Em avaliação">Em avaliação</SelectItem>
-                  <SelectItem value="Pré-aprovado">Pré-aprovado</SelectItem>
-                  <SelectItem value="Reprovado">Reprovado</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-full md:w-[200px]">
+                <SelectValue placeholder="Filtrar por status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos os status</SelectItem>
+                <SelectItem value="Pré-aprovado">Pré-aprovado</SelectItem>
+                <SelectItem value="Em avaliação">Em avaliação</SelectItem>
+                <SelectItem value="Contratado">Contratado</SelectItem>
+                <SelectItem value="Reprovado">Reprovado</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={jobAreaFilter} onValueChange={setJobAreaFilter}>
+              <SelectTrigger className="w-full md:w-[200px]">
+                <SelectValue placeholder="Filtrar por área" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todas as áreas</SelectItem>
+                {uniqueJobAreas.map(area => (
+                  <SelectItem key={area} value={area}>{area}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </CardContent>
       </Card>
@@ -174,247 +170,113 @@ const AdminCandidates = () => {
           <CardTitle>Lista de Candidatos</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b">
-                  <th className="text-left p-3 font-semibold">Nome</th>
-                  <th className="text-left p-3 font-semibold">Email</th>
-                  <th className="text-left p-3 font-semibold">Cidade</th>
-                  <th className="text-left p-3 font-semibold">Área</th>
-                  <th className="text-left p-3 font-semibold">DISC</th>
-                  <th className="text-left p-3 font-semibold">Cultural</th>
-                  <th className="text-left p-3 font-semibold">Status</th>
-                  <th className="text-left p-3 font-semibold">Candidaturas</th>
-                  <th className="text-left p-3 font-semibold">Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredCandidates.map((candidate) => (
-                  <tr key={candidate.id} className="border-b hover:bg-gray-50">
-                    <td className="p-3">
-                      <div>
-                        <div className="font-medium">{candidate.name}</div>
-                        <div className="text-sm text-gray-500">{candidate.phone}</div>
+          {filteredCandidates.length === 0 ? (
+            <div className="text-center py-12">
+              <User className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhum candidato encontrado</h3>
+              <p className="text-gray-500">Tente ajustar os filtros de busca.</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {filteredCandidates.map((candidate) => (
+                <div key={candidate.id} className="border rounded-lg p-6 hover:bg-gray-50">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-3 mb-3">
+                        <div className="w-12 h-12 bg-talently-purple rounded-full flex items-center justify-center">
+                          <span className="text-white font-semibold">
+                            {candidate.name.charAt(0)}
+                          </span>
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-gray-900">{candidate.name}</h3>
+                          <p className="text-sm text-gray-500">{candidate.email}</p>
+                        </div>
+                        {getStatusBadge(candidate.status)}
                       </div>
-                    </td>
-                    <td className="p-3 text-sm">{candidate.email}</td>
-                    <td className="p-3 text-sm">{candidate.city}</td>
-                    <td className="p-3">
-                      <Badge variant="outline">{candidate.jobArea}</Badge>
-                    </td>
-                    <td className="p-3">
-                      {candidate.hasCompletedDISC ? (
+
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
                         <div>
-                          <Badge variant="secondary" className="bg-green-100 text-green-800 mb-1">
-                            <CheckCircle size={12} className="mr-1" />
-                            Concluído
-                          </Badge>
-                          {candidate.discProfile && (
-                            <div className="text-xs text-gray-600">{candidate.discProfile}</div>
-                          )}
+                          <label className="text-sm font-medium text-gray-700">Área de Atuação</label>
+                          <p className="text-sm text-gray-900">{candidate.jobArea}</p>
                         </div>
-                      ) : (
-                        <Badge variant="secondary" className="bg-red-100 text-red-800">
-                          <XCircle size={12} className="mr-1" />
-                          Pendente
-                        </Badge>
-                      )}
-                    </td>
-                    <td className="p-3">
-                      {candidate.hasCompletedCultural ? (
                         <div>
-                          <Badge variant="secondary" className="bg-green-100 text-green-800 mb-1">
-                            <CheckCircle size={12} className="mr-1" />
-                            Concluído
-                          </Badge>
-                          {candidate.culturalProfile && (
-                            <div className="text-xs text-gray-600">{candidate.culturalProfile}</div>
-                          )}
+                          <label className="text-sm font-medium text-gray-700">Cidade</label>
+                          <p className="text-sm text-gray-900">{candidate.city}</p>
                         </div>
-                      ) : (
-                        <Badge variant="secondary" className="bg-gray-100 text-gray-800">
-                          <XCircle size={12} className="mr-1" />
-                          Não feito
-                        </Badge>
-                      )}
-                    </td>
-                    <td className="p-3">
-                      <Badge 
-                        variant="secondary" 
-                        className={
-                          candidate.status === 'Pré-aprovado' ? 'bg-green-100 text-green-800' :
-                          candidate.status === 'Reprovado' ? 'bg-red-100 text-red-800' :
-                          'bg-yellow-100 text-yellow-800'
-                        }
+                        <div>
+                          <label className="text-sm font-medium text-gray-700">Perfil DISC</label>
+                          <p className="text-sm text-gray-900">
+                            {candidate.hasCompletedDISC ? candidate.discProfile : 'Não realizado'}
+                          </p>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium text-gray-700">Candidaturas</label>
+                          <p className="text-sm text-gray-900">{candidate.applications.length}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col space-y-2 ml-6">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setSelectedCandidate(candidate)}
+                        className="flex items-center"
                       >
-                        {candidate.status}
-                      </Badge>
-                    </td>
-                    <td className="p-3">
-                      <Badge variant="outline">
-                        {candidate.applications.length} vagas
-                      </Badge>
-                    </td>
-                    <td className="p-3">
+                        Ver Detalhes
+                      </Button>
+                      
                       <div className="flex space-x-2">
                         <Button
                           size="sm"
-                          variant="outline"
-                          onClick={() => {
-                            setSelectedCandidate(candidate);
-                            setViewMode('view');
-                          }}
+                          onClick={() => handleStatusChange(candidate.id, 'Pré-aprovado')}
+                          className="bg-green-600 hover:bg-green-700 text-white"
+                          disabled={candidate.status === 'Pré-aprovado'}
                         >
-                          <Eye size={14} />
+                          Pré-aprovar
                         </Button>
+                        
                         <Button
                           size="sm"
-                          variant="outline"
-                          onClick={() => {
-                            setSelectedCandidate(candidate);
-                            setViewMode('edit');
-                          }}
+                          onClick={() => handleStatusChange(candidate.id, 'Contratado')}
+                          className="bg-blue-600 hover:bg-blue-700 text-white"
+                          disabled={candidate.status === 'Contratado'}
                         >
-                          <Edit size={14} />
+                          Contratar
                         </Button>
+                        
                         <Button
                           size="sm"
-                          variant="outline"
-                          onClick={() => setDeleteCandidate(candidate)}
-                          className="text-red-600 hover:text-red-700"
+                          variant="destructive"
+                          onClick={() => handleStatusChange(candidate.id, 'Reprovado')}
+                          disabled={candidate.status === 'Reprovado'}
                         >
-                          <Trash2 size={14} />
+                          Reprovar
                         </Button>
                       </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
 
-      {/* View/Edit Dialog */}
+      {/* Candidate Full View Dialog */}
       <Dialog open={!!selectedCandidate} onOpenChange={() => setSelectedCandidate(null)}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>
-              {viewMode === 'view' ? 'Visualizar' : 'Editar'} Candidato
-            </DialogTitle>
-            <DialogDescription>
-              {viewMode === 'view' ? 'Dados completos do candidato' : 'Edite as informações do candidato'}
-            </DialogDescription>
+            <DialogTitle>Dados Completos do Candidato</DialogTitle>
           </DialogHeader>
           
           {selectedCandidate && (
-            viewMode === 'view' ? (
-              <CandidateFullView candidate={selectedCandidate} />
-            ) : (
-              <CandidateForm 
-                candidate={selectedCandidate}
-                onSave={handleSaveCandidate}
-                onCancel={() => setSelectedCandidate(null)}
-              />
-            )
+            <CandidateFullView candidate={selectedCandidate} />
           )}
         </DialogContent>
       </Dialog>
-
-      {/* Delete Confirmation Dialog */}
-      <Dialog open={!!deleteCandidate} onOpenChange={() => setDeleteCandidate(null)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Confirmar Exclusão</DialogTitle>
-            <DialogDescription>
-              Tem certeza que deseja excluir o candidato <strong>{deleteCandidate?.name}</strong>?
-              Esta ação não pode ser desfeita.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteCandidate(null)}>
-              Cancelar
-            </Button>
-            <Button variant="destructive" onClick={handleDeleteCandidate}>
-              Excluir
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
-  );
-};
-
-// Candidate Form Component
-const CandidateForm = ({ 
-  candidate, 
-  onSave, 
-  onCancel 
-}: {
-  candidate: MockCandidate;
-  onSave: (candidate: MockCandidate) => void;
-  onCancel: () => void;
-}) => {
-  const [formData, setFormData] = useState(candidate);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSave(formData);
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="text-sm font-medium text-gray-700">Nome</label>
-          <Input
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            required
-          />
-        </div>
-        <div>
-          <label className="text-sm font-medium text-gray-700">Email</label>
-          <Input
-            type="email"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            required
-          />
-        </div>
-        <div>
-          <label className="text-sm font-medium text-gray-700">Telefone</label>
-          <Input
-            value={formData.phone}
-            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-          />
-        </div>
-        <div>
-          <label className="text-sm font-medium text-gray-700">Cidade</label>
-          <Input
-            value={formData.city}
-            onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-          />
-        </div>
-        <div>
-          <label className="text-sm font-medium text-gray-700">Área de Atuação</label>
-          <Input
-            value={formData.jobArea}
-            onChange={(e) => setFormData({ ...formData, jobArea: e.target.value })}
-          />
-        </div>
-      </div>
-
-      <div className="flex justify-end space-x-3">
-        <Button type="button" variant="outline" onClick={onCancel}>
-          Cancelar
-        </Button>
-        <Button type="submit">
-          Salvar
-        </Button>
-      </div>
-    </form>
   );
 };
 

@@ -62,6 +62,32 @@ export interface QualifyingAnswer {
   answer: 'sim' | 'não';
 }
 
+export interface InterviewEvaluation {
+  jobId: string;
+  companyId: string;
+  companyName: string;
+  jobTitle: string;
+  interestLevel: 'Muito Interessado' | 'Interessado' | 'Pouco Interessado' | 'Não Interessado';
+  comments?: string;
+  evaluatedAt: Date;
+}
+
+export interface ScheduledInterview {
+  id: string;
+  jobId: string;
+  companyId: string;
+  companyName: string;
+  jobTitle: string;
+  scheduledDate: Date;
+  scheduledTime: string;
+  status: 'Agendada' | 'Realizada' | 'Cancelada' | 'Reagendada';
+  interviewType: 'Presencial' | 'Online' | 'Telefone';
+  location?: string;
+  meetingLink?: string;
+  notes?: string;
+  createdAt: Date;
+}
+
 export interface MockCandidate {
   id: string;
   name: string;
@@ -69,7 +95,7 @@ export interface MockCandidate {
   phone: string;
   city: string;
   jobArea: string;
-  status: 'Pré-aprovado' | 'Reprovado' | 'Em avaliação';
+  status: 'Pré-aprovado' | 'Reprovado' | 'Em avaliação' | 'Contratado';
   hasCompletedDISC: boolean;
   discProfile?: string;
   hasCompletedCultural: boolean;
@@ -94,6 +120,8 @@ export interface MockCandidate {
   }>;
   skills?: string[];
   qualifyingAnswers?: { [jobId: string]: QualifyingAnswer[] };
+  interviewEvaluations?: InterviewEvaluation[];
+  scheduledInterviews?: ScheduledInterview[];
 }
 
 export const mockJobs: MockJob[] = [
@@ -390,7 +418,7 @@ export const mockCandidates: MockCandidate[] = [
     phone: '(11) 99999-1234',
     city: 'São Paulo, SP',
     jobArea: 'Tecnologia',
-    status: 'Pré-aprovado',
+    status: 'Contratado',
     hasCompletedDISC: true,
     discProfile: 'Dominante',
     hasCompletedCultural: true,
@@ -429,7 +457,34 @@ export const mockCandidates: MockCandidate[] = [
         { question: 'Você tem experiência com Python?', answer: 'não' },
         { question: 'Possui conhecimento em Machine Learning?', answer: 'não' }
       ]
-    }
+    },
+    interviewEvaluations: [
+      {
+        jobId: '1',
+        companyId: '1',
+        companyName: 'Tech Solutions',
+        jobTitle: 'Desenvolvedor Frontend React',
+        interestLevel: 'Muito Interessado',
+        comments: 'Candidata com excelente perfil técnico e cultural. Muito alinhada com nossas necessidades.',
+        evaluatedAt: new Date('2024-06-15')
+      }
+    ],
+    scheduledInterviews: [
+      {
+        id: uuidv4(),
+        jobId: '1',
+        companyId: '1',
+        companyName: 'Tech Solutions',
+        jobTitle: 'Desenvolvedor Frontend React',
+        scheduledDate: new Date('2024-06-20'),
+        scheduledTime: '14:00',
+        status: 'Realizada',
+        interviewType: 'Online',
+        meetingLink: 'https://meet.google.com/abc-def-ghi',
+        notes: 'Entrevista técnica realizada com sucesso. Candidata aprovada.',
+        createdAt: new Date('2024-06-16')
+      }
+    ]
   },
   {
     id: '2',
@@ -469,7 +524,34 @@ export const mockCandidates: MockCandidate[] = [
         { question: 'Você tem experiência mínima de 3 anos com React?', answer: 'não' },
         { question: 'Possui conhecimento em TypeScript?', answer: 'não' }
       ]
-    }
+    },
+    interviewEvaluations: [
+      {
+        jobId: '3',
+        companyId: '3',
+        companyName: 'Marketing Plus',
+        jobTitle: 'Analista de Marketing Digital',
+        interestLevel: 'Interessado',
+        comments: 'Candidato com boa experiência, mas precisa desenvolver algumas habilidades técnicas.',
+        evaluatedAt: new Date('2024-06-10')
+      }
+    ],
+    scheduledInterviews: [
+      {
+        id: uuidv4(),
+        jobId: '3',
+        companyId: '3',
+        companyName: 'Marketing Plus',
+        jobTitle: 'Analista de Marketing Digital',
+        scheduledDate: new Date('2024-06-25'),
+        scheduledTime: '10:00',
+        status: 'Agendada',
+        interviewType: 'Presencial',
+        location: 'Av. Afonso Pena, 789 - Belo Horizonte, MG',
+        notes: 'Entrevista com o gerente de marketing',
+        createdAt: new Date('2024-06-18')
+      }
+    ]
   },
   {
     id: '3',
@@ -508,7 +590,18 @@ export const mockCandidates: MockCandidate[] = [
         { question: 'Você tem experiência com Python?', answer: 'sim' },
         { question: 'Possui conhecimento em Machine Learning?', answer: 'sim' }
       ]
-    }
+    },
+    interviewEvaluations: [
+      {
+        jobId: '2',
+        companyId: '2',
+        companyName: 'Data Insights',
+        jobTitle: 'Cientista de Dados',
+        interestLevel: 'Não Interessado',
+        comments: 'Candidata não possui o perfil técnico necessário para a vaga de cientista de dados.',
+        evaluatedAt: new Date('2024-06-05')
+      }
+    ]
   }
 ];
 
@@ -521,5 +614,8 @@ export const getAdminStats = () => {
     totalApplications: mockJobs.reduce((sum, job) => sum + job.applications, 0),
     completedDISC: mockCandidates.filter(candidate => candidate.hasCompletedDISC).length,
     completedCultural: mockCandidates.filter(candidate => candidate.hasCompletedCultural).length,
+    contractedCandidates: mockCandidates.filter(candidate => candidate.status === 'Contratado').length,
+    scheduledInterviews: mockCandidates.reduce((sum, candidate) => 
+      sum + (candidate.scheduledInterviews?.length || 0), 0),
   };
 };
