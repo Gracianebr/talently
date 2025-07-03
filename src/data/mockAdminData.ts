@@ -16,6 +16,7 @@ export interface MockJob {
   requirements?: string;
   responsibilities?: string;
   benefits?: string;
+  qualifyingQuestions?: string[];
 }
 
 export interface MockCompany {
@@ -26,6 +27,15 @@ export interface MockCompany {
   address: string;
   jobs: string[];
   logo?: string;
+  cnpj: string;
+  responsibleName: string;
+  city: string;
+  sector: string;
+  size: 'Pequena' | 'Média' | 'Grande';
+  hasCompletedCultural: boolean;
+  culturalProfile?: string;
+  jobsPosted: number;
+  registeredAt: Date;
 }
 
 export interface MockTest {
@@ -102,7 +112,13 @@ export const mockJobs: MockJob[] = [
     updatedAt: new Date(),
     requirements: 'Experiência com React, TypeScript, Git',
     responsibilities: 'Desenvolvimento de interfaces, code review, testes unitários',
-    benefits: 'VR, VA, Plano de Saúde'
+    benefits: 'VR, VA, Plano de Saúde',
+    qualifyingQuestions: [
+      'Você tem experiência mínima de 3 anos com React?',
+      'Possui conhecimento em TypeScript?',
+      'Tem experiência com metodologias ágeis?',
+      'Possui nível intermediário de inglês?'
+    ]
   },
   {
     id: '2',
@@ -117,6 +133,10 @@ export const mockJobs: MockJob[] = [
     applications: 15,
     createdAt: new Date('2024-01-15'),
     updatedAt: new Date(),
+    qualifyingQuestions: [
+      'Você tem experiência com Python?',
+      'Possui conhecimento em Machine Learning?'
+    ]
   },
   {
     id: '3',
@@ -240,7 +260,16 @@ export const mockCompanies: MockCompany[] = [
     phone: '(11) 1234-5678',
     address: 'Av. Paulista, 1234 - São Paulo, SP',
     jobs: ['1', '6'],
-    logo: 'tech-solutions-logo.png'
+    logo: 'tech-solutions-logo.png',
+    cnpj: '12.345.678/0001-90',
+    responsibleName: 'João Silva',
+    city: 'São Paulo, SP',
+    sector: 'Tecnologia',
+    size: 'Grande',
+    hasCompletedCultural: true,
+    culturalProfile: 'Inovadora',
+    jobsPosted: 2,
+    registeredAt: new Date('2023-01-15')
   },
   {
     id: '2',
@@ -249,7 +278,16 @@ export const mockCompanies: MockCompany[] = [
     phone: '(21) 9876-5432',
     address: 'Rua das Laranjeiras, 567 - Rio de Janeiro, RJ',
     jobs: ['2', '7'],
-    logo: 'data-insights-logo.png'
+    logo: 'data-insights-logo.png',
+    cnpj: '23.456.789/0001-01',
+    responsibleName: 'Maria Santos',
+    city: 'Rio de Janeiro, RJ',
+    sector: 'Dados e Analytics',
+    size: 'Média',
+    hasCompletedCultural: true,
+    culturalProfile: 'Analítica',
+    jobsPosted: 2,
+    registeredAt: new Date('2023-02-20')
   },
   {
     id: '3',
@@ -258,7 +296,15 @@ export const mockCompanies: MockCompany[] = [
     phone: '(31) 4321-8765',
     address: 'Av. Afonso Pena, 789 - Belo Horizonte, MG',
     jobs: ['3', '8'],
-    logo: 'marketing-plus-logo.png'
+    logo: 'marketing-plus-logo.png',
+    cnpj: '34.567.890/0001-12',
+    responsibleName: 'Carlos Oliveira',
+    city: 'Belo Horizonte, MG',
+    sector: 'Marketing',
+    size: 'Pequena',
+    hasCompletedCultural: false,
+    jobsPosted: 2,
+    registeredAt: new Date('2023-03-10')
   },
   {
     id: '4',
@@ -267,7 +313,16 @@ export const mockCompanies: MockCompany[] = [
     phone: '(51) 5678-1234',
     address: 'Rua da Praia, 1010 - Porto Alegre, RS',
     jobs: ['4', '9'],
-    logo: 'global-projects-logo.png'
+    logo: 'global-projects-logo.png',
+    cnpj: '45.678.901/0001-23',
+    responsibleName: 'Ana Paula',
+    city: 'Porto Alegre, RS',
+    sector: 'Consultoria',
+    size: 'Grande',
+    hasCompletedCultural: true,
+    culturalProfile: 'Colaborativa',
+    jobsPosted: 2,
+    registeredAt: new Date('2023-04-05')
   },
   {
     id: '5',
@@ -276,7 +331,15 @@ export const mockCompanies: MockCompany[] = [
     phone: '(41) 8765-4321',
     address: 'Av. Batel, 2323 - Curitiba, PR',
     jobs: ['5', '10'],
-    logo: 'finance-solutions-logo.png'
+    logo: 'finance-solutions-logo.png',
+    cnpj: '56.789.012/0001-34',
+    responsibleName: 'Roberto Lima',
+    city: 'Curitiba, PR',
+    sector: 'Financeiro',
+    size: 'Média',
+    hasCompletedCultural: false,
+    jobsPosted: 2,
+    registeredAt: new Date('2023-05-12')
   }
 ];
 
@@ -448,3 +511,15 @@ export const mockCandidates: MockCandidate[] = [
     }
   }
 ];
+
+export const getAdminStats = () => {
+  return {
+    totalCandidates: mockCandidates.length,
+    totalCompanies: mockCompanies.length,
+    totalJobs: mockJobs.length,
+    activeJobs: mockJobs.filter(job => job.status === 'active').length,
+    totalApplications: mockJobs.reduce((sum, job) => sum + job.applications, 0),
+    completedDISC: mockCandidates.filter(candidate => candidate.hasCompletedDISC).length,
+    completedCultural: mockCandidates.filter(candidate => candidate.hasCompletedCultural).length,
+  };
+};
