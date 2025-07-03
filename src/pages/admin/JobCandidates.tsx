@@ -1,11 +1,16 @@
+
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, Download, CheckCircle, XCircle, User } from 'lucide-react';
+import { ArrowLeft, Download, CheckCircle, XCircle, User, Search } from 'lucide-react';
 import { mockJobs, mockCandidates, MockCandidate } from '@/data/mockAdminData';
+import CandidateFullView from '@/components/admin/CandidateFullView';
 
 const JobCandidates = () => {
   const { jobId } = useParams();
@@ -18,6 +23,18 @@ const JobCandidates = () => {
       candidate.applications.includes(jobId || '')
     )
   );
+  
+  // Novos estados para filtros
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [selectedCandidate, setSelectedCandidate] = useState<MockCandidate | null>(null);
+
+  // Filtrar candidatos
+  const filteredCandidates = candidates.filter(candidate => {
+    const matchesSearch = candidate.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = statusFilter === 'all' || candidate.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
 
   if (!job) {
     return (
@@ -100,26 +117,54 @@ const JobCandidates = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <label className="text-sm font-medium text-gray-700">Total de Candidatos</label>
-              <p className="text-2xl font-bold text-talently-purple">{candidates.length}</p>
+              <p className="text-2xl font-bold text-talently-purple">{filteredCandidates.length}</p>
             </div>
             <div>
               <label className="text-sm font-medium text-gray-700">Pré-aprovados</label>
               <p className="text-2xl font-bold text-green-600">
-                {candidates.filter(c => c.status === 'Pré-aprovado').length}
+                {filteredCandidates.filter(c => c.status === 'Pré-aprovado').length}
               </p>
             </div>
             <div>
               <label className="text-sm font-medium text-gray-700">Em Avaliação</label>
               <p className="text-2xl font-bold text-yellow-600">
-                {candidates.filter(c => c.status === 'Em avaliação').length}
+                {filteredCandidates.filter(c => c.status === 'Em avaliação').length}
               </p>
             </div>
             <div>
               <label className="text-sm font-medium text-gray-700">Reprovados</label>
               <p className="text-2xl font-bold text-red-600">
-                {candidates.filter(c => c.status === 'Reprovado').length}
+                {filteredCandidates.filter(c => c.status === 'Reprovado').length}
               </p>
             </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Filtros */}
+      <Card>
+        <CardContent className="pt-6">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+              <Input
+                placeholder="Buscar candidato por nome..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-full md:w-[200px]">
+                <SelectValue placeholder="Filtrar por status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos os status</SelectItem>
+                <SelectItem value="Pré-aprovado">Pré-aprovado</SelectItem>
+                <SelectItem value="Em avaliação">Em avaliação</SelectItem>
+                <SelectItem value="Reprovado">Reprovado</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </CardContent>
       </Card>
@@ -130,15 +175,19 @@ const JobCandidates = () => {
           <CardTitle>Candidatos Inscritos</CardTitle>
         </CardHeader>
         <CardContent>
-          {candidates.length === 0 ? (
+          {filteredCandidates.length === 0 ? (
             <div className="text-center py-12">
               <User className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhum candidato inscrito</h3>
-              <p className="text-gray-500">Esta vaga ainda não recebeu candidaturas.</p>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhum candidato encontrado</h3>
+              <p className="text-gray-500">
+                {searchTerm || statusFilter !== 'all' 
+                  ? 'Tente ajustar os filtros de busca.' 
+                  : 'Esta vaga ainda não recebeu candidaturas.'}
+              </p>
             </div>
           ) : (
             <div className="space-y-4">
-              {candidates.map((candidate) => (
+              {filteredCandidates.map((candidate) => (
                 <div key={candidate.id} className="border rounded-lg p-6 hover:bg-gray-50">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
@@ -173,15 +222,6 @@ const JobCandidates = () => {
                           <p className="text-sm text-gray-900">{candidate.city}</p>
                         </div>
                       </div>
-
-                      {candidate.resumeText && (
-                        <div className="mb-4">
-                          <label className="text-sm font-medium text-gray-700">Resumo do Currículo</label>
-                          <p className="text-sm text-gray-600 mt-1 p-3 bg-gray-50 rounded-lg">
-                            {candidate.resumeText}
-                          </p>
-                        </div>
-                      )}
                     </div>
 
                     <div className="flex flex-col space-y-2 ml-6">
@@ -193,6 +233,15 @@ const JobCandidates = () => {
                       >
                         <Download size={14} className="mr-2" />
                         Download CV
+                      </Button>
+                      
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setSelectedCandidate(candidate)}
+                        className="flex items-center"
+                      >
+                        Ver Todos os Dados
                       </Button>
                       
                       <div className="flex space-x-2">
@@ -225,6 +274,19 @@ const JobCandidates = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* Candidate Full View Dialog */}
+      <Dialog open={!!selectedCandidate} onOpenChange={() => setSelectedCandidate(null)}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Dados Completos do Candidato</DialogTitle>
+          </DialogHeader>
+          
+          {selectedCandidate && (
+            <CandidateFullView candidate={selectedCandidate} />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

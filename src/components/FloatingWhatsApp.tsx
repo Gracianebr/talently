@@ -1,8 +1,15 @@
 
 import { Phone } from 'lucide-react';
+import { useAdminAuth } from '@/contexts/AdminAuthContext';
 
 const FloatingWhatsApp = () => {
+  const { adminUser } = useAdminAuth();
   const whatsappLink = "https://wa.me/message/NZ54XTXJSETEO1";
+
+  // Não mostrar WhatsApp para administradores
+  if (adminUser) {
+    return null;
+  }
 
   return (
     <a

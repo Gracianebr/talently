@@ -1,19 +1,38 @@
-// Mock data for admin panel
+
 export interface MockCandidate {
   id: string;
   name: string;
   email: string;
   phone: string;
   city: string;
+  jobArea: string; // Nova propriedade para área de atuação
   hasCompletedDISC: boolean;
-  hasCompletedCultural: boolean;
   discProfile?: string;
+  hasCompletedCultural: boolean;
   culturalProfile?: string;
   applications: string[];
-  registeredAt: string;
-  resume?: string;
   status: 'Em avaliação' | 'Pré-aprovado' | 'Reprovado';
+  resume?: string;
   resumeText?: string;
+  registeredAt: string;
+  // Novos campos para visualização completa
+  education?: {
+    level: string;
+    course: string;
+    institution: string;
+    year: string;
+  }[];
+  experience?: {
+    position: string;
+    company: string;
+    period: string;
+    description: string;
+  }[];
+  languages?: {
+    language: string;
+    level: string;
+  }[];
+  skills?: string[];
 }
 
 export interface MockCompany {
@@ -24,11 +43,12 @@ export interface MockCompany {
   phone: string;
   city: string;
   sector: string;
+  size: 'Pequena' | 'Média' | 'Grande'; // Nova propriedade para porte
+  responsibleName: string;
   hasCompletedCultural: boolean;
   culturalProfile?: string;
   jobsPosted: number;
   registeredAt: string;
-  responsibleName: string;
 }
 
 export interface MockJob {
@@ -37,88 +57,148 @@ export interface MockJob {
   companyId: string;
   companyName: string;
   location: string;
-  type: 'CLT' | 'PJ' | 'Estágio' | 'Freelancer';
+  type: string;
   salary: string;
+  description: string;
+  requirements?: string;
+  benefits?: string;
+  responsibilities?: string;
   status: 'active' | 'inactive';
   applications: number;
   createdAt: string;
-  description: string;
+}
+
+export interface MockTest {
+  id: string;
+  userId: string;
+  userName: string;
+  userEmail: string;
+  type: 'disc' | 'cultural';
+  profile: string;
+  completedAt: string;
+  questions?: {
+    question: string;
+    answer: string;
+  }[];
+  detailedResult?: {
+    description: string;
+    strengths: string[];
+    areas_for_development: string[];
+    recommendations: string[];
+  };
 }
 
 export const mockCandidates: MockCandidate[] = [
   {
     id: '1',
-    name: 'Ana Silva Santos',
-    email: 'ana.santos@email.com',
-    phone: '(11) 99876-5432',
-    city: 'São Paulo - SP',
+    name: 'Ana Silva',
+    email: 'ana.silva@email.com',
+    phone: '(11) 99999-9999',
+    city: 'São Paulo',
+    jobArea: 'Tecnologia',
     hasCompletedDISC: true,
+    discProfile: 'Dominância (D)',
     hasCompletedCultural: true,
-    discProfile: 'D - Dominância',
     culturalProfile: 'Executor',
-    applications: ['1', '3'],
-    registeredAt: '2024-01-15',
-    resume: 'curriculum_ana_santos.pdf',
-    status: 'Pré-aprovado',
-    resumeText: 'Desenvolvedora com 5 anos de experiência em React e Node.js. Especializada em desenvolvimento full-stack.'
+    applications: ['1', '2'],
+    status: 'Em avaliação',
+    resume: 'curriculo_ana_silva.pdf',
+    resumeText: 'Desenvolvedora Full Stack com 3 anos de experiência em React e Node.js...',
+    registeredAt: '2024-01-15T10:00:00Z',
+    education: [
+      {
+        level: 'Superior',
+        course: 'Ciência da Computação',
+        institution: 'USP',
+        year: '2021'
+      }
+    ],
+    experience: [
+      {
+        position: 'Desenvolvedor Full Stack',
+        company: 'TechCorp',
+        period: '2021 - Atual',
+        description: 'Desenvolvimento de aplicações web usando React, Node.js e MongoDB'
+      }
+    ],
+    languages: [
+      { language: 'Inglês', level: 'Avançado' },
+      { language: 'Espanhol', level: 'Intermediário' }
+    ],
+    skills: ['React', 'Node.js', 'MongoDB', 'TypeScript', 'Git']
   },
   {
     id: '2',
-    name: 'Carlos Eduardo Lima',
-    email: 'carlos.lima@email.com',
-    phone: '(21) 98765-4321',
-    city: 'Rio de Janeiro - RJ',
+    name: 'Carlos Oliveira',
+    email: 'carlos.oliveira@email.com',
+    phone: '(11) 88888-8888',
+    city: 'Rio de Janeiro',
+    jobArea: 'Design',
     hasCompletedDISC: true,
+    discProfile: 'Influência (I)',
     hasCompletedCultural: false,
-    discProfile: 'I - Influência',
-    applications: ['2'],
-    registeredAt: '2024-02-20',
-    resume: 'curriculum_carlos_lima.pdf',
-    status: 'Em avaliação',
-    resumeText: 'Analista de marketing com experiência em campanhas digitais e estratégias de growth hacking.'
+    applications: ['1'],
+    status: 'Pré-aprovado',
+    resume: 'curriculo_carlos_oliveira.pdf',
+    resumeText: 'Designer UX/UI especializado em interfaces mobile e web...',
+    registeredAt: '2024-01-20T14:30:00Z',
+    education: [
+      {
+        level: 'Superior',
+        course: 'Design Gráfico',
+        institution: 'PUC-RJ',
+        year: '2020'
+      }
+    ],
+    experience: [
+      {
+        position: 'UX/UI Designer',
+        company: 'DesignStudio',
+        period: '2020 - Atual',
+        description: 'Criação de interfaces para aplicativos mobile e web'
+      }
+    ],
+    languages: [
+      { language: 'Inglês', level: 'Intermediário' }
+    ],
+    skills: ['Figma', 'Adobe XD', 'Sketch', 'Prototyping', 'User Research']
   },
   {
     id: '3',
-    name: 'Mariana Costa Oliveira',
-    email: 'mariana.costa@email.com',
-    phone: '(31) 97654-3210',
-    city: 'Belo Horizonte - MG',
-    hasCompletedDISC: true,
-    hasCompletedCultural: true,
-    discProfile: 'S - Estabilidade',
-    culturalProfile: 'Conector',
-    applications: ['1', '4'],
-    registeredAt: '2024-01-10',
-    resume: 'curriculum_mariana_costa.pdf',
-    status: 'Pré-aprovado',
-    resumeText: 'UX/UI Designer com foco em design centrado no usuário e experiência de produto.'
-  },
-  {
-    id: '4',
-    name: 'Roberto Fernandes',
-    email: 'roberto.fernandes@email.com',
-    phone: '(41) 96543-2109',
-    city: 'Curitiba - PR',
+    name: 'Mariana Santos',
+    email: 'mariana.santos@email.com',
+    phone: '(11) 77777-7777',
+    city: 'Belo Horizonte',
+    jobArea: 'Marketing',
     hasCompletedDISC: false,
-    hasCompletedCultural: false,
-    applications: [],
-    registeredAt: '2024-03-01',
-    status: 'Em avaliação'
-  },
-  {
-    id: '5',
-    name: 'Juliana Pereira Santos',
-    email: 'juliana.pereira@email.com',
-    phone: '(51) 95432-1098',
-    city: 'Porto Alegre - RS',
-    hasCompletedDISC: true,
     hasCompletedCultural: true,
-    discProfile: 'C - Conformidade',
-    culturalProfile: 'Guardião',
-    applications: ['5'],
-    registeredAt: '2024-02-05',
+    culturalProfile: 'Conector',
+    applications: ['2'],
     status: 'Reprovado',
-    resumeText: 'Enfermeira especializada em UTI com 8 anos de experiência em hospitais de grande porte.'
+    resume: 'curriculo_mariana_santos.pdf',
+    resumeText: 'Especialista em marketing digital com foco em redes sociais...',
+    registeredAt: '2024-02-01T09:15:00Z',
+    education: [
+      {
+        level: 'Superior',
+        course: 'Marketing',
+        institution: 'UFMG',
+        year: '2019'
+      }
+    ],
+    experience: [
+      {
+        position: 'Analista de Marketing Digital',
+        company: 'Marketing Pro',
+        period: '2019 - Atual',
+        description: 'Gestão de campanhas digitais e análise de métricas'
+      }
+    ],
+    languages: [
+      { language: 'Inglês', level: 'Avançado' },
+      { language: 'Francês', level: 'Básico' }
+    ],
+    skills: ['Google Ads', 'Facebook Ads', 'SEO', 'Analytics', 'Social Media']
   }
 ];
 
@@ -126,57 +206,46 @@ export const mockCompanies: MockCompany[] = [
   {
     id: '1',
     name: 'TechFlow Soluções',
-    email: 'rh@techflow.com.br',
+    email: 'contato@techflow.com',
     cnpj: '12.345.678/0001-90',
-    phone: '(11) 3456-7890',
-    city: 'São Paulo - SP',
+    phone: '(11) 3333-3333',
+    city: 'São Paulo',
     sector: 'Tecnologia',
+    size: 'Média',
+    responsibleName: 'João Silva',
     hasCompletedCultural: true,
-    culturalProfile: 'Exploradora',
-    jobsPosted: 3,
-    registeredAt: '2023-12-10',
-    responsibleName: 'Maria Fernanda Silva'
+    culturalProfile: 'Executor',
+    jobsPosted: 5,
+    registeredAt: '2024-01-10T08:00:00Z'
   },
   {
     id: '2',
-    name: 'Innovare Consultoria',
-    email: 'contato@innovare.com.br',
-    cnpj: '23.456.789/0001-01',
-    phone: '(21) 2345-6789',
-    city: 'Rio de Janeiro - RJ',
-    sector: 'Consultoria',
-    hasCompletedCultural: true,
-    culturalProfile: 'Executora',
-    jobsPosted: 2,
-    registeredAt: '2024-01-05',
-    responsibleName: 'João Carlos Pereira'
+    name: 'Inovação Digital',
+    email: 'rh@inovacaodigital.com',
+    cnpj: '98.765.432/0001-10',
+    phone: '(11) 4444-4444',
+    city: 'Rio de Janeiro',
+    sector: 'Tecnologia',
+    size: 'Grande',
+    responsibleName: 'Maria Santos',
+    hasCompletedCultural: false,
+    jobsPosted: 3,
+    registeredAt: '2024-01-12T10:30:00Z'
   },
   {
     id: '3',
-    name: 'Construtech Engenharia',
-    email: 'rh@construtech.com.br',
-    cnpj: '34.567.890/0001-12',
-    phone: '(31) 3234-5678',
-    city: 'Belo Horizonte - MG',
-    sector: 'Engenharia',
-    hasCompletedCultural: false,
-    jobsPosted: 1,
-    registeredAt: '2024-02-15',
-    responsibleName: 'Ana Beatriz Costa'
-  },
-  {
-    id: '4',
-    name: 'HealthCare Solutions',
-    email: 'talentos@healthcare.com.br',
-    cnpj: '45.678.901/0001-23',
-    phone: '(41) 3123-4567',
-    city: 'Curitiba - PR',
-    sector: 'Saúde',
+    name: 'StartupX',
+    email: 'hiring@startupx.com',
+    cnpj: '11.222.333/0001-44',
+    phone: '(11) 5555-5555',
+    city: 'São Paulo',
+    sector: 'Tecnologia',
+    size: 'Pequena',
+    responsibleName: 'Pedro Oliveira',
     hasCompletedCultural: true,
-    culturalProfile: 'Conectora',
+    culturalProfile: 'Explorador',
     jobsPosted: 2,
-    registeredAt: '2023-11-20',
-    responsibleName: 'Dr. Roberto Santos'
+    registeredAt: '2024-01-15T16:45:00Z'
   }
 ];
 
@@ -189,95 +258,93 @@ export const mockJobs: MockJob[] = [
     location: 'São Paulo - SP',
     type: 'CLT',
     salary: 'R$ 8.000 - R$ 12.000',
+    description: 'Vaga para desenvolvedor full stack com experiência em React e Node.js',
+    requirements: 'Experiência mínima de 2 anos com React, Node.js, MongoDB. Conhecimento em TypeScript é um diferencial.',
+    benefits: 'Vale refeição, plano de saúde, plano odontológico, gympass, home office flexível',
+    responsibilities: 'Desenvolver aplicações web, manter código existente, participar de code reviews, colaborar com equipe de design',
     status: 'active',
     applications: 15,
-    createdAt: '2024-03-01',
-    description: 'Desenvolvedor experiente em React, Node.js e bancos de dados relacionais.'
+    createdAt: '2024-01-20T10:00:00Z'
   },
   {
     id: '2',
-    title: 'Analista de Marketing Digital',
+    title: 'UX/UI Designer',
     companyId: '2',
-    companyName: 'Innovare Consultoria',
+    companyName: 'Inovação Digital',
     location: 'Rio de Janeiro - RJ',
-    type: 'CLT',
-    salary: 'R$ 5.000 - R$ 7.000',
+    type: 'PJ',
+    salary: 'R$ 5.000 - R$ 8.000',
+    description: 'Designer para criar interfaces inovadoras e user-friendly',
+    requirements: 'Experiência com Figma, Adobe XD, conhecimento em Design System, portfolio sólido',
+    benefits: 'Horário flexível, equipamento fornecido, ambiente criativo',
+    responsibilities: 'Criar wireframes, protótipos, conduzir pesquisas com usuários, trabalhar em equipe multidisciplinar',
     status: 'active',
     applications: 8,
-    createdAt: '2024-02-25',
-    description: 'Profissional para gerenciar campanhas digitais e estratégias de marketing online.'
-  },
-  {
-    id: '3',
-    title: 'UX/UI Designer',
-    companyId: '1',
-    companyName: 'TechFlow Soluções',
-    location: 'São Paulo - SP',
-    type: 'PJ',
-    salary: 'R$ 6.000 - R$ 9.000',
-    status: 'active',
-    applications: 12,
-    createdAt: '2024-02-20',
-    description: 'Designer para criar interfaces intuitivas e experiências de usuário excepcionais.'
-  },
-  {
-    id: '4',
-    title: 'Engenheiro Civil Júnior',
-    companyId: '3',
-    companyName: 'Construtech Engenharia',
-    location: 'Belo Horizonte - MG',
-    type: 'CLT',
-    salary: 'R$ 4.000 - R$ 6.000',
-    status: 'active',
-    applications: 6,
-    createdAt: '2024-02-18',
-    description: 'Engenheiro recém-formado para acompanhar projetos de construção civil.'
-  },
-  {
-    id: '5',
-    title: 'Enfermeiro Especialista',
-    companyId: '4',
-    companyName: 'HealthCare Solutions',
-    location: 'Curitiba - PR',
-    type: 'CLT',
-    salary: 'R$ 5.500 - R$ 8.000',
-    status: 'active',
-    applications: 4,
-    createdAt: '2024-02-10',
-    description: 'Enfermeiro especializado em cuidados intensivos para hospital de referência.'
-  },
-  {
-    id: '6',
-    title: 'Product Manager',
-    companyId: '1',
-    companyName: 'TechFlow Soluções',
-    location: 'São Paulo - SP',
-    type: 'CLT',
-    salary: 'R$ 12.000 - R$ 18.000',
-    status: 'inactive',
-    applications: 20,
-    createdAt: '2024-01-15',
-    description: 'Gerente de produto para liderar estratégia e desenvolvimento de produtos digitais.'
+    createdAt: '2024-01-25T14:00:00Z'
   }
 ];
 
-// Admin statistics
-export const getAdminStats = () => {
-  const totalCandidates = mockCandidates.length;
-  const totalCompanies = mockCompanies.length;
-  const totalJobs = mockJobs.length;
-  const activeJobs = mockJobs.filter(job => job.status === 'active').length;
-  const totalApplications = mockJobs.reduce((sum, job) => sum + job.applications, 0);
-  const completedDISC = mockCandidates.filter(candidate => candidate.hasCompletedDISC).length;
-  const completedCultural = mockCandidates.filter(candidate => candidate.hasCompletedCultural).length;
+export const mockTests: MockTest[] = [
+  {
+    id: '1',
+    userId: '1',
+    userName: 'Ana Silva',
+    userEmail: 'ana.silva@email.com',
+    type: 'disc',
+    profile: 'Dominância (D)',
+    completedAt: '2024-01-16T10:00:00Z',
+    questions: [
+      {
+        question: 'Como você prefere trabalhar em equipe?',
+        answer: 'Gosto de liderar e tomar decisões rápidas'
+      },
+      {
+        question: 'Como você lida com conflitos?',
+        answer: 'Enfrento de forma direta e busco soluções práticas'
+      }
+    ],
+    detailedResult: {
+      description: 'Perfil Dominância caracteriza-se por pessoas focadas em resultados, diretas e assertivas.',
+      strengths: ['Liderança natural', 'Tomada de decisões rápidas', 'Foco em resultados', 'Assertividade'],
+      areas_for_development: ['Paciência com processos', 'Escuta ativa', 'Trabalho em equipe'],
+      recommendations: ['Desenvolver habilidades de coaching', 'Praticar feedback construtivo', 'Trabalhar flexibilidade']
+    }
+  },
+  {
+    id: '2',
+    userId: '1',
+    userName: 'Ana Silva',
+    userEmail: 'ana.silva@email.com',
+    type: 'cultural',
+    profile: 'Executor',
+    completedAt: '2024-01-17T15:30:00Z',
+    questions: [
+      {
+        question: 'O que mais te motiva no trabalho?',
+        answer: 'Atingir metas e ver resultados concretos'
+      },
+      {
+        question: 'Como você prefere receber feedback?',
+        answer: 'De forma direta e com foco em melhorias'
+      }
+    ],
+    detailedResult: {
+      description: 'Perfil Executor é focado em performance, metas e resultados mensuráveis.',
+      strengths: ['Orientação para resultados', 'Disciplina', 'Eficiência', 'Competitividade saudável'],
+      areas_for_development: ['Flexibilidade', 'Criatividade', 'Colaboração'],
+      recommendations: ['Participar de projetos colaborativos', 'Explorar soluções criativas', 'Desenvolver empatia']
+    }
+  }
+];
 
+export const getAdminStats = () => {
   return {
-    totalCandidates,
-    totalCompanies,
-    totalJobs,
-    activeJobs,
-    totalApplications,
-    completedDISC,
-    completedCultural
+    totalCandidates: mockCandidates.length,
+    totalCompanies: mockCompanies.length,
+    totalJobs: mockJobs.length,
+    activeJobs: mockJobs.filter(job => job.status === 'active').length,
+    totalApplications: mockJobs.reduce((sum, job) => sum + job.applications, 0),
+    completedDISC: mockCandidates.filter(c => c.hasCompletedDISC).length,
+    completedCultural: mockCandidates.filter(c => c.hasCompletedCultural).length + mockCompanies.filter(c => c.hasCompletedCultural).length
   };
 };

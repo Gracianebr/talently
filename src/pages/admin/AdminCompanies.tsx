@@ -12,24 +12,25 @@ import { mockCompanies, MockCompany } from '@/data/mockAdminData';
 const AdminCompanies = () => {
   const [companies, setCompanies] = useState<MockCompany[]>(mockCompanies);
   const [searchTerm, setSearchTerm] = useState('');
-  const [sectorFilter, setSectorFilter] = useState<string>('all');
+  const [sizeFilter, setSizeFilter] = useState<string>('all');
   const [selectedCompany, setSelectedCompany] = useState<MockCompany | null>(null);
   const [deleteCompany, setDeleteCompany] = useState<MockCompany | null>(null);
   const [viewMode, setViewMode] = useState<'view' | 'edit'>('view');
   const { toast } = useToast();
 
-  // Get unique sectors
-  const sectors = Array.from(new Set(companies.map(company => company.sector)));
+  // Get unique sizes (portes)
+  const sizes = Array.from(new Set(companies.map(company => company.size)));
 
-  // Filter companies
+  // Filter companies - incluindo busca pelo nome do responsável
   const filteredCompanies = companies.filter(company => {
     const matchesSearch = company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          company.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         company.cnpj.includes(searchTerm);
+                         company.cnpj.includes(searchTerm) ||
+                         company.responsibleName.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesSector = sectorFilter === 'all' || company.sector === sectorFilter;
+    const matchesSize = sizeFilter === 'all' || company.size === sizeFilter;
     
-    return matchesSearch && matchesSector;
+    return matchesSearch && matchesSize;
   });
 
   const handleDeleteCompany = () => {
@@ -69,20 +70,20 @@ const AdminCompanies = () => {
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
               <Input
-                placeholder="Buscar por nome, email ou CNPJ..."
+                placeholder="Buscar por nome, email, CNPJ ou responsável..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
               />
             </div>
-            <Select value={sectorFilter} onValueChange={setSectorFilter}>
+            <Select value={sizeFilter} onValueChange={setSizeFilter}>
               <SelectTrigger className="w-full md:w-[200px]">
-                <SelectValue placeholder="Filtrar por setor" />
+                <SelectValue placeholder="Filtrar por porte" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Todos os setores</SelectItem>
-                {sectors.map((sector) => (
-                  <SelectItem key={sector} value={sector}>{sector}</SelectItem>
+                <SelectItem value="all">Todos os portes</SelectItem>
+                {sizes.map((size) => (
+                  <SelectItem key={size} value={size}>{size}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -104,6 +105,7 @@ const AdminCompanies = () => {
                   <th className="text-left p-3 font-semibold">Responsável</th>
                   <th className="text-left p-3 font-semibold">CNPJ</th>
                   <th className="text-left p-3 font-semibold">Setor</th>
+                  <th className="text-left p-3 font-semibold">Porte</th>
                   <th className="text-left p-3 font-semibold">Cidade</th>
                   <th className="text-left p-3 font-semibold">Teste Cultural</th>
                   <th className="text-left p-3 font-semibold">Vagas</th>
@@ -130,6 +132,9 @@ const AdminCompanies = () => {
                     <td className="p-3 text-sm font-mono">{company.cnpj}</td>
                     <td className="p-3">
                       <Badge variant="outline">{company.sector}</Badge>
+                    </td>
+                    <td className="p-3">
+                      <Badge variant="outline">{company.size}</Badge>
                     </td>
                     <td className="p-3 text-sm">{company.city}</td>
                     <td className="p-3">
@@ -242,7 +247,7 @@ const AdminCompanies = () => {
   );
 };
 
-// Company Form Component
+// Company Form Component - atualizada para incluir campo size
 const CompanyForm = ({ 
   company, 
   mode, 
@@ -292,6 +297,10 @@ const CompanyForm = ({
           <div>
             <label className="text-sm font-medium text-gray-700">Setor</label>
             <p className="mt-1 text-sm text-gray-900">{company.sector}</p>
+          </div>
+          <div>
+            <label className="text-sm font-medium text-gray-700">Porte</label>
+            <p className="mt-1 text-sm text-gray-900">{company.size}</p>
           </div>
         </div>
 
@@ -387,6 +396,19 @@ const CompanyForm = ({
             value={formData.sector}
             onChange={(e) => setFormData({ ...formData, sector: e.target.value })}
           />
+        </div>
+        <div>
+          <label className="text-sm font-medium text-gray-700">Porte</label>
+          <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value as any })}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Pequena">Pequena</SelectItem>
+              <SelectItem value="Média">Média</SelectItem>
+              <SelectItem value="Grande">Grande</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 

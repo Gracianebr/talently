@@ -6,8 +6,9 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
-import { Search, Eye, Edit, Trash2, CheckCircle, XCircle, FileText } from 'lucide-react';
+import { Search, Eye, Edit, Trash2, CheckCircle, XCircle } from 'lucide-react';
 import { mockCandidates, MockCandidate } from '@/data/mockAdminData';
+import CandidateFullView from '@/components/admin/CandidateFullView';
 
 const AdminCandidates = () => {
   const [candidates, setCandidates] = useState<MockCandidate[]>(mockCandidates);
@@ -16,10 +17,14 @@ const AdminCandidates = () => {
   const [discFilter, setDiscFilter] = useState<string>('all');
   const [culturalFilter, setCulturalFilter] = useState<string>('all');
   const [candidateStatusFilter, setCandidateStatusFilter] = useState<string>('all');
+  const [jobAreaFilter, setJobAreaFilter] = useState<string>('all');
   const [selectedCandidate, setSelectedCandidate] = useState<MockCandidate | null>(null);
   const [deleteCandidate, setDeleteCandidate] = useState<MockCandidate | null>(null);
   const [viewMode, setViewMode] = useState<'view' | 'edit'>('view');
   const { toast } = useToast();
+
+  // Get unique job areas
+  const jobAreas = Array.from(new Set(candidates.map(candidate => candidate.jobArea)));
 
   // Filter candidates
   const filteredCandidates = candidates.filter(candidate => {
@@ -43,7 +48,9 @@ const AdminCandidates = () => {
 
     const matchesCandidateStatus = candidateStatusFilter === 'all' || candidate.status === candidateStatusFilter;
     
-    return matchesSearch && matchesStatus && matchesDisc && matchesCultural && matchesCandidateStatus;
+    const matchesJobArea = jobAreaFilter === 'all' || candidate.jobArea === jobAreaFilter;
+    
+    return matchesSearch && matchesStatus && matchesDisc && matchesCultural && matchesCandidateStatus && matchesJobArea;
   });
 
   const handleDeleteCandidate = () => {
@@ -105,6 +112,18 @@ const AdminCandidates = () => {
             </div>
             
             <div className="flex flex-col md:flex-row gap-4">
+              <Select value={jobAreaFilter} onValueChange={setJobAreaFilter}>
+                <SelectTrigger className="w-full md:w-[200px]">
+                  <SelectValue placeholder="Área de Atuação" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todas as Áreas</SelectItem>
+                  {jobAreas.map((area) => (
+                    <SelectItem key={area} value={area}>{area}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
               <Select value={discFilter} onValueChange={setDiscFilter}>
                 <SelectTrigger className="w-full md:w-[200px]">
                   <SelectValue placeholder="Perfil DISC" />
@@ -162,6 +181,7 @@ const AdminCandidates = () => {
                   <th className="text-left p-3 font-semibold">Nome</th>
                   <th className="text-left p-3 font-semibold">Email</th>
                   <th className="text-left p-3 font-semibold">Cidade</th>
+                  <th className="text-left p-3 font-semibold">Área</th>
                   <th className="text-left p-3 font-semibold">DISC</th>
                   <th className="text-left p-3 font-semibold">Cultural</th>
                   <th className="text-left p-3 font-semibold">Status</th>
@@ -180,6 +200,9 @@ const AdminCandidates = () => {
                     </td>
                     <td className="p-3 text-sm">{candidate.email}</td>
                     <td className="p-3 text-sm">{candidate.city}</td>
+                    <td className="p-3">
+                      <Badge variant="outline">{candidate.jobArea}</Badge>
+                    </td>
                     <td className="p-3">
                       {candidate.hasCompletedDISC ? (
                         <div>
@@ -275,23 +298,26 @@ const AdminCandidates = () => {
 
       {/* View/Edit Dialog */}
       <Dialog open={!!selectedCandidate} onOpenChange={() => setSelectedCandidate(null)}>
-        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               {viewMode === 'view' ? 'Visualizar' : 'Editar'} Candidato
             </DialogTitle>
             <DialogDescription>
-              {viewMode === 'view' ? 'Detalhes completos do candidato' : 'Edite as informações do candidato'}
+              {viewMode === 'view' ? 'Dados completos do candidato' : 'Edite as informações do candidato'}
             </DialogDescription>
           </DialogHeader>
           
           {selectedCandidate && (
-            <CandidateForm 
-              candidate={selectedCandidate}
-              mode={viewMode}
-              onSave={handleSaveCandidate}
-              onCancel={() => setSelectedCandidate(null)}
-            />
+            viewMode === 'view' ? (
+              <CandidateFullView candidate={selectedCandidate} />
+            ) : (
+              <CandidateForm 
+                candidate={selectedCandidate}
+                onSave={handleSaveCandidate}
+                onCancel={() => setSelectedCandidate(null)}
+              />
+            )
           )}
         </DialogContent>
       </Dialog>
@@ -323,12 +349,10 @@ const AdminCandidates = () => {
 // Candidate Form Component
 const CandidateForm = ({ 
   candidate, 
-  mode, 
   onSave, 
   onCancel 
 }: {
   candidate: MockCandidate;
-  mode: 'view' | 'edit';
   onSave: (candidate: MockCandidate) => void;
   onCancel: () => void;
 }) => {
@@ -338,85 +362,6 @@ const CandidateForm = ({
     e.preventDefault();
     onSave(formData);
   };
-
-  if (mode === 'view') {
-    return (
-      <div className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="text-sm font-medium text-gray-700">Nome</label>
-            <p className="mt-1 text-sm text-gray-900">{candidate.name}</p>
-          </div>
-          <div>
-            <label className="text-sm font-medium text-gray-700">Email</label>
-            <p className="mt-1 text-sm text-gray-900">{candidate.email}</p>
-          </div>
-          <div>
-            <label className="text-sm font-medium text-gray-700">Telefone</label>
-            <p className="mt-1 text-sm text-gray-900">{candidate.phone}</p>
-          </div>
-          <div>
-            <label className="text-sm font-medium text-gray-700">Cidade</label>
-            <p className="mt-1 text-sm text-gray-900">{candidate.city}</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="text-sm font-medium text-gray-700">Status DISC</label>
-            <div className="mt-1">
-              {candidate.hasCompletedDISC ? (
-                <div>
-                  <Badge className="bg-green-100 text-green-800">Concluído</Badge>
-                  {candidate.discProfile && (
-                    <p className="text-sm text-gray-600 mt-1">{candidate.discProfile}</p>
-                  )}
-                </div>
-              ) : (
-                <Badge className="bg-red-100 text-red-800">Pendente</Badge>
-              )}
-            </div>
-          </div>
-          <div>
-            <label className="text-sm font-medium text-gray-700">Status Cultural</label>
-            <div className="mt-1">
-              {candidate.hasCompletedCultural ? (
-                <div>
-                  <Badge className="bg-green-100 text-green-800">Concluído</Badge>
-                  {candidate.culturalProfile && (
-                    <p className="text-sm text-gray-600 mt-1">{candidate.culturalProfile}</p>
-                  )}
-                </div>
-              ) : (
-                <Badge className="bg-gray-100 text-gray-800">Não feito</Badge>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {candidate.resume && (
-          <div>
-            <label className="text-sm font-medium text-gray-700">Currículo</label>
-            <div className="mt-1 flex items-center space-x-2">
-              <FileText size={16} className="text-gray-500" />
-              <span className="text-sm text-gray-900">{candidate.resume}</span>
-            </div>
-          </div>
-        )}
-
-        <div>
-          <label className="text-sm font-medium text-gray-700">Candidaturas</label>
-          <p className="mt-1 text-sm text-gray-900">
-            {candidate.applications.length} vagas aplicadas
-          </p>
-        </div>
-
-        <div className="flex justify-end">
-          <Button onClick={onCancel}>Fechar</Button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -450,6 +395,13 @@ const CandidateForm = ({
           <Input
             value={formData.city}
             onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+          />
+        </div>
+        <div>
+          <label className="text-sm font-medium text-gray-700">Área de Atuação</label>
+          <Input
+            value={formData.jobArea}
+            onChange={(e) => setFormData({ ...formData, jobArea: e.target.value })}
           />
         </div>
       </div>

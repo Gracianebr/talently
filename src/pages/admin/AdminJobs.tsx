@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -273,7 +274,7 @@ const AdminJobs = () => {
   );
 };
 
-// Job Form Component
+// Job Form Component - visualização completa
 const JobForm = ({ 
   job, 
   mode, 
@@ -337,6 +338,34 @@ const JobForm = ({
             {job.description}
           </div>
         </div>
+
+        {/* Novos campos detalhados */}
+        {job.requirements && (
+          <div>
+            <label className="text-sm font-medium text-gray-700">Requisitos</label>
+            <div className="mt-1 p-3 bg-gray-50 rounded-lg text-sm text-gray-900">
+              {job.requirements}
+            </div>
+          </div>
+        )}
+
+        {job.responsibilities && (
+          <div>
+            <label className="text-sm font-medium text-gray-700">Responsabilidades</label>
+            <div className="mt-1 p-3 bg-gray-50 rounded-lg text-sm text-gray-900">
+              {job.responsibilities}
+            </div>
+          </div>
+        )}
+
+        {job.benefits && (
+          <div>
+            <label className="text-sm font-medium text-gray-700">Benefícios</label>
+            <div className="mt-1 p-3 bg-gray-50 rounded-lg text-sm text-gray-900">
+              {job.benefits}
+            </div>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>

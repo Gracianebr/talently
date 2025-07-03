@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,60 +7,26 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Search, Eye, FileText, Brain, Users } from 'lucide-react';
-import { mockCandidates, mockCompanies } from '@/data/mockAdminData';
+import { Search, Eye, Brain, Users } from 'lucide-react';
+import { mockTests, MockTest } from '@/data/mockAdminData';
+import TestFullView from '@/components/admin/TestFullView';
 
 const AdminTests = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [profileFilter, setProfileFilter] = useState<string>('all');
-  const [selectedResult, setSelectedResult] = useState<any>(null);
-  const [resultType, setResultType] = useState<'disc' | 'cultural'>('disc');
+  const [selectedTest, setSelectedTest] = useState<MockTest | null>(null);
 
   // Get DISC results
-  const discResults = mockCandidates
-    .filter(candidate => candidate.hasCompletedDISC)
-    .map(candidate => ({
-      id: candidate.id,
-      name: candidate.name,
-      email: candidate.email,
-      profile: candidate.discProfile,
-      completedAt: candidate.registeredAt,
-      type: 'disc' as const
-    }));
+  const discResults = mockTests.filter(test => test.type === 'disc');
 
-  // Get Cultural results from candidates
-  const candidateCulturalResults = mockCandidates
-    .filter(candidate => candidate.hasCompletedCultural)
-    .map(candidate => ({
-      id: candidate.id,
-      name: candidate.name,
-      email: candidate.email,
-      profile: candidate.culturalProfile,
-      completedAt: candidate.registeredAt,
-      type: 'cultural-candidate' as const,
-      userType: 'Candidato'
-    }));
-
-  // Get Cultural results from companies
-  const companyCulturalResults = mockCompanies
-    .filter(company => company.hasCompletedCultural)
-    .map(company => ({
-      id: company.id,
-      name: company.name,
-      email: company.email,
-      profile: company.culturalProfile,
-      completedAt: company.registeredAt,
-      type: 'cultural-company' as const,
-      userType: 'Empresa'
-    }));
-
-  const culturalResults = [...candidateCulturalResults, ...companyCulturalResults];
+  // Get Cultural results
+  const culturalResults = mockTests.filter(test => test.type === 'cultural');
 
   // Filter functions
-  const filterResults = (results: any[]) => {
+  const filterResults = (results: MockTest[]) => {
     return results.filter(result => {
-      const matchesSearch = result.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           result.email.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesSearch = result.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           result.userEmail.toLowerCase().includes(searchTerm.toLowerCase());
       
       const matchesProfile = profileFilter === 'all' || 
                             (result.profile && result.profile.toLowerCase().includes(profileFilter.toLowerCase()));
@@ -75,9 +42,8 @@ const AdminTests = () => {
   const discProfiles = Array.from(new Set(discResults.map(r => r.profile).filter(Boolean)));
   const culturalProfiles = Array.from(new Set(culturalResults.map(r => r.profile).filter(Boolean)));
 
-  const handleViewResult = (result: any, type: 'disc' | 'cultural') => {
-    setSelectedResult(result);
-    setResultType(type);
+  const handleViewResult = (test: MockTest) => {
+    setSelectedTest(test);
   };
 
   return (
@@ -153,9 +119,9 @@ const AdminTests = () => {
                     {filteredDiscResults.map((result) => (
                       <tr key={result.id} className="border-b hover:bg-gray-50">
                         <td className="p-3">
-                          <div className="font-medium">{result.name}</div>
+                          <div className="font-medium">{result.userName}</div>
                         </td>
-                        <td className="p-3 text-sm">{result.email}</td>
+                        <td className="p-3 text-sm">{result.userEmail}</td>
                         <td className="p-3">
                           <Badge variant="secondary" className="bg-blue-100 text-blue-800">
                             {result.profile}
@@ -168,7 +134,7 @@ const AdminTests = () => {
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => handleViewResult(result, 'disc')}
+                            onClick={() => handleViewResult(result)}
                           >
                             <Eye size={14} className="mr-1" />
                             Ver Detalhes
@@ -227,7 +193,6 @@ const AdminTests = () => {
                     <tr className="border-b">
                       <th className="text-left p-3 font-semibold">Nome</th>
                       <th className="text-left p-3 font-semibold">Email</th>
-                      <th className="text-left p-3 font-semibold">Tipo</th>
                       <th className="text-left p-3 font-semibold">Perfil Cultural</th>
                       <th className="text-left p-3 font-semibold">Data do Teste</th>
                       <th className="text-left p-3 font-semibold">Ações</th>
@@ -235,16 +200,11 @@ const AdminTests = () => {
                   </thead>
                   <tbody>
                     {filteredCulturalResults.map((result) => (
-                      <tr key={`${result.type}-${result.id}`} className="border-b hover:bg-gray-50">
+                      <tr key={result.id} className="border-b hover:bg-gray-50">
                         <td className="p-3">
-                          <div className="font-medium">{result.name}</div>
+                          <div className="font-medium">{result.userName}</div>
                         </td>
-                        <td className="p-3 text-sm">{result.email}</td>
-                        <td className="p-3">
-                          <Badge variant="outline">
-                            {result.userType}
-                          </Badge>
-                        </td>
+                        <td className="p-3 text-sm">{result.userEmail}</td>
                         <td className="p-3">
                           <Badge variant="secondary" className="bg-purple-100 text-purple-800">
                             {result.profile}
@@ -257,7 +217,7 @@ const AdminTests = () => {
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => handleViewResult(result, 'cultural')}
+                            onClick={() => handleViewResult(result)}
                           >
                             <Eye size={14} className="mr-1" />
                             Ver Detalhes
@@ -273,97 +233,27 @@ const AdminTests = () => {
         </TabsContent>
       </Tabs>
 
-      {/* Result Detail Dialog */}
-      <Dialog open={!!selectedResult} onOpenChange={() => setSelectedResult(null)}>
-        <DialogContent className="max-w-2xl">
+      {/* Test Full View Dialog */}
+      <Dialog open={!!selectedTest} onOpenChange={() => setSelectedTest(null)}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center space-x-2">
-              {resultType === 'disc' ? (
+              {selectedTest?.type === 'disc' ? (
                 <Brain className="text-blue-600" size={20} />
               ) : (
                 <Users className="text-purple-600" size={20} />
               )}
               <span>
-                Resultado do Teste {resultType === 'disc' ? 'DISC' : 'Cultural'}
+                Resultado Completo - {selectedTest?.userName}
               </span>
             </DialogTitle>
             <DialogDescription>
-              Detalhes do resultado para {selectedResult?.name}
+              Visualização completa do teste {selectedTest?.type === 'disc' ? 'DISC' : 'Cultural'}
             </DialogDescription>
           </DialogHeader>
           
-          {selectedResult && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-medium text-gray-700">Nome</label>
-                  <p className="mt-1 text-sm text-gray-900">{selectedResult.name}</p>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-700">Email</label>
-                  <p className="mt-1 text-sm text-gray-900">{selectedResult.email}</p>
-                </div>
-                {selectedResult.userType && (
-                  <div>
-                    <label className="text-sm font-medium text-gray-700">Tipo</label>
-                    <p className="mt-1 text-sm text-gray-900">{selectedResult.userType}</p>
-                  </div>
-                )}
-                <div>
-                  <label className="text-sm font-medium text-gray-700">Data do Teste</label>
-                  <p className="mt-1 text-sm text-gray-900">
-                    {new Date(selectedResult.completedAt).toLocaleDateString('pt-BR')}
-                  </p>
-                </div>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-gray-700">
-                  Resultado {resultType === 'disc' ? 'DISC' : 'Cultural'}
-                </label>
-                <div className="mt-2 p-4 bg-gray-50 rounded-lg">
-                  <Badge 
-                    variant="secondary" 
-                    className={resultType === 'disc' 
-                      ? 'bg-blue-100 text-blue-800' 
-                      : 'bg-purple-100 text-purple-800'
-                    }
-                  >
-                    {selectedResult.profile}
-                  </Badge>
-                </div>
-              </div>
-
-              {resultType === 'disc' && (
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-blue-900 mb-2">Sobre o Perfil DISC</h4>
-                  <p className="text-sm text-blue-800">
-                    {selectedResult.profile?.includes('D') && 'Perfil Dominância: Pessoa focada em resultados, direta e assertiva.'}
-                    {selectedResult.profile?.includes('I') && 'Perfil Influência: Pessoa sociável, otimista e persuasiva.'}
-                    {selectedResult.profile?.includes('S') && 'Perfil Estabilidade: Pessoa paciente, confiável e colaborativa.'}
-                    {selectedResult.profile?.includes('C') && 'Perfil Conformidade: Pessoa analítica, precisa e sistemática.'}
-                  </p>
-                </div>
-              )}
-
-              {resultType === 'cultural' && (
-                <div className="bg-purple-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-purple-900 mb-2">Sobre o Perfil Cultural</h4>
-                  <p className="text-sm text-purple-800">
-                    {selectedResult.profile?.includes('Explorador') && 'Perfil voltado à inovação, criatividade e autonomia.'}
-                    {selectedResult.profile?.includes('Executor') && 'Perfil focado em performance, metas e resultados.'}
-                    {selectedResult.profile?.includes('Guardião') && 'Perfil que preza estabilidade, organização e regras claras.'}
-                    {selectedResult.profile?.includes('Conector') && 'Perfil guiado por propósito, colaboração e impacto social.'}
-                  </p>
-                </div>
-              )}
-
-              <div className="flex justify-end">
-                <Button onClick={() => setSelectedResult(null)}>
-                  Fechar
-                </Button>
-              </div>
-            </div>
+          {selectedTest && (
+            <TestFullView test={selectedTest} />
           )}
         </DialogContent>
       </Dialog>
