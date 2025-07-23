@@ -8,6 +8,7 @@ import { Briefcase, GraduationCap, User, Users } from "lucide-react";
 import CandidateProfileMenu from "@/components/CandidateProfileMenu";
 import { useTestStatus } from "@/hooks/useTestStatus";
 import TestsRequired from "@/components/TestsRequired";
+import LanguageSelector from "@/components/LanguageSelector";
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
@@ -31,7 +32,8 @@ export default function Dashboard() {
                 <div className="flex items-center space-x-4">
                   <span className="text-2xl font-bold text-talently-purple">Talently</span>
                 </div>
-                <div>
+                <div className="flex items-center space-x-4">
+                  <LanguageSelector />
                   <CandidateProfileMenu />
                 </div>
               </div>
@@ -52,7 +54,8 @@ export default function Dashboard() {
               <div className="flex items-center space-x-4">
                 <span className="text-2xl font-bold text-talently-purple">Talently</span>
               </div>
-              <div>
+              <div className="flex items-center space-x-4">
+                <LanguageSelector />
                 <CandidateProfileMenu />
               </div>
             </div>
@@ -167,7 +170,8 @@ export default function Dashboard() {
               <div className="flex items-center space-x-4">
                 <span className="text-2xl font-bold text-talently-purple">Talently</span>
               </div>
-              <div>
+              <div className="flex items-center space-x-4">
+                <LanguageSelector />
                 <Button variant="outline" onClick={handleLogout}>Logout</Button>
               </div>
             </div>

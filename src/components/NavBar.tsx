@@ -1,11 +1,12 @@
 
 import React, { useState } from 'react';
-import { Menu, X, Globe, LogIn } from 'lucide-react';
+import { Menu, X, LogIn } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import LanguageSelector from './LanguageSelector';
 
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { language, toggleLanguage, t } = useLanguage();
+  const { t } = useLanguage();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -60,14 +61,8 @@ const NavBar = () => {
               {t('nav.about')}
             </button>
 
-            {/* Language Toggle */}
-            <button
-              onClick={toggleLanguage}
-              className="flex items-center space-x-1 text-talently-gray hover:text-talently-purple transition-colors"
-            >
-              <Globe size={18} />
-              <span className="text-sm font-medium">{language === 'pt' ? 'EN' : 'PT'}</span>
-            </button>
+            {/* Language Selector */}
+            <LanguageSelector />
 
             {/* Botão Fale Conosco */}
             <button 
@@ -88,14 +83,8 @@ const NavBar = () => {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center space-x-4">
-            {/* Language Toggle Mobile */}
-            <button
-              onClick={toggleLanguage}
-              className="flex items-center space-x-1 text-talently-gray hover:text-talently-purple transition-colors"
-            >
-              <Globe size={18} />
-              <span className="text-sm font-medium">{language === 'pt' ? 'EN' : 'PT'}</span>
-            </button>
+            {/* Language Selector Mobile */}
+            <LanguageSelector />
             
             <button onClick={toggleMenu} className="text-talently-gray hover:text-talently-purple">
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}

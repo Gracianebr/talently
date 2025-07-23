@@ -1,9 +1,10 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
-type Language = 'pt' | 'en';
+type Language = 'pt' | 'en' | 'es';
 
 interface LanguageContextType {
   language: Language;
+  setLanguage: (lang: Language) => void;
   toggleLanguage: () => void;
   t: (key: string) => string;
 }
@@ -107,7 +108,21 @@ const translations = {
     'footer.contact.email': 'contato@talently.com.br',
     'footer.contact.phone': '(19) 99741-6289',
     'footer.contact.location': 'Campinas, SP - Brasil',
-    'footer.copyright': 'Todos os direitos reservados.'
+    'footer.copyright': 'Todos os direitos reservados.',
+    'login.title': 'Acessar',
+    'login.subtitle': 'Insira seu e-mail e senha para acessar sua conta.',
+    'login.email': 'E-mail',
+    'login.password': 'Senha',
+    'login.forgotPassword': 'Esqueceu a senha?',
+    'login.submit': 'Entrar',
+    'login.loading': 'Entrando...',
+    'login.noAccount': 'Não tem uma conta?',
+    'login.signUpLink': 'Cadastre-se aqui',
+    'login.success': 'Login realizado com sucesso!',
+    'login.welcome': 'Bem-vindo ao Talently',
+    'login.error': 'Erro no login',
+    'login.incorrectCredentials': 'E-mail ou senha incorretos',
+    'login.tryAgain': 'Tente novamente mais tarde'
   },
   en: {
     'nav.services': 'Services',
@@ -207,17 +222,155 @@ const translations = {
     'footer.contact.email': 'contact@talentlyrecruiter.co.uk',
     'footer.contact.phone': '+44 7917 288150',
     'footer.contact.location': 'London, UK',
-    'footer.copyright': 'All rights reserved.'
+    'footer.copyright': 'All rights reserved.',
+    'login.title': 'Sign In',
+    'login.subtitle': 'Enter your email and password to access your account.',
+    'login.email': 'Email',
+    'login.password': 'Password',
+    'login.forgotPassword': 'Forgot password?',
+    'login.submit': 'Sign In',
+    'login.loading': 'Signing in...',
+    'login.noAccount': 'Don\'t have an account?',
+    'login.signUpLink': 'Sign up here',
+    'login.success': 'Login successful!',
+    'login.welcome': 'Welcome to Talently',
+    'login.error': 'Login error',
+    'login.incorrectCredentials': 'Incorrect email or password',
+    'login.tryAgain': 'Please try again later'
+  },
+  es: {
+    'nav.services': 'Servicios',
+    'nav.differentials': 'Diferenciales',
+    'nav.pricing': 'Planes',
+    'nav.about': 'Acerca de',
+    'nav.contact': 'Contacto',
+    'hero.title': 'el talento adecuado para',
+    'hero.title.highlight1': 'Contrata',
+    'hero.title.highlight2': 'acelerar',
+    'hero.title.end': 'el crecimiento de tu empresa',
+    'hero.subtitle': 'Conectamos empresas y startups en fase de tracción o scale-up con profesionales altamente calificados, enfocándonos en agilidad y asertividad en el proceso de contratación.',
+    'hero.cta1': 'Agendar reunión',
+    'hero.cta2': 'Conoce nuestros servicios',
+    'services.title': 'Headhunting Especializado',
+    'services.subtitle': 'Búsqueda activa de talentos alineados con el perfil conductual y técnico de tu empresa, con match perfecto para crecimiento acelerado.',
+    'services.process.title': 'CÓMO FUNCIONA NUESTRO PROCESO:',
+    'services.process.step1.title': 'Entendimiento del perfil',
+    'services.process.step1.description': 'Comprendemos profundamente las necesidades técnicas y conductuales de tu empresa, cultura organizacional y objetivos de negocio.',
+    'services.process.step2.title': 'Búsqueda calificada',
+    'services.process.step2.description': 'Utilizamos nuestro banco de talentos y metodologías avanzadas para encontrar profesionales que se ajusten perfectamente a los requisitos definidos.',
+    'services.process.step3.title': 'Entrevistas y selección',
+    'services.process.step3.description': 'Realizamos filtros técnicos y conductuales para garantizar la alineación del candidato con la posición y cultura de la empresa.',
+    'services.process.step4.title': 'Presentación y cierre',
+    'services.process.step4.description': 'Presentamos los mejores candidatos con informes detallados.',
+    'services.process.cta': 'Conoce más sobre nuestro proceso',
+    'services.quote': 'Nuestra metodología de headhunting fue desarrollada para identificar no solo las habilidades técnicas, sino también la alineación cultural que garantiza contrataciones duraderas y de alto impacto.',
+    'differentials.title': 'Nuestros Diferenciales',
+    'differentials.subtitle': 'Innovaciones que transforman el proceso de reclutamiento y selección para startups en crecimiento.',
+    'differentials.international.title': 'Vacantes Internacionales',
+    'differentials.international.description': 'Búsqueda de talentos en América Latina para posiciones remotas, incluyendo curso intensivo de portugués para extranjeros.',
+    'differentials.onboarding.title': 'Onboarding Asistido',
+    'differentials.onboarding.description': 'Acompañamiento especializado en los primeros 30 días, con ajustes de expectativas y feedback continuo para garantizar el éxito.',
+    'differentials.guarantee.title': '90 días de garantía',
+    'differentials.guarantee.description': 'Ofrecemos una garantía de 90 días. Si el profesional contratado se va antes de este período, encontramos otro sin costo alguno para tu empresa.',
+    'about.title': 'Quiénes Somos',
+    'about.description1': 'Talently es una startup enfocada en atender startups en fase de tracción y scale-up — empresas que están creciendo rápidamente, han recibido inversión o están alcanzando altos volúmenes de ventas, y ahora enfrentan el desafío de contratar los talentos adecuados para continuar expandiéndose.',
+    'about.description2': 'Nuestra metodología incluye match conductual entre candidato y vacante, priorizando perfiles con las soft skills ideales para la función, además de entrenamientos gratuitos para candidatos en temas como soft skills, etiqueta profesional, expresión verbal, revisión gramatical y redacción comercial.',
+    'about.precision.title': 'Precisión',
+    'about.precision.description': 'Para cada vacante, entregamos hasta 5 candidatos altamente calificados.',
+    'about.agility.title': 'Agilidad',
+    'about.agility.description': 'Entregamos hasta 5 profesionales calificados por vacante en hasta 7 días hábiles.',
+    'about.quality.title': 'Calidad',
+    'about.quality.description': 'Talentos pre-calificados y alineados con la cultura de tu empresa.',
+    'pricing.title': 'Planes e Inversión',
+    'pricing.subtitle': 'Elige el plan ideal para las necesidades de contratación de tu startup.',
+    'pricing.plan1.title': 'Contratación Única',
+    'pricing.plan1.description': 'Ideal para startups con necesidades puntuales de contratación.',
+    'pricing.plan1.price': 'Desde €2.000',
+    'pricing.plan1.period': 'por vacante',
+    'pricing.plan1.included': 'Qué está incluido:',
+    'pricing.plan1.feature1': 'Hasta 5 candidatos calificados',
+    'pricing.plan1.feature2': 'Match conductual',
+    'pricing.plan1.feature3': 'Entrenamientos gratuitos para candidatos',
+    'pricing.plan1.feature4': 'Pago después de la contratación',
+    'pricing.plan1.cta': 'Habla con un consultor',
+    'pricing.plan2.title': 'Plan Recurrente',
+    'pricing.plan2.description': 'Ideal para startups en fase de crecimiento continuo.',
+    'pricing.plan2.price': 'Personalizado',
+    'pricing.plan2.period': 'paquetes anuales (mín. 12 meses)',
+    'pricing.plan2.included': 'Qué está incluido:',
+    'pricing.plan2.feature1': 'Paquetes de contrataciones anuales',
+    'pricing.plan2.feature2': 'Precios diferenciados por volumen',
+    'pricing.plan2.feature3': 'Prioridad en los procesos',
+    'pricing.plan2.feature4': 'Consultor dedicado',
+    'pricing.plan2.cta': 'Habla con un consultor',
+    'pricing.plan3.title': 'Servicios Adicionales',
+    'pricing.plan3.description': 'Complementa tu estrategia de reclutamiento.',
+    'pricing.plan3.price': 'Bajo consulta',
+    'pricing.plan3.period': 'precios personalizados',
+    'pricing.plan3.included': 'Servicios disponibles:',
+    'pricing.plan3.feature1': 'Onboarding Asistido (30 días)',
+    'pricing.plan3.feature2': 'Curso de portugués para extranjeros',
+    'pricing.plan3.cta': 'Saber más',
+    'pricing.popular': 'MÁS POPULAR',
+    'testimonials.title': 'Lo que dicen nuestros clientes',
+    'testimonials.subtitle': 'Startups que crecieron con el talento adecuado en el equipo.',
+    'testimonials.testimonial1.quote': 'Talently transformó nuestra forma de contratar. Encontramos perfiles que realmente se ajustan a nuestra cultura y nos ayudan a crecer.',
+    'testimonials.testimonial1.position': 'Co-fundador de',
+    'testimonials.testimonial2.quote': 'Talently nos proporcionó de forma muy rápida y eficiente, dos SDRs que nos ayudaron mucho en la validación del ICP de nuestro producto en la fase de planificación de nuestra startup.',
+    'testimonials.testimonial2.position': 'Co-Fundador de',
+    'testimonials.testimonial3.quote': 'Hoy puedo producir contenido para diversas redes sociales, de forma consistente y acorde con mi propuesta y perfil, gracias a una excelente profesional que vino por Talently',
+    'testimonials.testimonial3.position': 'Socio de',
+    'cta.title': '¿Listo para acelerar el crecimiento de tu startup con los talentos adecuados?',
+    'cta.subtitle': 'Agenda una reunión con nuestros consultores y descubre cómo Talently puede transformar tu proceso de reclutamiento.',
+    'cta.button': 'Agendar reunión',
+    'footer.company.description': 'Conectando startups con los mejores talentos del mercado para acelerar su crecimiento.',
+    'footer.services': 'Servicios',
+    'footer.services.headhunter': 'Headhunter',
+    'footer.services.onboarding': 'Onboarding Asistido',
+    'footer.quickLinks': 'Enlaces Rápidos',
+    'footer.quickLinks.about': 'Acerca de',
+    'footer.quickLinks.pricing': 'Planes',
+    'footer.quickLinks.differentials': 'Diferenciales',
+    'footer.quickLinks.privacy': 'Política de Privacidad',
+    'footer.contact': 'Contacto',
+    'footer.contact.email': 'contacto@talentlyrecruiter.es',
+    'footer.contact.phone': '+34 123 456 789',
+    'footer.contact.location': 'Madrid, España',
+    'footer.copyright': 'Todos los derechos reservados.',
+    'login.title': 'Acceder',
+    'login.subtitle': 'Ingresa tu email y contraseña para acceder a tu cuenta.',
+    'login.email': 'Email',
+    'login.password': 'Contraseña',
+    'login.forgotPassword': '¿Olvidaste la contraseña?',
+    'login.submit': 'Ingresar',
+    'login.loading': 'Ingresando...',
+    'login.noAccount': '¿No tienes una cuenta?',
+    'login.signUpLink': 'Regístrate aquí',
+    'login.success': '¡Inicio de sesión exitoso!',
+    'login.welcome': 'Bienvenido a Talently',
+    'login.error': 'Error de inicio de sesión',
+    'login.incorrectCredentials': 'Email o contraseña incorrectos',
+    'login.tryAgain': 'Inténtalo de nuevo más tarde'
   }
 };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguage] = useState<Language>('pt');
+  const [language, setLanguage] = useState<Language>(() => {
+    const saved = localStorage.getItem('talently-language');
+    return (saved as Language) || 'pt';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('talently-language', language);
+  }, [language]);
 
   const toggleLanguage = () => {
-    setLanguage(prev => prev === 'pt' ? 'en' : 'pt');
+    const languages: Language[] = ['pt', 'en', 'es'];
+    const currentIndex = languages.indexOf(language);
+    const nextIndex = (currentIndex + 1) % languages.length;
+    setLanguage(languages[nextIndex]);
   };
 
   const t = (key: string): string => {
@@ -225,7 +378,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <LanguageContext.Provider value={{ language, toggleLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage, toggleLanguage, t }}>
       {children}
     </LanguageContext.Provider>
   );

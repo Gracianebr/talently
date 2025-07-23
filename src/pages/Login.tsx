@@ -23,6 +23,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
+import LanguageSelector from "@/components/LanguageSelector";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -38,6 +40,7 @@ export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -55,21 +58,21 @@ export default function LoginPage() {
       
       if (success) {
         toast({
-          title: "Login realizado com sucesso!",
-          description: "Bem-vindo ao Talently",
+          title: t('login.success'),
+          description: t('login.welcome'),
         });
         navigate('/dashboard');
       } else {
         toast({
-          title: "Erro no login",
-          description: "E-mail ou senha incorretos",
+          title: t('login.error'),
+          description: t('login.incorrectCredentials'),
           variant: "destructive",
         });
       }
     } catch (error) {
       toast({
-        title: "Erro no login",
-        description: "Tente novamente mais tarde",
+        title: t('login.error'),
+        description: t('login.tryAgain'),
         variant: "destructive",
       });
     } finally {
@@ -79,11 +82,14 @@ export default function LoginPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4">
+      <div className="absolute top-4 right-4">
+        <LanguageSelector />
+      </div>
       <Card className="w-full max-w-md mx-auto">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-3xl font-bold text-talently-darkblue">Acessar</CardTitle>
+          <CardTitle className="text-3xl font-bold text-talently-darkblue">{t('login.title')}</CardTitle>
           <CardDescription>
-            Insira seu e-mail e senha para acessar sua conta.
+            {t('login.subtitle')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -94,7 +100,7 @@ export default function LoginPage() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>E-mail</FormLabel>
+                    <FormLabel>{t('login.email')}</FormLabel>
                     <FormControl>
                       <Input type="email" placeholder="seu@email.com" {...field} />
                     </FormControl>
@@ -108,9 +114,9 @@ export default function LoginPage() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="flex items-center justify-between">
-                      <FormLabel>Senha</FormLabel>
+                      <FormLabel>{t('login.password')}</FormLabel>
                       <Link to="/forgot-password" className="text-sm text-talently-purple hover:underline">
-                        Esqueceu a senha?
+                        {t('login.forgotPassword')}
                       </Link>
                     </div>
                     <FormControl>
@@ -125,14 +131,14 @@ export default function LoginPage() {
                 className="w-full bg-talently-purple hover:bg-talently-purple/90"
                 disabled={isLoading}
               >
-                {isLoading ? "Entrando..." : "Entrar"}
+                {isLoading ? t('login.loading') : t('login.submit')}
               </Button>
             </form>
           </Form>
           <div className="mt-6 text-center text-sm">
-            Não tem uma conta?{" "}
+            {t('login.noAccount')}{" "}
             <Link to="/signup" className="font-semibold text-talently-purple hover:underline">
-              Cadastre-se aqui
+              {t('login.signUpLink')}
             </Link>
           </div>
         </CardContent>

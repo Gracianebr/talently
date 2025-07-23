@@ -13,6 +13,7 @@ import {
   X
 } from 'lucide-react';
 import { useState } from 'react';
+import LanguageSelector from '@/components/LanguageSelector';
 
 const AdminLayout = () => {
   const { adminUser, logout } = useAdminAuth();
@@ -125,9 +126,13 @@ const AdminLayout = () => {
             <Menu size={20} />
           </Button>
           
-          <h1 className="text-lg font-semibold text-gray-900">
-            Painel Administrativo
-          </h1>
+          <div className="flex-1">
+            <h1 className="text-lg font-semibold text-gray-900">
+              Painel Administrativo
+            </h1>
+          </div>
+          
+          <LanguageSelector />
         </header>
 
         {/* Page Content */}
