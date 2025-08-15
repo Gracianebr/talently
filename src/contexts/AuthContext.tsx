@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 interface User {
   email: string;
   name: string;
-  type: 'candidate' | 'company';
+  type: 'candidate' | 'company' | 'recruiter';
   profile?: any;
 }
 
@@ -52,6 +52,24 @@ const TEMP_USERS = [
       website: 'https://techempresa.com.br',
       hasCompletedCultural: false,
       culturalResults: null
+    }
+  },
+  {
+    email: 'c.o.gabriel@gmail.com',
+    password: '12345678',
+    name: 'Gabriel Oliveira',
+    type: 'recruiter' as const,
+    profile: {
+      id: '1',
+      name: 'Gabriel Oliveira',
+      phone: '(11) 99999-0001',
+      linkedin: 'https://linkedin.com/in/gabriel-oliveira',
+      cpf: '123.456.789-00',
+      cnpj: '12.345.678/0001-90',
+      contractFile: 'contrato-gabriel.pdf',
+      bankStatementFile: 'comprovante-gabriel.pdf',
+      registeredAt: new Date('2024-01-15'),
+      isActive: true
     }
   }
 ];

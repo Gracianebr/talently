@@ -34,6 +34,11 @@ import AdminCompanies from "./pages/admin/AdminCompanies";
 import AdminJobs from "./pages/admin/AdminJobs";
 import AdminTests from "./pages/admin/AdminTests";
 import JobCandidates from "./pages/admin/JobCandidates";
+import RecruiterDashboard from "./pages/RecruiterDashboard";
+import RecruiterJobs from "./pages/RecruiterJobs";
+import RecruiterJobDetails from "./pages/RecruiterJobDetails";
+import RecruiterIndicateCandidate from "./pages/RecruiterIndicateCandidate";
+import RecruiterSignUp from "./pages/RecruiterSignUp";
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -62,6 +67,13 @@ const App = () => (
                 
                 {/* Admin Routes */}
                 <Route path="/admin/login" element={<AdminLogin />} />
+                {/* Recruiter Routes */}
+                <Route path="/recruiter/dashboard" element={<RecruiterDashboard />} />
+                <Route path="/recruiter/jobs" element={<RecruiterJobs />} />
+                <Route path="/recruiter/job/:id" element={<RecruiterJobDetails />} />
+                <Route path="/recruiter/job/:id/indicate" element={<RecruiterIndicateCandidate />} />
+                <Route path="/recruiter/signup" element={<RecruiterSignUp />} />
+                
                 <Route path="/admin" element={
                   <AdminProtectedRoute>
                     <AdminLayout />
