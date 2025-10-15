@@ -114,7 +114,8 @@ const RecruiterDashboard = () => {
     }
   };
 
-  const tr = translations[t] || translations.pt;
+  const currentLang = (localStorage.getItem('language') || 'pt') as 'pt' | 'en' | 'es';
+  const tr = translations[currentLang];
 
   const getStatusBadge = (status: string) => {
     const statusMap = {

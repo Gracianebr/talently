@@ -70,7 +70,8 @@ const RecruiterJobs = () => {
     }
   };
 
-  const tr = translations[t] || translations.pt;
+  const currentLang = (localStorage.getItem('language') || 'pt') as 'pt' | 'en' | 'es';
+  const tr = translations[currentLang];
 
   // Only show active jobs
   const activeJobs = mockJobs.filter(job => job.status === 'active');

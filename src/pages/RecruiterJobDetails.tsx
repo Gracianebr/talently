@@ -86,7 +86,8 @@ const RecruiterJobDetails = () => {
     }
   };
 
-  const tr = translations[t] || translations.pt;
+  const currentLang = (localStorage.getItem('language') || 'pt') as 'pt' | 'en' | 'es';
+  const tr = translations[currentLang];
 
   return (
     <div className="min-h-screen bg-background">

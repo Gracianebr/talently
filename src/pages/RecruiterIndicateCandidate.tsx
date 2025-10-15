@@ -119,7 +119,8 @@ const RecruiterIndicateCandidate = () => {
     }
   };
 
-  const tr = translations[t] || translations.pt;
+  const currentLang = (localStorage.getItem('language') || 'pt') as 'pt' | 'en' | 'es';
+  const tr = translations[currentLang];
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({
